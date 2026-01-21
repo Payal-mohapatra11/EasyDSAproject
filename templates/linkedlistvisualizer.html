@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+     <script src="https://unpkg.com/feather-icons"></script>
+      <style>
+         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body>
+     {% include 'header.html' %}
+
+      <div class="max-w-5xl mx-auto py-12 px-6">
+        <h1 class="text-3xl font-bold text-center mb-8 text-pink-800">LinkedList Visualizer</h1>
+        <div class="bg-green-100 rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex justify-center space-x-4 mb-6">
+                <button id="sll-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Singly Linked List</button>
+                <button id="dll-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Doubly Linked List</button>
+                <button id="reset-btn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">Reset</button>
+            </div>
+            <div class="flex justify-center space-x-4 mb-6">
+                 <input type="number" id="node-value" placeholder="Node Value" class="px-3 py-2 border rounded-md w-32">
+                <button id="insert-head" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Insert Head</button>
+                <button id="insert-tail" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Insert Tail</button>
+                <button id="delete-head" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Delete Head</button>
+                <button id="delete-tail" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Delete Tail</button>
+            </div>
+
+             <div id="linkedlist-container" class="flex flex-wrap justify-center items-center min-h-32 space-x-2"></div>
+
+            <div id="status-message" class="text-center text-gray-600 italic mt-4"></div>
+                     <!-- DUMMY STEPS OUTPUT -->
+        <div id="steps-output" class="bg-white p-4 rounded-lg text-sm font-mono text-gray-800"></div>
+            </div>
+            <!-- <div class="bg-green-100 rounded-xl shadow-lg p-6 border border-white">
+      <h2 class="text-xl font-bold mb-3 text-green-900">Theory: Array Operation</h2>
+      <p class="text-gray-700 mb-3">
+        Arrays store elements in contiguous memory, so index-based access is direct.
+      </p>
+      <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+        <ul class="list-disc pl-5 text-gray-800">
+          <li><strong>Access/Update by index:</strong> Time complexity O(1), Space complexity O(1) [Direct address calculation, so reads/writes at a known index are O(1).]</li>
+          <li><strong>Search (unsorted):</strong> Time complexity O(n), Space complexity O(1)</li> [May check every element]
+          <li><strong>Insert/Delete at index:</strong> Time complexity O(n) (shift elements), Space complexity typically O(1) for in-place shifting [Shift subsequent elements to maintain contiguity (make space on insert, close the gap on delete).]</li>
+          <li><strong>Overall array storage:</strong> O(n) Space for n elements</li>
+        </ul>
+      </div>
+    </div> -->
+     
+        
+</div>
+
+    {% include 'footer.html' %} 
+    <script>
+        
+document.addEventListener('DOMContentLoaded', function () {
+    feather.replace();
+
+    /* ===============================
+       STATE
+    =============================== */
+    let linkedList = [5, 2, 7, 9];
+    let type = 'SLL';
+
+    const container = document.getElementById('linkedlist-container');
+    const status = document.getElementById('status-message');
+    const stepsOutput = document.getElementById('steps-output');
+
+    /* ===============================
+       HELPERS
+    =============================== */
+    function logSteps(steps) {
+        stepsOutput.innerHTML = '';
+        steps.forEach(step => {
+            const p = document.createElement('p');
+            p.textContent = JSON.stringify(step);
+            stepsOutput.appendChild(p);
+        });
+    }
+
+    /* ===============================
+       STEP FUNCTIONS – SLL
+    =============================== */
+    function getSLLInsertHeadSteps(list, value) {
+        return [
+            { action: "create_node", value },
+            { action: "point_next_to_old_head", next: list[0] ?? null },
+            { action: "update_head", newHead: value },
+            { action: "finish", list: [value, ...list] }
+        ];
+    }
+
+    function getSLLInsertTailSteps(list, value) {
+        const steps = [];
+        for (let i = 0; i < list.length; i++) {
+            steps.push({ action: "traverse", index: i, node: list[i] });
+        }
+        steps.push({ action: "create_node", value });
+        steps.push({ action: "update_last_next", from: list[list.length - 1] ?? null });
+        steps.push({ action: "finish", list: [...list, value] });
+        return steps;
+    }
+
+    function getSLLDeleteHeadSteps(list) {
+        return [
+            { action: "remove_head", removed: list[0] },
+            { action: "update_head", newHead: list[1] ?? null },
+            { action: "finish", list: list.slice(1) }
+        ];
+    }
+
+    function getSLLDeleteTailSteps(list) {
+        const steps = [];
+        for (let i = 0; i < list.length - 1; i++) {
+            steps.push({ action: "traverse", index: i, node: list[i] });
+        }
+        steps.push({ action: "remove_tail", removed: list[list.length - 1] });
+        steps.push({ action: "finish", list: list.slice(0, -1) });
+        return steps;
+    }
+
+    /* ===============================
+       STEP FUNCTIONS – DLL
+    =============================== */
+    function getDLLInsertHeadSteps(list, value) {
+        return [
+            { action: "create_node", value, prev: null, next: list[0] ?? null },
+            { action: "update_old_head_prev", oldHead: list[0] ?? null },
+            { action: "update_head", newHead: value },
+            { action: "finish", list: [value, ...list] }
+        ];
+    }
+
+    function getDLLInsertTailSteps(list, value) {
+        const steps = [];
+        for (let i = 0; i < list.length; i++) {
+            steps.push({ action: "traverse_next", index: i, node: list[i] });
+        }
+        steps.push({ action: "create_node", value, prev: list[list.length - 1] ?? null });
+        steps.push({ action: "update_tail", newTail: value });
+        steps.push({ action: "finish", list: [...list, value] });
+        return steps;
+    }
+
+    function getDLLDeleteHeadSteps(list) {
+        return [
+            { action: "remove_head", removed: list[0] },
+            { action: "update_new_head_prev", newHead: list[1] ?? null },
+            { action: "finish", list: list.slice(1) }
+        ];
+    }
+
+    function getDLLDeleteTailSteps(list) {
+        const steps = [];
+        for (let i = list.length - 1; i > 0; i--) {
+            steps.push({ action: "traverse_prev", index: i, node: list[i] });
+        }
+        steps.push({ action: "remove_tail", removed: list[list.length - 1] });
+        steps.push({ action: "finish", list: list.slice(0, -1) });
+        return steps;
+    }
+
+    /* ===============================
+       RENDER
+    =============================== */
+    function renderList() {
+        container.innerHTML = '';
+        linkedList.forEach((node, idx) => {
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className =
+                'px-4 py-2 bg-indigo-500 text-white rounded-md flex items-center';
+            nodeDiv.textContent = node;
+
+            if (idx < linkedList.length - 1) {
+                const arrow = document.createElement('span');
+                arrow.className = 'mx-2 text-xl font-bold';
+                arrow.textContent = type === 'SLL' ? '→' : '⇄';
+                nodeDiv.appendChild(arrow);
+            }
+            container.appendChild(nodeDiv);
+        });
+    }
+
+    /* ===============================
+       BUTTON ACTIONS
+    =============================== */
+    document.getElementById('insert-head').onclick = () => {
+        const v = +document.getElementById('node-value').value;
+        if (isNaN(v)) return status.textContent = "Enter value";
+
+        const steps = type === 'SLL'
+            ? getSLLInsertHeadSteps(linkedList, v)
+            : getDLLInsertHeadSteps(linkedList, v);
+
+        linkedList.unshift(v);
+        renderList();
+        logSteps(steps);
+        status.textContent = `Inserted ${v} at head`;
+    };
+
+    document.getElementById('insert-tail').onclick = () => {
+        const v = +document.getElementById('node-value').value;
+        if (isNaN(v)) return status.textContent = "Enter value";
+
+        const steps = type === 'SLL'
+            ? getSLLInsertTailSteps(linkedList, v)
+            : getDLLInsertTailSteps(linkedList, v);
+
+        linkedList.push(v);
+        renderList();
+        logSteps(steps);
+        status.textContent = `Inserted ${v} at tail`;
+    };
+
+    document.getElementById('delete-head').onclick = () => {
+        if (!linkedList.length) return status.textContent = "List empty";
+
+        const steps = type === 'SLL'
+            ? getSLLDeleteHeadSteps(linkedList)
+            : getDLLDeleteHeadSteps(linkedList);
+
+        linkedList.shift();
+        renderList();
+        logSteps(steps);
+        status.textContent = "Deleted head";
+    };
+
+    document.getElementById('delete-tail').onclick = () => {
+        if (!linkedList.length) return status.textContent = "List empty";
+
+        const steps = type === 'SLL'
+            ? getSLLDeleteTailSteps(linkedList)
+            : getDLLDeleteTailSteps(linkedList);
+
+        linkedList.pop();
+        renderList();
+        logSteps(steps);
+        status.textContent = "Deleted tail";
+    };
+
+    document.getElementById('reset-btn').onclick = () => {
+        linkedList = [];
+        renderList();
+        logSteps([]);
+        status.textContent = "Linked list reset";
+    };
+
+
+    function switchMode(newType) {
+    if (type !== newType) {
+        linkedList = [];      // 🔥 automatic reset
+        logSteps([]);
+    }
+    type = newType;
+    renderList();
+    status.textContent = 
+        `Switched to ${newType === 'SLL' ? 'Singly' : 'Doubly'} Linked List`;
+}
+    document.getElementById('sll-btn').onclick = () => switchMode('SLL');
+    document.getElementById('dll-btn').onclick = () => switchMode('DLL');
+
+    renderList();
+});
+</script>
+
+</body>
+</html>

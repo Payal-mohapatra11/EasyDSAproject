@@ -36,4 +36,8 @@ urlpatterns = [
      
      #visualizers
      path('visualizers/',views.visualizers,name='visualizers'),
+     
+     path('arrayvisualizers/',views.arrayvisualizers,name='arrayvisualizers'),
+     path('linkedlistvisualizers/',views.linkedlistvisualizers,name='linkedlistvisualizers'),
+     path('chatbotpage/',views.chatbotpage,name='chatbotpage'),
 ]

@@ -1,0 +1,426 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+     <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="max-w-5xl mx-auto py-12 px-6">
+        <h1 class="text-3xl font-bold text-center mb-8 text-pink-800">Array Visualizer</h1>
+        <div class="bg-green-100 rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex justify-between mb-4">
+                <div class="flex space-x-2">
+                    <button id="insert-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Insert</button>
+                   <button id="delete-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Delete</button>
+                   <button id="update-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Update</button>
+                   <button id="search-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Search</button> 
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="reset-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Reset</button>
+                </div>
+            </div>
+            <div class="flex justify-center mb-4">
+                <div id="array-container" class="flex space-x-4 p-4 bg-gray-100 rounded-lg min-h-20">
+                    <!-- Array elements will be dynamically inserted here-->
+                </div>
+            </div>
+            <div id="operation-panel" class="hidden bg-gray-100 p-4 rounded-lg mb-4">
+                <div id="insert-panel" class="hidden">
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <label for="insert-index" class="block text-sm font-medium text-gray-700">Index:</label>
+                           <input type="number" id="insert-index" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label for="insert-value" class="block text-sm font-medium text-gray-700">Value:</label>
+                            <input type="number" id="insert-value" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm">
+                        </div>
+                         <button id="do-insert" class="mt-5 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Insert</button>
+                    </div>
+                </div>
+                <div id="delete-panel" class="hidden">
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <label for="delete-index" class="block text-sm font-medium text-gray-700">Index:</label>
+                            <input type="number" id="delete-index" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <button id="do-delete" class="mt-5 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Delete</button>
+                    </div>
+                </div>
+                
+                <div id="update-panel" class="hidden">
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <label for="update-index" class="block text-sm font-medium text-gray-700">Index:</label>
+                            <input type="number" id="update-index" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label for="update-value" class="block text-sm font-medium text-gray-700">Value:</label>
+                            <input type="number" id="update-value" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <button id="do-update" class="mt-5 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Update</button>
+                    </div>
+                </div>
+                 <div id="search-panel" class="hidden">
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <label for="search-value" class="block text-sm font-medium text-gray-700">Value:</label>
+                            <input type="number" id="search-value" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <button id="do-search" class="mt-5 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Search</button>
+                    </div>
+                </div>
+            </div>
+                 <div id="status-message" class="text-center text-gray-600 italic"></div>
+
+                 <!-- DUMMY STEPS OUTPUT -->
+        <div id="steps-output" class="bg-white p-4 rounded-lg text-sm font-mono text-gray-800"></div>
+        </div>
+             <div class="bg-green-100 rounded-xl shadow-lg p-6 border border-white">
+      <h2 class="text-xl font-bold mb-3 text-green-900">Theory: Array Operation</h2>
+      <p class="text-gray-700 mb-3">
+        Arrays store elements in contiguous memory, so index-based access is direct.
+      </p>
+      <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+        <ul class="list-disc pl-5 text-gray-800">
+          <li><strong>Access/Update by index:</strong> Time complexity O(1), Space complexity O(1) [Direct address calculation, so reads/writes at a known index are O(1).]</li>
+          <li><strong>Search (unsorted):</strong> Time complexity O(n), Space complexity O(1)</li> [May check every element]
+          <li><strong>Insert/Delete at index:</strong> Time complexity O(n) (shift elements), Space complexity typically O(1) for in-place shifting [Shift subsequent elements to maintain contiguity (make space on insert, close the gap on delete).]</li>
+          <li><strong>Overall array storage:</strong> O(n) Space for n elements</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+    {% include 'footer.html' %}
+    {% include 'chatbot.html' %}
+
+    <script>
+       document.addEventListener('DOMContentLoaded', () => {
+
+    feather.replace();
+
+    let array = [5, 2, 7, 9, 1];
+
+    const arrayContainer = document.getElementById('array-container');
+    const operationPanel = document.getElementById('operation-panel');
+    const statusMessage = document.getElementById('status-message');
+    const stepsOutput = document.getElementById('steps-output');
+
+    const insertBtn = document.getElementById('insert-btn');
+    const deleteBtn = document.getElementById('delete-btn');
+    const updateBtn = document.getElementById('update-btn');
+    const searchBtn = document.getElementById('search-btn');
+    const resetBtn  = document.getElementById('reset-btn');
+
+    const doInsert = document.getElementById('do-insert');
+    const doDelete = document.getElementById('do-delete');
+    const doUpdate = document.getElementById('do-update');
+    const doSearch = document.getElementById('do-search');
+
+    /* ---------- HELPERS ---------- */
+
+    function drawArray() {
+        arrayContainer.innerHTML = '';
+        array.forEach((val, idx) => {
+            const el = document.createElement('div');
+            el.className =
+                'w-12 h-12 bg-green-500 text-white flex items-center justify-center rounded font-bold';
+            el.textContent = val;
+            el.dataset.index = idx;
+            arrayContainer.appendChild(el);
+        });
+    }
+
+    function flash(index) {
+        const el = document.querySelector(`[data-index="${index}"]`);
+        if (el) {
+            el.classList.add('bg-pink-500');
+            setTimeout(() => el.classList.remove('bg-pink-500'), 700);
+        }
+    }
+
+    function logSteps(steps) {
+        stepsOutput.innerHTML = '';
+        steps.forEach(step => {
+            const p = document.createElement('p');
+            p.textContent = JSON.stringify(step);
+            stepsOutput.appendChild(p);
+        });
+    }
+
+    function setStatus(message, type = "info") {
+        const colors = {
+            info: "text-blue-700",
+            success: "text-green-700",
+            error: "text-red-600"
+        };
+        statusMessage.className = `text-center italic mb-3 ${colors[type]}`;
+        statusMessage.textContent = message;
+    }
+
+    function showPanel(id) {
+        operationPanel.classList.remove('hidden');
+        document
+            .querySelectorAll('#operation-panel > div')
+            .forEach(p => p.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    drawArray();
+
+    /* ---------- PANEL BUTTONS ---------- */
+
+    insertBtn.onclick = () => showPanel('insert-panel');
+    deleteBtn.onclick = () => showPanel('delete-panel');
+    updateBtn.onclick = () => showPanel('update-panel');
+    searchBtn.onclick = () => showPanel('search-panel');
+
+    resetBtn.onclick = () => {
+        array = [5, 2, 7, 9, 1];
+        drawArray();
+        logSteps([]);
+        setStatus("Array reset to initial state.", "info");
+    };
+
+    function getInsertSteps(arr, index, value) {
+    return [
+        {
+            action: "start_insert",
+            array: [...arr],
+            index: index,
+            element: value
+        },
+        {
+            action: "expand",
+            array: [...arr, null]
+        },
+        {
+            action: "insert",
+            index: index,
+            element: value,
+            array: (() => {
+                const copy = [...arr];
+                copy.splice(index, 0, value);
+                return copy;
+            })()
+        },
+        {
+            action: "finish",
+            array: (() => {
+                const copy = [...arr];
+                copy.splice(index, 0, value);
+                return copy;
+            })()
+        }
+    ];
+}
+
+
+    /* ---------- INSERT ---------- */
+
+    doInsert.onclick = () => {
+        const i = +document.getElementById('insert-index').value;
+        const v = +document.getElementById('insert-value').value;
+
+        if (isNaN(i) || isNaN(v)) {
+            setStatus("Please enter both index and value.", "error");
+            return;
+        }
+
+        if (i < 0 || i > array.length) {
+            setStatus(`Index out of bound. Valid range: 0 to ${array.length}`, "error");
+            return;
+        }
+
+        const steps = getInsertSteps(array, i, v);
+
+
+        array.splice(i, 0, v);
+
+        drawArray();
+        flash(i);
+        logSteps(steps);
+        setStatus(`Inserted ${v} at index ${i}. Time Complexity: O(n)`, "success");
+    };
+
+    /* ---------- DELETE ---------- */
+
+    function getDeleteSteps(arr, index) {
+    const steps = [];
+
+    steps.push({
+        action: "start_delete",
+        index: index,
+        array: [...arr]
+    });
+
+    const copy = [...arr];
+    const removed = copy[index];
+
+    for (let i = index; i < copy.length - 1; i++) {
+        copy[i] = copy[i + 1];
+        steps.push({
+            action: "shift_left",
+            from: i + 1,
+            to: i,
+            array: [...copy]
+        });
+    }
+
+    copy.pop();
+
+    steps.push({
+        action: "delete",
+        removed: removed,
+        array: [...copy]
+    });
+
+    steps.push({
+        action: "finish",
+        array: [...copy]
+    });
+
+    return steps;
+}
+
+
+    doDelete.onclick = () => {
+        const i = +document.getElementById('delete-index').value;
+
+        if (isNaN(i)) {
+            setStatus("Please enter an index.", "error");
+            return;
+        }
+
+        if (i < 0 || i >= array.length) {
+            setStatus(`Index out of bound. Valid range: 0 to ${array.length - 1}`, "error");
+            return;
+        }
+
+        const removed = array[i];
+        const steps = getDeleteSteps(array, i);
+        array.splice(i, 1);
+
+        drawArray();
+        logSteps(steps);
+        setStatus(`Deleted ${removed} from index ${i}. Time Complexity: O(n)`, "success");
+    };
+
+    /* ---------- UPDATE ---------- */
+
+    function getUpdateSteps(arr, index, newValue) {
+    return [
+        {
+            action: "access",
+            index: index,
+            old: arr[index]
+        },
+        {
+            action: "update",
+            index: index,
+            new: newValue,
+            array: (() => {
+                const copy = [...arr];
+                copy[index] = newValue;
+                return copy;
+            })()
+        },
+        {
+            action: "finish",
+            array: (() => {
+                const copy = [...arr];
+                copy[index] = newValue;
+                return copy;
+            })()
+        }
+    ];
+}
+
+
+    doUpdate.onclick = () => {
+        const i = +document.getElementById('update-index').value;
+        const v = +document.getElementById('update-value').value;
+
+        if (isNaN(i) || isNaN(v)) {
+            setStatus("Please enter both index and value.", "error");
+            return;
+        }
+
+        if (i < 0 || i >= array.length) {
+            setStatus(`Index out of bound. Valid range: 0 to ${array.length - 1}`, "error");
+            return;
+        }
+
+        const steps = getUpdateSteps(array, i, v);
+
+        array[i] = v;
+
+        drawArray();
+        flash(i);
+        logSteps(steps);
+        setStatus(`Updated index ${i} with value ${v}. Time Complexity: O(1)`, "success");
+    };
+
+    /* ---------- SEARCH ---------- */
+
+    function getSearchSteps(arr, value) {
+    const steps = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        steps.push({
+            action: "compare",
+            index: i,
+            value: arr[i]
+        });
+
+        if (arr[i] === value) {
+            steps.push({
+                action: "found",
+                index: i
+            });
+            return steps;
+        }
+    }
+
+    steps.push({
+        action: "not_found"
+    });
+
+    return steps;
+}
+
+
+    doSearch.onclick = () => {
+        const v = +document.getElementById('search-value').value;
+
+        if (isNaN(v)) {
+            setStatus("Please enter a value to search.", "error");
+            return;
+        }
+
+        const steps = getSearchSteps(array, v);
+    logSteps(steps);
+
+    const foundStep = steps.find(s => s.action === "found");
+    if (foundStep) {
+        flash(foundStep.index);
+        setStatus(`Found ${v}. Time Complexity: O(n)`, "success");
+    } else {
+        setStatus(`${v} not found. Time Complexity: O(n)`, "error");
+    }
+    };
+
+});
+    </script>
+    
+</body>
+</html>

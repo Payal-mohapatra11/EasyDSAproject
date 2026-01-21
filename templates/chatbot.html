@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <!-- Floating Chatbot Button with Auto Popup -->
+<div class="fixed bottom-6 right-6 z-50">
+
+    <!-- Popup -->
+    <div id="chatbotPopup"
+         class="absolute bottom-20 right-0 bg-green-600 text-white
+                px-4 py-2 rounded-lg shadow-lg text-sm
+                animate-bounce whitespace-nowrap">
+           Ask EasyDSA Chatbot
+        <div class="absolute -bottom-2 right-6 w-0 h-0
+                    border-l-8 border-r-8 border-t-8
+                    border-l-transparent border-r-transparent
+                    border-t-green-600"></div>
+    </div>
+
+     <!-- ================= FLOATING CHATBOT IMAGE ================= -->
+<img src="{% static 'robot.jpg' %}"
+     onclick="openSidebar()"
+     class="fixed bottom-6 right-6 w-16 h-16 cursor-pointer
+            rounded-full shadow-lg hover:scale-110 transition z-50"
+     alt="Chatbot">
+
+<!-- ================= LEFT FIXED CHATBOT SIDEBAR ================= -->
+<div id="leftSidebar"
+     class="fixed top-0 left-0 h-full w-[420px] bg-white shadow-2xl
+            transform -translate-x-full transition-transform duration-300 z-50">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center p-4 bg-green-600 text-white">
+        <h2 class="text-lg font-semibold">EasyDSA Chatbot</h2>
+        <button onclick="closeSidebar()" class="text-2xl font-bold">×</button>
+    </div>
+
+    <!-- Scrollable Chat Area -->
+    <div class="p-4 overflow-y-auto h-[calc(100%-64px)]">
+
+        <form onsubmit="return false;">
+            <input type="text" id="question"
+                   placeholder="Ask a DSA question..."
+                   class="w-full px-4 py-3 border rounded-lg
+                          focus:ring-2 focus:ring-green-500 mb-4">
+
+            <button type="button"
+                    onclick="askchatbot()"
+                    class="w-full bg-green-600 hover:bg-green-700
+                           text-white py-3 rounded-lg transition">
+                Ask
+            </button>
+
+            <pre id="answer"
+                 class="mt-5 p-4 bg-gray-100 rounded-lg text-sm
+                        whitespace-pre-wrap min-h-[120px]">
+            </pre>
+        </form>
+
+    </div>
+</div>
+
+     <script>
+        function openSidebar() {
+    document.getElementById("leftSidebar")
+        .classList.remove("-translate-x-full");
+}
+
+function closeSidebar() {
+    document.getElementById("leftSidebar")
+        .classList.add("-translate-x-full");
+}
+        async function askchatbot(){
+            const questionIN = document.getElementById('question');
+            const answer=document.getElementById('answer');
+
+            const question = questionIN.value.trim();
+            if(!question){
+                answer.innerText="please enter your question";
+                return;
+            } 
+            answer.innerText="Lodding...";
+
+            try{
+                const res = await fetch("/chatbot/chatbot/",{
+                    method:"POST",
+                    headers:{ "Content-Type":"application/json"},
+                    body:JSON.stringify({question:question})
+                });
+
+                const data = await res.json();
+                answer.innerText=data.answer;
+            } catch (error){
+                answer.innerText="Error occurred.Please try again."
+            }
+        }
+     </script>
+</body>
+</html>

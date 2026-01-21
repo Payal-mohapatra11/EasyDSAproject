@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,54 +92,10 @@
                 </div>
             </div>
         </div>
-    </section>
-
-
-    <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
-
-        <h2 class="text-xl font-semibold text-center text-green-600 mb-4">
-             EasyDSA Chatbot - You personalized DSA guide
-        </h2>
-        <!--Input-->
-        <form onsubmit="return false;">
-            <input type="text" id="question" placehosder="Ask a DSA question..."
-               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-4">
-               <botton type="button" onclick="askchatbot()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition duration-200">
-                 Ask
-               </botton> 
-               <pre id="answer" 
-               class="mt-5 p-4 bg-gray-100 rounded-lg text-sm text-gray-800 whitespace-pre-wrap min-h-[80px]">
-            </pre>
-        </form>
-    </div>
+    </section>       
   
      {% include 'footer.html' %}
 
-     <script>
-        async function askchatbot(){
-            const questionIN = document.getElementById('question');
-            const answer=document.getElementById('answer');
-
-            const question = questionIN.value.trim();
-            if(!question){
-                answer.innerText="please enter your question";
-                return;
-            } 
-            answer.innerText="Lodding...";
-
-            try{
-                const res = await fetch("/chatbot/chatbot/",{
-                    method:"POST",
-                    headers:{ "Content-Type":"application/json"},
-                    body:JSON.stringify({question:question})
-                });
-
-                const data = await res.json();
-                answer.innerText=data.answer;
-            } catch (error){
-                answer.innerText="Error occurred.Please try again."
-            }
-        }
-     </script>
+  
 </body>
 </html>
