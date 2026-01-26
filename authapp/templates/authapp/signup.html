@@ -17,45 +17,9 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
-     <nav class="bg-green-600 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-code text-white text-2xl"></i>
-                    <span class="text-xl font-bold">EasyDSA</span>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-center space-x-4">
-                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium bg-indigo-700">Home</a>
-                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500">Features</a>
-                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500">Visualizers</a>
-                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500">Profile</a>
-                        <a href="{% url 'login' %}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 flex items-center" >Login
-                        <i data-icon="arrow-right" class="text-white-500 w-5 h-5 ml-2"></i>
-                        </a>
-                    
-                    </div>
-                </div>
-            <div class="md:hidden">
-                <button class="mobile-menu-button p-2 rounded-md hover:bg-indigo-500">
-                   <i class="fa-solid fa-list"></i>
-                </button>
-            </div>
-            </div>
-            </div>
-        <div class="mobile-menu hidden md:hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium bg-indigo-700 text-white">Home</a>
-              <a href="features.html" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-500">Features</a>
-                <a href="visualizers.html" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-500">Visualizers</a>
-                <a href="profile.html" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-500">Profile</a>
-                <a href="login.html" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-500">Login</a>  
-            </div>
-        </div>
-    </nav>
-
+    {% include 'header.html' %}
     <!-- Signup Form -->
-    <div class="max-w-md mx-auto my-16 p-8 bg-white rounded-lg shadow-md">
+    <div class="max-w-md mx-auto my-16 p-8 bg-white rounded-lg shadow-md min-h-[520px]">
         <div class="text-center mb-8">
             <h2 class="text-3xl font-extrabold text-gray-900">Create your account</h2>
             <p class="mt-2 text-gray-600">Join DSA Playground to start learning through games</p>
@@ -84,6 +48,7 @@
                 <div class="mt-1">
                     {{form.phone}}
                     {{form.phone.errors}}
+                    </div>
             </div>
 
             <div>
@@ -102,36 +67,48 @@
                 </div>
             </div>
 
-            <div class="flex items-center">
-                <input id="terms" name="terms" type="checkbox" 
-                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                <label for="terms" class="ml-2 block text-sm text-gray-700">
-                    I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms of Service</a>
-                </label>
-            </div>
 
             <div>
                 <button type="submit" 
-                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Sign Up
                 </button>
             </div>
-        </form>
-         <div class="mt-6 text-center">
+                <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white text-gray-500">
+                        Or continue with
+                    </span>
+                </div>
+            </div>
+
+                    <a href="/accounts/google/login/"
+   class="w-full flex justify-center py-2 px- border rounded-md bg-white hover:bg-gray-100">
+   <img src="https://www.google.com/favicon.ico" class="h-5 w-5 mr-2">
+
+</a>
+                
+           <div class="mt-6 text-center">
             <p class="text-sm text-gray-600">
                 Already have an account? <a href="{% url 'login' %}" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
             </p>
+        </div>  
+        
+
+        
+        </form>
+       </div>
         </div>
+        
+          
+    
     </div>
+
+   {% include 'footer.html' %}
    
-    <!-- Footer -->
-      <footer class="bg-gray-800 text-white py-8 mt-auto">
-        <div class="max-w-7xl mx-auto px-4  text-center">
-            <p class="text-base text-gray-400">
-                &copy; 2025 EasyDSA. All rights reserved.
-            </p>
-        </div>
-    </footer>
     <script>
         // Mobile menu toggle
         document.querySelector('.mobile-menu-button').addEventListener('click', function() {

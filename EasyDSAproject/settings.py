@@ -161,23 +161,46 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
-LOGIN_REDIRECT_URL = "/auth/success/"
+LOGIN_REDIRECT_URL = "/auth/profile/"
 LOGOUT_REDIRECT_URL = "/auth/login/"
-ACCOUNT_SIGNUP_REDIRECT_URL = "/auth/login/"
+ACCOUNT_SIGNUP_REDIRECT_URL = "/auth/login"
 SOCIALACCOUNT_SIGNUP_REDIRECT_URL = "/auth/signup/"
+LOGIN_URL = "/auth/login/"
 
 ACCOUNT_ADAPTER = "authapp.adapters.CustomAccountAdapter"
 SOCIALACCOUNT_ADAPTER = "authapp.adapters.NoPromptAccountAdapter"
 
-SOCIALACCOUNT_AUTO_SIGNUP = False
+SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
 
 
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-print("GROQ KEY:", os.getenv("GROQ_API_KEY"))
+# print("GROQ KEY:", os.getenv("GROQ_API_KEY"))
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "FIELDS": [
+            "id",
+            "email",
+            "name",
+            "picture",   
+        ],
+    }
+}

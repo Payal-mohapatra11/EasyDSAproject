@@ -25,7 +25,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('auth/', include('authapp.urls')),
     
-    # 🔥 Block Allauth signup + redirect to your page
+    # Block Allauth signup + redirect to your page
     path('accounts/signup/', lambda request: redirect('/auth/signup/')),
     path('accounts/3rdparty/signup/', lambda request: redirect('/auth/signup/')),
     path('accounts/login/', lambda request: redirect('/auth/login/')),
@@ -40,4 +40,5 @@ urlpatterns = [
      path('arrayvisualizers/',views.arrayvisualizers,name='arrayvisualizers'),
      path('linkedlistvisualizers/',views.linkedlistvisualizers,name='linkedlistvisualizers'),
      path('chatbotpage/',views.chatbotpage,name='chatbotpage'),
+    
 ]

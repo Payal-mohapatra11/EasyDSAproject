@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+     <script src="https://unpkg.com/feather-icons"></script>
+      <style>
+         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="max-w-5xl mx-auto py-6 sm:py-10 px-3 sm:px-6">
+        <h1 class="text-3xl font-bold text-center mb-8 text-pink-800">Sorting Algorithms Visualizer</h1>
+        <div class="bg-green-100 rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-3 mb-6">
+                 <button onclick="generateArray()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Generate Array</button>
+                  <button onclick="bubbleSort()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Bubble Sort</button>
+                  <button onclick="selectionSort()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">Selection Sort</button>
+                  <button onclick="insertionSort()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">insertion Sort</button>
+                  <button onclick="startMergeSort()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Merge Sort</button>
+            </div>
+              <!-- Legend -->
+   <div class="flex justify-center gap-6 mb-4 text-sm font-semibold">
+    <span class="text-blue-500">■ Unsorted</span>
+    <span class="text-red-500">■ Comparing</span>
+    <span class="text-purple-500">■ Merging</span>
+    <span class="text-green-500">■ Sorted</span>
+   </div>
+
+   <!-- Visualizer -->
+<div id="arrayContainer"
+     class="flex items-end justify-center gap-1 sm:gap-2 h-56 sm:h-72 md:h-80 bg-white p-2 sm:p-4 rounded shadow overflow-x-auto">
+</div>
+
+ <div id="status-message" class="text-center text-sm sm:text-base italic mt-4 px-2"></div>
+
+                 <!-- DUMMY STEPS OUTPUT -->
+        <div id="steps-output" class="bg-white p-3 sm:p-4 rounded-lg text-xs sm:text-sm font-mono text-gray-800 overflow-x-auto max-h-64"></div>
+
+    </div>
+
+     <div class="bg-green-100 rounded-xl shadow-lg p-6 border border-white">
+      <h2 class="text-xl font-bold mb-3 text-green-900">Theory: Array Operation</h2>
+      <p class="text-gray-700 mb-3">
+        Arrays store elements in contiguous memory, so index-based access is direct.
+      </p>
+      <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+        <ul class="list-disc pl-5 text-gray-800">
+          <li><strong>Access/Update by index:</strong> Time complexity O(1), Space complexity O(1) [Direct address calculation, so reads/writes at a known index are O(1).]</li>
+          <li><strong>Search (unsorted):</strong> Time complexity O(n), Space complexity O(1)</li> [May check every element]
+          <li><strong>Insert/Delete at index:</strong> Time complexity O(n) (shift elements), Space complexity typically O(1) for in-place shifting [Shift subsequent elements to maintain contiguity (make space on insert, close the gap on delete).]</li>
+          <li><strong>Overall array storage:</strong> O(n) Space for n elements</li>
+        </ul>
+      </div>
+    </div>
+    
+
+    </div>
+{% include 'footer.html' %}
+<script>
+    const arrayContainer = document.getElementById('array-container');
+    const operationPanel = document.getElementById('operation-panel');
+    const statusMessage = document.getElementById('status-message');
+    const stepsOutput = document.getElementById('steps-output');
+
+    /* Global variables */
+    let array=[];
+    const container=document.getElementById("arrayContainer");
+    const delay=400;
+
+    /* Generate Random Array */
+    function generateArray(size=11){
+        container.innerHTML="";
+        array=[];
+
+        for(let i=0;i<size;i++){
+            let value = Math.floor(Math.random()*100)+10;
+            array.push(value);
+
+            const bar = document.createElement("div");
+            bar.style.height = `${value * 2}px`;
+            // bar.style.width = "35px";
+            bar.innerText = value;
+
+            bar.className= "bg-blue-400 rounded flex items-end justify-center text-[10px] sm:text-xs font-bold text-black w-6 sm:w-8 md:w-10";
+             container.appendChild(bar);
+        }
+    }
+    /* Sleep function for animation delay */
+    function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function setStatus(message, type = "info") {
+    const colors = {
+        info: "text-blue-700",
+        success: "text-green-700",
+        error: "text-red-600"
+    };
+    statusMessage.className = `text-center italic mb-3 ${colors[type]}`;
+    statusMessage.textContent = message;
+}
+
+function logSteps(steps) {
+    stepsOutput.innerHTML = '';
+    steps.forEach(step => {
+        const p = document.createElement('p');
+        p.textContent = JSON.stringify(step);
+        stepsOutput.appendChild(p);
+    });
+}
+
+
+/* bubble sort */
+async function bubbleSort(){
+    let bars = document.querySelectorAll("#arrayContainer div");
+
+    for(let i=0;i<array.length;i++){
+        for (let j=0; j<array.length-i-1;j++){
+            bars[j].className="bg-red-400 rounded flex items-end justify-center text-xs font-bold";
+            bars[j+1].className="bg-red-400 rounded flex items-end justify-center text-xs font-bold";
+             await sleep(delay);
+
+            if (array[j] > array[j + 1]) {
+                [array[j], array[j + 1]] = [array[j + 1], array[j]];
+
+                bars[j].style.height = `${array[j] * 2}px`;
+                bars[j + 1].style.height = `${array[j + 1] * 2}px`;
+
+                bars[j].innerText = array[j];
+                bars[j + 1].innerText = array[j + 1];
+            }
+
+            bars[j].className =
+                "bg-blue-400 rounded flex items-end justify-center text-xs font-bold";
+            bars[j + 1].className =
+                "bg-blue-400 rounded flex items-end justify-center text-xs font-bold";
+        }
+
+        bars[array.length - i - 1].className =
+            "bg-green-500 rounded flex items-end justify-center text-xs font-bold";
+    }
+    logSteps(getBubbleSortSteps(array));
+setStatus("Bubble Sort completed. Time Complexity: O(n²).Click 'Generate Array' before the next sort", "success");
+}
+
+
+
+
+function getBubbleSortSteps(arr) {
+    const steps = [];
+    const copy = [...arr];
+
+    for (let i = 0; i < copy.length; i++) {
+        for (let j = 0; j < copy.length - i - 1; j++) {
+            steps.push({
+                action: "compare",
+                indices: [j, j + 1],
+                array: [...copy]
+            });
+
+            if (copy[j] > copy[j + 1]) {
+                [copy[j], copy[j + 1]] = [copy[j + 1], copy[j]];
+                steps.push({
+                    action: "swap",
+                    indices: [j, j + 1],
+                    array: [...copy]
+                });
+            }
+        }
+    }
+
+    steps.push({ action: "finish", array: [...copy] });
+    return steps;
+}
+
+
+
+        
+    /*selection sort*/
+    async function selectionSort() {
+    let bars = document.querySelectorAll("#arrayContainer div");
+
+    for (let i = 0; i < array.length; i++) {
+        let minIndex = i;
+        bars[minIndex].className =
+            "bg-yellow-400 rounded flex items-end justify-center text-xs font-bold";
+
+        for (let j = i + 1; j < array.length; j++) {
+            bars[j].className =
+                "bg-red-400 rounded flex items-end justify-center text-xs font-bold";
+
+            await sleep(delay);
+
+            if (array[j] < array[minIndex]) {
+                bars[minIndex].className =
+                    "bg-blue-400 rounded flex items-end justify-center text-xs font-bold";
+
+                minIndex = j;
+                bars[minIndex].className =
+                    "bg-yellow-400 rounded flex items-end justify-center text-xs font-bold";
+            } else {
+                bars[j].className =
+                    "bg-blue-400 rounded flex items-end justify-center text-xs font-bold";
+            }
+        }
+
+        [array[i], array[minIndex]] = [array[minIndex], array[i]];
+
+        bars[i].style.height = `${array[i] * 2}px`;
+        bars[minIndex].style.height = `${array[minIndex] * 2}px`;
+
+        bars[i].innerText = array[i];
+        bars[minIndex].innerText = array[minIndex];
+
+        bars[minIndex].className =
+            "bg-blue-400 rounded flex items-end justify-center text-xs font-bold";
+
+        bars[i].className =
+            "bg-green-500 rounded flex items-end justify-center text-xs font-bold";
+    } 
+    logSteps(getSelectionSortSteps(array));
+setStatus("Selection Sort completed. Time Complexity: O(n²).Click 'Generate Array' before the next sort", "success");
+
+}
+
+
+
+function getSelectionSortSteps(arr) {
+    const steps = [];
+    const copy = [...arr];
+
+    for (let i = 0; i < copy.length; i++) {
+        let min = i;
+
+        for (let j = i + 1; j < copy.length; j++) {
+            steps.push({
+                action: "compare",
+                indices: [min, j],
+                array: [...copy]
+            });
+            if (copy[j] < copy[min]) min = j;
+        }
+
+        [copy[i], copy[min]] = [copy[min], copy[i]];
+        steps.push({
+            action: "swap",
+            indices: [i, min],
+            array: [...copy]
+        });
+    }
+
+    steps.push({ action: "finish", array: [...copy] });
+    return steps;
+}
+
+
+    
+/* =========================
+   START MERGE SORT
+========================= */
+async function startMergeSort() {
+    let bars = document.querySelectorAll("#arrayContainer div");
+    await mergeSort(array, 0, array.length - 1, bars);
+
+    bars.forEach(bar => bar.className =
+        "bg-green-500 rounded flex items-end justify-center text-xs font-bold text-black");
+        logSteps(getMergeSortSteps(array));
+    setStatus("Merge Sort completed. Time Complexity: O(n log n).Click 'Generate Array' before the next sort", "success");
+}
+
+/* =========================
+   MERGE SORT (DIVIDE)
+========================= */
+async function mergeSort(arr, left, right, bars) {
+    if (left >= right) return;
+
+    const mid = Math.floor((left + right) / 2);
+
+    await mergeSort(arr, left, mid, bars);
+    await mergeSort(arr, mid + 1, right, bars);
+    await merge(arr, left, mid, right, bars);
+}
+
+/* =========================
+   MERGE FUNCTION (REAL-TIME)
+========================= */
+async function merge(arr, left, mid, right, bars) {
+
+    let leftPart = arr.slice(left, mid + 1);
+    let rightPart = arr.slice(mid + 1, right + 1);
+
+    let i = 0, j = 0, k = left;
+
+    while (i < leftPart.length && j < rightPart.length) {
+
+        bars[k].className =
+            "bg-red-400 rounded flex items-end justify-center text-xs font-bold text-black";
+        await sleep(delay);
+
+        if (leftPart[i] <= rightPart[j]) {
+            arr[k] = leftPart[i];
+            bars[k].style.height = `${leftPart[i] * 2}px`;
+            bars[k].innerText = leftPart[i];   //  update number
+            i++;
+        } else {
+            arr[k] = rightPart[j];
+            bars[k].style.height = `${rightPart[j] * 2}px`;
+            bars[k].innerText = rightPart[j]; // update number
+            j++;
+        }
+
+        bars[k].className =
+            "bg-purple-400 rounded flex items-end justify-center text-xs font-bold text-black";
+        k++;
+        await sleep(delay);
+    }
+
+    while (i < leftPart.length) {
+        arr[k] = leftPart[i];
+        bars[k].style.height = `${leftPart[i] * 2}px`;
+        bars[k].innerText = leftPart[i];
+        bars[k].className =
+            "bg-purple-400 rounded flex items-end justify-center text-xs font-bold text-black";
+        i++;
+        k++;
+        await sleep(delay);
+    }
+
+    while (j < rightPart.length) {
+        arr[k] = rightPart[j];
+        bars[k].style.height = `${rightPart[j] * 2}px`;
+        bars[k].innerText = rightPart[j];
+        bars[k].className =
+            "bg-purple-400 rounded flex items-end justify-center text-xs font-bold text-black";
+        j++;
+        k++;
+        await sleep(delay);
+    }
+}
+
+
+
+
+function getMergeSortSteps(arr) {
+    const steps = [];
+    const copy = [...arr];
+
+    function mergeSortSteps(start, end) {
+        if (start >= end) return;
+
+        const mid = Math.floor((start + end) / 2);
+
+        // DIVIDE STEP
+        steps.push({
+            action: "divide",
+            range: [start, end],
+            mid: mid
+        });
+
+        mergeSortSteps(start, mid);
+        mergeSortSteps(mid + 1, end);
+
+        // MERGE STEP
+        let left = copy.slice(start, mid + 1);
+        let right = copy.slice(mid + 1, end + 1);
+
+        let i = 0, j = 0, k = start;
+
+        while (i < left.length && j < right.length) {
+            steps.push({
+                action: "compare",
+                left: left[i],
+                right: right[j]
+            });
+
+            if (left[i] <= right[j]) {
+                copy[k] = left[i];
+                steps.push({
+                    action: "write",
+                    index: k,
+                    value: left[i],
+                    array: [...copy]
+                });
+                i++;
+            } else {
+                copy[k] = right[j];
+                steps.push({
+                    action: "write",
+                    index: k,
+                    value: right[j],
+                    array: [...copy]
+                });
+                j++;
+            }
+            k++;
+        }
+
+        while (i < left.length) {
+            copy[k] = left[i];
+            steps.push({
+                action: "write",
+                index: k,
+                value: left[i],
+                array: [...copy]
+            });
+            i++;
+            k++;
+        }
+
+        while (j < right.length) {
+            copy[k] = right[j];
+            steps.push({
+                action: "write",
+                index: k,
+                value: right[j],
+                array: [...copy]
+            });
+            j++;
+            k++;
+        }
+
+        steps.push({
+            action: "merged",
+            range: [start, end],
+            array: [...copy]
+        });
+    }
+
+    mergeSortSteps(0, copy.length - 1);
+
+    steps.push({
+        action: "finish",
+        array: [...copy]
+    });
+
+    return steps;
+}
+
+
+/* =========================
+   INSERTION SORT (FIXED)
+========================= */
+async function insertionSort() {
+    let bars = document.querySelectorAll("#arrayContainer div");
+
+    for (let i = 1; i < array.length; i++) {
+        let key = array[i];
+        let j = i - 1;
+
+        // Highlight key element
+        bars[i].className =
+            "bg-yellow-400 rounded flex items-end justify-center text-xs font-bold";
+        await sleep(delay);
+
+        while (j >= 0 && array[j] > key) {
+            // Comparing
+            bars[j].className =
+                "bg-red-400 rounded flex items-end justify-center text-xs font-bold";
+            bars[j + 1].className =
+                "bg-red-400 rounded flex items-end justify-center text-xs font-bold";
+            await sleep(delay);
+
+            array[j + 1] = array[j];
+
+            bars[j + 1].style.height = `${array[j] * 2}px`;
+            bars[j + 1].innerText = array[j];
+
+            bars[j].className =
+                "bg-blue-400 rounded flex items-end justify-center text-xs font-bold";
+            bars[j + 1].className =
+                "bg-blue-400 rounded flex items-end justify-center text-xs font-bold";
+
+            j--;
+        }
+
+        array[j + 1] = key;
+        bars[j + 1].style.height = `${key * 2}px`;
+        bars[j + 1].innerText = key;
+    }
+
+    // Mark all as sorted
+    bars.forEach(bar => {
+        bar.className =
+            "bg-green-500 rounded flex items-end justify-center text-xs font-bold text-black";
+    });
+
+      logSteps(getInsertionSortSteps(array));
+    setStatus("Insertion Sort completed. Time Complexity: O(n²).Click 'Generate Array' before the next sort", "success");
+    
+}
+
+
+
+function getInsertionSortSteps(arr) {
+    const steps = [];
+    const copy = [...arr];
+
+    for (let i = 1; i < copy.length; i++) {
+        let key = copy[i];
+        let j = i - 1;
+
+        steps.push({
+            action: "pick_key",
+            index: i,
+            value: key
+        });
+
+        while (j >= 0 && copy[j] > key) {
+            steps.push({
+                action: "shift",
+                from: j,
+                to: j + 1,
+                array: [...copy]
+            });
+            copy[j + 1] = copy[j];
+            j--;
+        }
+
+        copy[j + 1] = key;
+        steps.push({
+            action: "insert",
+            index: j + 1,
+            array: [...copy]
+        });
+    }
+
+    steps.push({ action: "finish", array: [...copy] });
+    return steps;
+}
+
+
+
+</script>
+</body>
+</html>

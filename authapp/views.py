@@ -7,71 +7,94 @@ from django.db.models import Q  #Q()-Query wrapper /Without Q, Django cannot com
 from allauth.socialaccount.models import SocialLogin
 from allauth.socialaccount.models import SocialAccount
 from .models import Profile
-# Create your views here.
+from authapp.forms import ProfileEditForm
+from django.contrib import messages
+# Create your views here.                      
 def SignupView(request):
     #Auto-fill username and email if coming from google
-    google_email = request.session.get("google_email")
-    if request.method == "GET" and google_email:
-         suggested_username = google_email.split("@")[0]
-         base = suggested_username
-         counter=1
-         while User.objects.filter(username=suggested_username).exists():
-             suggested_username = f"{base}{counter}"
-             counter=counter+1
-        #Prefill form with Google data
-         form = CustomSignupForm(initial={"email":google_email,"username":suggested_username})
-         return render(request,"authapp/signup.html",{"form":form})
-         
+    # google_email = request.session.get("google_email")
+    # if request.method == "GET" and google_email:
+    #      suggested_username = google_email.split("@")[0]
+    #      base = suggested_username
+    #      counter=1
+    #      while User.objects.filter(username=suggested_username).exists():
+    #          suggested_username = f"{base}{counter}"
+    #          counter=counter+1
+    #     #Prefill form with Google data
+    #      form = CustomSignupForm(initial={"email":google_email,"username":suggested_username})
+    #      return render(request,"authapp/signup.html",{"form":form})
+    form = CustomSignupForm() 
          #Handle form submission   
     if request.method == "POST":
         form = CustomSignupForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user,full_name=user.username,phone=form.cleaned_data["phone"])
-            print("User created:", user.username)
             
+            profile, created = Profile.objects.get_or_create(
+    user=user,
+    defaults={
+        "full_name": user.get_full_name() or user.username
+    }
+)
+            profile.phone = form.cleaned_data.get("phone")
             google_email = request.session.get("google_email")
-            google_uid = request.session.get("google_uid")
-            print("session email =",google_email)
-            print("session uid=",google_uid)
-            #save google account
-            if google_email and google_uid:
-                SocialAccount.objects.create(user=user,provider="google",uid=google_uid)
+            if google_email:
+                profile.gmailid = google_email
                 del request.session["google_email"]
-                del request.session["google_uid"]
-                print("Linked Google account to user:")
-            return redirect('/auth/login/')
-        else:
-            print("Form errors:",form.errors)
-    #If not Get or post request 
-    form = CustomSignupForm()
+
+            profile.save()
+           
+            
+            
+            return redirect("login")
+    
     return render(request,"authapp/signup.html",{"form":form}) 
 
+
+# 
 def LoginView(request):
+    """
+    MANUAL LOGIN (Username/Email + Password)
+    Google users are detected and handled safely
+    """
     if request.method == "POST":
-        username = request.POST.get("username")
+        username_or_email = request.POST.get("username")
         password = request.POST.get("password")
-        #CHECK IF THE USERNAME IS EXISTS 
-        user_qs = User.objects.filter(Q(username=username) | Q(email=username))
+
+        # Find user by username OR email
+        user_qs = User.objects.filter(
+            Q(username=username_or_email) | Q(email=username_or_email)
+        )
+
         if not user_qs.exists():
-            return render(request,"authapp/login.html",{"error":"Invalid username or email"})
-        
+            return render(request, "authapp/login.html", {
+                "error": "User does not exist"
+            })
+
         user_obj = user_qs.first()
-        
-        #Block login if user is inactive
+
+        # IMPORTANT: Google users don't have passwords
         if not user_obj.has_usable_password():
-            return render(request,"authapp/login.html",{"error":"This account is registered via Google. Please use Google Sign-In."})
-        user = authenticate(request,username=user_obj.username,password=password)
-        if user:
-            login(request,user)
-            return redirect( "success")
+            return render(request, "authapp/login.html", {
+                "error": "This account uses Google login. Please login with Google or set a password."
+            })
+
+        # PASSWORD HASH CHECK HAPPENS HERE
+        user = authenticate(
+            request,
+            username=user_obj.username,
+            password=password
+        )
+
+        if user :
+            login(request, user)
+            return redirect("profile")
+
         return render(request, "authapp/login.html", {
-            "error": "Invalid credentials"
-})
-           
-        # else:
-        #     return render(request,"authapp/login.html",{"error":"Invalid credentials"})
-    return render(request,"authapp/login.html")
+            "error": "Invalid password"
+        })
+
+    return render(request, "authapp/login.html")
 
 @login_required
 def success_view(request):
@@ -80,3 +103,33 @@ def success_view(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+@login_required
+def profile_view(request):
+    profile, created = Profile.objects.get_or_create(
+        user=request.user,
+        defaults={
+            "full_name": request.user.get_full_name() or request.user.username
+        }
+    )
+
+    return render(request, "authapp/profile.html", {
+        "profile": profile
+    })
+
+@login_required
+def edit_profile(request):
+    profile = Profile.objects.get(user=request.user)
+
+    if request.method == "POST":
+        form = ProfileEditForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("profile")
+    else:
+        form = ProfileEditForm(instance=profile)
+
+    return render(request, "authapp/edit_profile.html", {
+        "form": form
+    })
