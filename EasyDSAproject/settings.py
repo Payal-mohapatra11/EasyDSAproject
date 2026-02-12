@@ -20,7 +20,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+load_dotenv(BASE_DIR / '.env')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'authapp',
     
     'chatbot',
+    'learning',
+    'feedback',
 ]
 SITE_ID = 3
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "127.0.0.1:8001"]
@@ -94,19 +96,34 @@ WSGI_APPLICATION = 'EasyDSAproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'easydsa_db',
+#         'USER':'django_user',
+#         'PASSWORD':'StrongPassword@123',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
+
+# DATABASES['default']['OPTIONS'] = {
+#     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'easydsa_db',
-        'USER':'django_user',
-        'PASSWORD':'StrongPassword@123',
-        'HOST':'localhost',
-        'PORT':'3306',
+        'NAME': 'defaultdb', 
+        'USER': 'avnadmin',
+        'PASSWORD':  os.environ.get('DB_PASSWORD'),
+        'HOST': 'mysql-3380fdf2-easydsaproject135.c.aivencloud.com',
+        'PORT': '15619',
+        'OPTIONS': {
+            'ssl': {'ssl-mode': 'REQUIRED'},
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
-}
-
-DATABASES['default']['OPTIONS'] = {
-    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
 }
 
 
@@ -116,9 +133,11 @@ DATABASES['default']['OPTIONS'] = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8}
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -204,3 +223,16 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
     }
 }
+
+
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'payalmohapatra137@gmail.com'
+
+EMAIL_HOST_PASSWORD ='dlmjdwnwrpmcrbqh'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

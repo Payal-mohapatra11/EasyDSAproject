@@ -11,10 +11,29 @@
         body { font-family: 'Space Grotesk', sans-serif; }
     </style>
 </head>
-<body>
+<body>      
     {% include 'header.html' %}
     <div class="max-w-5xl mx-auto py-6 sm:py-10 px-3 sm:px-6">
-        <h1 class="text-3xl font-bold text-center mb-8 text-pink-800">Sorting Algorithms Visualizer</h1>
+        <div class="text-center mb-10">
+           <h1 class="text-4xl font-bold text-pink-800 tracking-wide">{{topic.name}} Visualizer</h1>
+        </div>
+        
+        <form method="POST" class="mb-6">
+    {% csrf_token %}
+    
+    <div class="flex items-center space-x-3">
+        <input type="checkbox"
+               name="complete_topic"
+               onchange="this.form.submit()"
+               {% if progress.is_completed %}checked disabled{% endif %}
+               class="w-5 h-5 text-green-600">
+
+        <label class="text-lg font-semibold text-green-700">
+            Mark only if this topic is Completed
+        </label>
+    </div>
+</form>
+
         <div class="bg-green-100 rounded-xl shadow-lg p-6 mb-8">
             <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-3 mb-6">
                  <button onclick="generateArray()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Generate Array</button>

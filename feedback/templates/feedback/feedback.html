@@ -1,0 +1,178 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Easy DSA - Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 ">
+    {% include 'header.html' %}
+<div class="w-full flex justify-center">
+<div class="bg-white shadow-2xl rounded-2xl w-full max-w-3xl p-8 mt-20 mb-10">
+
+    <!-- Heading -->
+    <h1 class="text-3xl font-bold text-center text-green-600 mb-2">
+        Help Us Improve Easy DSA 
+    </h1>
+    <p class="text-center text-gray-500 mb-8">
+        Your feedback helps us make learning DSA simpler and more effective.
+    </p>
+     {% if messages %}
+        {% for message in messages %}
+            <p class="text-green-600 text-center font-semibold mb-4">
+                {{ message }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+
+    <form method="POST" action="{% url 'feedback' %}" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Basic Info -->
+        <div>
+            <label class="block font-semibold text-lg mb-1">Name </label>
+            <input type="text" name="name" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none">
+        </div>
+
+        <div>
+            <label class="block font-semibold text-lg mb-1">Email </label>
+            <input type="email" name="email" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none">
+        </div>
+
+        <!-- Role -->
+        <div>
+            <label class="block font-semibold text-lg mb-2">You are:</label>
+            <div class="grid grid-cols-2 gap-2">
+                <label><input type="radio" name="domain" value="1st Year Student" required> 1st Year Student</label>
+                <label><input type="radio" name="domain" value="2nd Year Student"> 2nd Year Student</label>
+                <label><input type="radio" name="domain" value="3rd/4th Year Student"> 3rd/4th Year Student</label>
+                <label><input type="radio" name="domain" value="Working Professional"> Working Professional</label>
+                <label><input type="radio" name="domain" value="Beginner"> Beginner</label>
+            </div>
+        </div>
+
+        <!-- Overall Rating -->
+        <div>
+          <label class="block font-semibold text-lg mb-2">Overall Experience:</label>
+
+           <div class="space-y-2">
+    
+                <!-- 5 Star -->
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="radio" name="rating" value="5" required>
+                <div class="flex text-yellow-500">
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star</span>
+               </div>
+               <span>Excellent</span>
+            </label>
+
+              <!-- 4 Star -->
+           <label class="flex items-center gap-3 cursor-pointer">
+                <input type="radio" name="rating" value="4">
+                <div class="flex text-yellow-500">
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star</span>
+                   <span class="material-icons">star_border</span>
+                </div>
+                <span>Very Good</span>
+           </label>
+ 
+                <!-- 3 Star -->
+          <label class="flex items-center gap-3 cursor-pointer">
+               <input type="radio" name="rating" value="3">
+               <div class="flex text-yellow-500">
+                  <span class="material-icons">star</span>
+                  <span class="material-icons">star</span>
+                  <span class="material-icons">star</span>
+                  <span class="material-icons">star_border</span>
+                  <span class="material-icons">star_border</span>
+               </div>
+               <span>Good</span>
+           </label>
+
+               <!-- 2 Star -->
+           <label class="flex items-center gap-3 cursor-pointer">
+                <input type="radio" name="rating" value="2">
+                <div class="flex text-yellow-500">
+                    <span class="material-icons">star</span>
+                    <span class="material-icons">star</span>
+                    <span class="material-icons">star_border</span>
+                    <span class="material-icons">star_border</span>
+                    <span class="material-icons">star_border</span>
+               </div>
+               <span>Average</span>
+           </label>
+
+                 <!-- 1 Star -->
+           <label class="flex items-center gap-3 cursor-pointer">
+                <input type="radio" name="rating" value="1">
+                <div class="flex text-yellow-500">
+                     <span class="material-icons">star</span>
+                   <span class="material-icons">star_border</span>
+                   <span class="material-icons">star_border</span>
+                   <span class="material-icons">star_border</span>
+                   <span class="material-icons">star_border</span>
+               </div>
+              <span>Poor</span>
+           </label>
+          </div>
+       </div>
+
+        <!-- Issues -->
+        <div>
+            <label class="block font-semibold text-lg mb-2">Did You Face Any Issue?</label>
+            <select name="issue_type" class="w-full border rounded-lg p-2">
+                <option value="No Issues">No Issues</option>
+                <option value="Found a Bug">Found a Bug</option>
+                <option value="Content Error">Content Error</option>
+                <option value="UI Problem">UI Problem</option>
+            </select>
+        </div>
+
+        
+
+        <!-- Suggestions -->
+        <div>
+            <label class="block font-semibold text-lg mb-1">Suggestions:</label>
+            <textarea name="suggestions" class="w-full border rounded-lg p-2" rows="10"
+                placeholder="What can we improve?"></textarea>
+        </div>
+
+        <!-- Recommendation -->
+        <div>
+            <label class="block font-semibold text-lg mb-2">Would you recommend Easy DSA?</label>
+            <select name="recommendation" required class="w-full border rounded-lg p-2">
+                 <option value="">Select</option>
+                <option>Definitely Yes</option>
+                <option>Probably Yes</option>
+                <option>Maybe</option>
+                <option>Probably No</option>
+                <option>No</option>
+            </select>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit"
+            class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition">
+            Submit Feedback
+        </button>
+
+    </form>
+
+</div>
+</div>
+
+    {% include 'footer.html' %}
+
+</body>
+</html>

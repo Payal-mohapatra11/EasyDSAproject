@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from authapp.models import Profile
+from django.contrib.auth.forms import SetPasswordForm
 
 class CustomSignupForm(UserCreationForm):
     email = forms.EmailField(required=True,widget=forms.EmailInput(attrs={"class":"w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"}))
@@ -52,3 +53,16 @@ class ProfileEditForm(forms.ModelForm):
                 "placeholder": "Enter phone number"
             }),
         }                                         
+        
+class CustomResetForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            "class": "w-full px-4 py-2 border border-gray-300 rounded-md"
+        })
+    )
+
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            "class": "w-full px-4 py-2 border border-gray-300 rounded-md"
+        })
+    )

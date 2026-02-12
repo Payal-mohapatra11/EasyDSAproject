@@ -1,7 +1,8 @@
+import token
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import CustomSignupForm
+from .forms import CustomResetForm, CustomSignupForm
 from django.contrib.auth.models import User
 from django.db.models import Q  #Q()-Query wrapper /Without Q, Django cannot combine conditions like that.
 from allauth.socialaccount.models import SocialLogin
@@ -9,6 +10,17 @@ from allauth.socialaccount.models import SocialAccount
 from .models import Profile
 from authapp.forms import ProfileEditForm
 from django.contrib import messages
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes,force_str
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.forms import SetPasswordForm
+
+
+token_generator = PasswordResetTokenGenerator()
+
 # Create your views here.                      
 def SignupView(request):
     #Auto-fill username and email if coming from google
@@ -37,10 +49,11 @@ def SignupView(request):
     }
 )
             profile.phone = form.cleaned_data.get("phone")
-            google_email = request.session.get("google_email")
-            if google_email:
-                profile.gmailid = google_email
-                del request.session["google_email"]
+            #  Check if user has Google account linked
+            social_account = SocialAccount.objects.filter(user=user, provider="google").first()
+
+            if social_account:
+                profile.gmailid = social_account.extra_data.get("email")
 
             profile.save()
            
@@ -104,6 +117,7 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
+
 @login_required
 def profile_view(request):
     profile, created = Profile.objects.get_or_create(
@@ -112,6 +126,12 @@ def profile_view(request):
             "full_name": request.user.get_full_name() or request.user.username
         }
     )
+
+    
+
+    if request.user.email:
+        profile.gmailid = request.user.email
+        profile.save()
 
     return render(request, "authapp/profile.html", {
         "profile": profile
@@ -133,3 +153,66 @@ def edit_profile(request):
     return render(request, "authapp/edit_profile.html", {
         "form": form
     })
+    
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        users = User.objects.filter(email=email)
+
+        if not users.exists():
+            messages.error(request, "Email not registered.")
+            return redirect("forgot_password")
+
+        user = users.first()   # get single user
+
+        # If Google user
+        if not user.has_usable_password():
+            messages.error(request, "This account uses Google login.")
+            return redirect("forgot_password")
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = token_generator.make_token(user)
+
+        reset_link = request.build_absolute_uri(
+            f'/auth/reset-password/{uid}/{token}/'
+        )
+
+        send_mail(
+            subject="Reset Your Password",
+            message=f"Click the link to reset your password:\n\n{reset_link}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+        )
+
+        messages.success(request, "Reset link sent to your email.")
+
+    return render(request, "authapp/forgot_password.html")
+
+def reset_password(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if not user or not default_token_generator.check_token(user, token):
+        messages.error(request, "Invalid or expired link.")
+        return redirect("forgot_password")
+
+    # Only create empty form on GET
+    if request.method == "GET":
+        form = CustomResetForm(user)
+        return render(request, "authapp/reset_password.html", {"form": form})
+
+    #  Only validate on POST
+    if request.method == "POST":
+        form = CustomResetForm(user, request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Password reset successful.")
+            return redirect("login")
+
+        # If invalid → render same form with errors
+        return render(request, "authapp/reset_password.html", {"form": form})
