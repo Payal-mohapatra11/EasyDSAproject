@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-g9#m!c03_e%w@(&v5t6qgd52t7oz=txt7zg!!g&p0@yaa0&ngi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['easydsapro.onrender.com', '.onrender.com']
+ALLOWED_HOSTS = ['easydsapro.onrender.com','localhost', '127.0.0.1' ,'.onrender.com']
 
 CSRF_TRUSTED_ORIGINS = [
     "https://easydsapro.onrender.com",
