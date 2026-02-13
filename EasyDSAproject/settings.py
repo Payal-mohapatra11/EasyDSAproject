@@ -36,8 +36,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://easydsapro.onrender.com",
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+USE_X_FORWARDED_HOST = True
+
 
 #redeploy
 
