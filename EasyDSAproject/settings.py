@@ -67,7 +67,7 @@ INSTALLED_APPS = [
     'feedback',
 ]
 SITE_ID = 3
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "127.0.0.1:8001"]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
