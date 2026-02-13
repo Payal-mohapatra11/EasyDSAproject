@@ -36,6 +36,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://easydsa.onrender.com",
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+#redeploy
+
 # Application definition
 
 INSTALLED_APPS = [
