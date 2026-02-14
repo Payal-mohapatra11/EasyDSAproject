@@ -5,19 +5,13 @@ class Command(BaseCommand):
     help = 'Setup site for django.contrib.sites'
 
     def handle(self, *args, **kwargs):
-        try:
-            site, created = Site.objects.get_or_create(
-                id=1,  # Using SITE_ID = 1
-                defaults={
-                    'domain': 'easydsapro.onrender.com',
-                    'name': 'EasyDSA Pro'
-                }
-            )
-            if not created:
-                site.domain = 'easydsapro.onrender.com'
-                site.name = 'EasyDSA Pro'
-                site.save()
-            
-            self.stdout.write(self.style.SUCCESS(f'✓ Site configured: {site.domain}'))
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f'✗ Error: {str(e)}'))
+        site, created = Site.objects.update_or_create(
+            domain='easydsapro.onrender.com',
+            defaults={
+                'name': 'EasyDSA Pro'
+            }
+        )
+
+        self.stdout.write(
+            self.style.SUCCESS(f'✓ Site configured: {site.domain} (ID={site.id})')
+        )
