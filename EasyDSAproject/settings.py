@@ -25,7 +25,7 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g9#m!c03_e%w@(&v5t6qgd52t7oz=txt7zg!!g&p0@yaa0&ngi'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -33,7 +33,8 @@ DEBUG = False
 ALLOWED_HOSTS = ['easydsapro.onrender.com','localhost', '127.0.0.1' ,'.onrender.com']
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://easydsapro.onrender.com",
+    'https://easydsapro.onrender.com',
+    'https://*.onrender.com',
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
@@ -246,5 +247,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'payalmohapatra137@gmail.com'
 
-EMAIL_HOST_PASSWORD ='dlmjdwnwrpmcrbqh'
+# EMAIL_HOST_PASSWORD ='dlmjdwnwrpmcrbqh'
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
