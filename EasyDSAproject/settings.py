@@ -234,6 +234,11 @@ SOCIALACCOUNT_PROVIDERS = {
             "name",
             "picture",   
         ],
+        "APP": {
+            "client_id": os.environ.get('GOOGLE_CLIENT_ID', ''),
+            "secret": os.environ.get('GOOGLE_CLIENT_SECRET', ''),
+            "key": ""
+        }
     }
 }
 
