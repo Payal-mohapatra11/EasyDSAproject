@@ -219,28 +219,28 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # print("GROQ KEY:", os.getenv("GROQ_API_KEY"))
 
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
-        "FIELDS": [
-            "id",
-            "email",
-            "name",
-            "picture",   
-        ],
-        "APP": {
-            "client_id": os.environ.get('GOOGLE_CLIENT_ID', ''),
-            "secret": os.environ.get('GOOGLE_CLIENT_SECRET', ''),
-            "key": ""
-        }
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     "google": {
+#         "SCOPE": [
+#             "profile",
+#             "email",
+#         ],
+#         "AUTH_PARAMS": {
+#             "access_type": "online",
+#         },
+#         "FIELDS": [
+#             "id",
+#             "email",
+#             "name",
+#             "picture",   
+#         ],
+#         "APP": {
+#             "client_id": os.environ.get('GOOGLE_CLIENT_ID', ''),
+#             "secret": os.environ.get('GOOGLE_CLIENT_SECRET', ''),
+#             "key": ""
+#         }
+#     }
+# }
 
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
