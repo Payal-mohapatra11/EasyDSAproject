@@ -10,11 +10,11 @@ urlpatterns = [
    path("success/", success_view, name="success"),
     #  path("auth/delete/", delete_account, name="delete_account"),
     
-     path("password-reset/",
-         auth_views.PasswordResetView.as_view(
-             template_name="authapp/password_reset.html"
-         ),
-         name="password_reset"),
+    #  path("password-reset/",
+    #      auth_views.PasswordResetView.as_view(
+    #          template_name="authapp/password_reset.html"
+    #      ),
+    #      name="password_reset"),
      path("profile/", profile_view, name="profile"),
      path("profile/edit/", views.edit_profile, name="edit_profile"),
      path("forgot-password/", views.forgot_password,name='forgot_password'),
