@@ -36,7 +36,7 @@ class CustomSignupForm(UserCreationForm):
     )
     class Meta:
         model = User
-        fields=["username","email","phone","password1","password2"]
+        fields=["full_name","email","phone","password1","password2"]
         
 class ProfileEditForm(forms.ModelForm):
     class Meta:
