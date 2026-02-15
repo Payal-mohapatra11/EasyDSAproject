@@ -2,6 +2,8 @@ import token
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+import resend
 from .forms import CustomResetForm, CustomSignupForm
 from django.contrib.auth.models import User
 from django.db.models import Q  #Q()-Query wrapper /Without Q, Django cannot combine conditions like that.
@@ -19,7 +21,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import SetPasswordForm
 
 
-token_generator = PasswordResetTokenGenerator()
+#token_generator = PasswordResetTokenGenerator()
+resend.api_key = settings.RESEND_API_KEY
 
 # Create your views here.                      
 def SignupView(request):
@@ -172,12 +175,11 @@ def forgot_password(request):
             return redirect("forgot_password")
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = token_generator.make_token(user)
-
+        token = default_token_generator.make_token(user)
+        
         reset_link = request.build_absolute_uri(
-            f'/auth/reset-password/{uid}/{token}/'
-        )
-
+    reverse("reset_password", args=[uid, token])
+)
         send_mail(
             subject="Reset Your Password",
             message=f"Click the link to reset your password:\n\n{reset_link}",
