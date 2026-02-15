@@ -44,14 +44,11 @@ def SignupView(request):
         form = CustomSignupForm(request.POST)
         if form.is_valid():
             user = form.save()
-            
-            profile, created = Profile.objects.get_or_create(
-    user=user,
-    defaults={
-        "full_name": user.get_full_name() or user.username
-    }
-)
-            profile.phone = form.cleaned_data.get("phone")
+            profile = Profile.objects.create(
+              user=user,
+        full_name=form.cleaned_data.get("full_name"),
+        phone=form.cleaned_data.get("phone")
+    )
             #  Check if user has Google account linked
             social_account = SocialAccount.objects.filter(user=user, provider="google").first()
 
