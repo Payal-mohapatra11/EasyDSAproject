@@ -46,7 +46,7 @@ def SignupView(request):
             user = form.save()
             profile = Profile.objects.create(
               user=user,
-        full_name=form.cleaned_data.get("full_name"),
+        full_name=user.username,
         phone=form.cleaned_data.get("phone")
     )
             #  Check if user has Google account linked
@@ -144,7 +144,12 @@ def edit_profile(request):
     if request.method == "POST":
         form = ProfileEditForm(request.POST, instance=profile)
         if form.is_valid():
-            form.save()
+            profile = form.save(commit=False)
+            new_username=form.cleaned_data.get("full_name")
+            request.user.username = new_username
+            request.user.save()
+            profile.full_name=new_username
+            profile.save()
             messages.success(request, "Profile updated successfully.")
             return redirect("profile")
     else:
