@@ -73,6 +73,11 @@ def LoginView(request):
     if request.method == "POST":
         username_or_email = request.POST.get("username")
         password = request.POST.get("password")
+        
+        if not username_or_email or not password:
+            return render(request, "authapp/login.html", {
+                "error": "Please enter both fields"
+            })
 
         # Find user by username OR email
         user_qs = User.objects.filter(

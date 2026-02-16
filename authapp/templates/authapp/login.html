@@ -27,9 +27,9 @@
         <form method="POST" action="{% url 'login' %}">
               {% csrf_token %}
             <div>
-                  <label for="full_name" class="block text-sm font-medium text-gray-700">Enter Full Name</label>
+                  <label for="username" class="block text-sm font-medium text-gray-700">Enter Username</label>
                   <div class="mt-1">
-                        <input id="username" name="full_name" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-400">
+                        <input id="username" name="username" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-400">
                   </div>
             </div>
             <div>
