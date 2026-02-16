@@ -23,7 +23,7 @@ from learning import views as learning_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('home/', views.home, name='home'),
     path('auth/', include('authapp.urls')),
     
     # Block Allauth signup + redirect to your page
