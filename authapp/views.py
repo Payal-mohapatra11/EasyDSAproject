@@ -187,12 +187,12 @@ def forgot_password(request):
         reset_link = request.build_absolute_uri(
     reverse("reset_password", args=[uid, token])
 )
-        send_mail(
-            subject="Reset Your Password",
-            message=f"Click the link to reset your password:\n\n{reset_link}",
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[email],
-        )
+        resend.Emails.send({
+            "from": "onboarding@resend.dev",
+            "to": email,
+            "subject": "Reset Your Password",
+            "text": f"Click the link below to reset your password:\n\n{reset_link}"
+        })
 
         messages.success(request, "Reset link sent to your email.")
 
