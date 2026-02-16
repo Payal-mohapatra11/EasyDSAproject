@@ -37,6 +37,21 @@ class CustomSignupForm(UserCreationForm):
     class Meta:
         model = User
         fields=["full_name","email","phone","password1","password2"]
+       #Save full_name in auth_user (first_name + last_name) 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        full_name = self.cleaned_data.get("full_name")
+        if full_name:
+            parts = full_name.split(" ", 1)
+            user.first_name = parts[0]
+            if len(parts) > 1:
+                user.last_name = parts[1]
+
+        if commit:
+            user.save()
+
+        return user
         
 class ProfileEditForm(forms.ModelForm):
     class Meta:
