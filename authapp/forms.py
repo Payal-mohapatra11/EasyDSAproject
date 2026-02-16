@@ -36,7 +36,7 @@ class CustomSignupForm(UserCreationForm):
     )
     class Meta:
         model = User
-        fields=["full_name","email","phone","password1","password2"]
+        fields=["username","full_name","email","phone","password1","password2"]
        #Save full_name in auth_user (first_name + last_name) 
     def save(self, commit=True):
         user = super().save(commit=False)
