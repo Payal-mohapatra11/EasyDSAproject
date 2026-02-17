@@ -188,7 +188,7 @@ def forgot_password(request):
     reverse("reset_password", args=[uid, token])
 )
         resend.Emails.send({
-            "from": "onboarding@resend.dev",
+            "from": "support@easydsa.online",
             "to": email,
             "subject": "Reset Your Password",
             "text": f"Click the link below to reset your password:\n\n{reset_link}"
