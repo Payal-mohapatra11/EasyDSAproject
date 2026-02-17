@@ -21,7 +21,10 @@ from django.shortcuts import redirect
 from learning import views as learning_views
 
 
+
+
 urlpatterns = [
+     path('', lambda request: redirect('home')), 
     path('admin/', admin.site.urls),
     path('home/', views.home, name='home'),
     path('auth/', include('authapp.urls')),
