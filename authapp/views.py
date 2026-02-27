@@ -131,11 +131,21 @@ def profile_view(request):
             "full_name": request.user.get_full_name() or request.user.username
         }
     )
-    if request.user.get_full_name():    
-           default_username=request.user.get_full_name()
+     
+    social_account = SocialAccount.objects.filter(user=request.user,provider="google").first()
+    if social_account:
+           google_email = social_account.extra_data.get("name","")
+           default_username=google_email or request.user.email.split("@")[0]
+           if not profile.full_name or profile.full_name == request.user.username:
+               profile.full_name=default_username
+               profile.save()
     else:
-        default_username=request.user.email.split("@")[0]
-    
+           if request.user.get_full_name():
+               default_username=request.user.get_full_name()
+           else:
+               default_username=request.user.email.split("@")[0]       
+              
+   
     if request.user.username !=default_username:
         request.user.username=default_username
         request.user.save()

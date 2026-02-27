@@ -27,7 +27,7 @@ def save_google_profile(request, sociallogin, **kwargs):
     extra_data = sociallogin.account.extra_data
 
     profile, created = Profile.objects.get_or_create(user=user)
-
+    profile.full_name = extra_data.get("name", user.username)
     profile.gmailid = extra_data.get("email")
     profile.avatar = extra_data.get("picture")
     profile.save()
