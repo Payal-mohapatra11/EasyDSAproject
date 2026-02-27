@@ -16,10 +16,9 @@
    
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
     {% include 'header.html' %}
-<main class="flex-grow">
-    <div class="max-w-5xl mx-auto py-6 sm:py-12 sm:px-4 ">
+    <div class="max-w-5xl mx-auto px-6 py-12 sm:py-12 sm:px-4 ">
         <div class="text-center mb-10">
            <h1 class="text-4xl sm:text-3xl font-bold text-pink-800 tracking-wide text-center mb-6 sm:mb-8">{{topic.name}} Visualizer</h1>
         </div>
@@ -125,7 +124,7 @@
       </div>
     </div>
     </div>
-</main>
+
    {% include 'chatbot.html' %}
   {% include 'footer.html' %}
 
@@ -446,45 +445,7 @@
     };
 
 });
-    </script>
-    <script>
-function openSidebar() {
-    document.getElementById("leftSidebar")
-        .classList.remove("-translate-x-full");
-}
-
-function closeSidebar() {
-    document.getElementById("leftSidebar")
-        .classList.add("-translate-x-full");
-}
-
-async function askchatbot(){
-    const questionIN = document.getElementById('question');
-    const answer=document.getElementById('answer');
-
-    const question = questionIN.value.trim();
-    if(!question){
-        answer.innerText="Please enter your question";
-        return;
-    }
-
-    answer.innerText="Loading...";
-
-    try{
-        const res = await fetch("/chatbot/chatbot/",{
-            method:"POST",
-            headers:{ "Content-Type":"application/json"},
-            body:JSON.stringify({question:question})
-        });
-
-        const data = await res.json();
-        answer.innerText=data.answer;
-    } catch (error){
-        answer.innerText="Error occurred. Please try again.";
-    }
-}
-</script>
-   
+        </script>
 
 </body>
 </html>
