@@ -43,6 +43,7 @@ urlpatterns = [
      
      path('arrayvisualizers/',learning_views.array_visualizer,name='array_visualizer'),
      path('linkedlistvisualizers/',learning_views.linkedlist_visualizer,name='linkedlist_visualizer'),
+     path('stackvisualizers/',learning_views.stack_visualizer,name='stack_visualizer'),
      path('sortingvisualizers/',learning_views.sorting_visualizer,name='sorting_visualizer'),
      path('searchingvisualizers/',learning_views.searching_visualizer,name='searching_visualizer'),
      path('chatbotpage/',views.chatbotpage,name='chatbotpage'),
