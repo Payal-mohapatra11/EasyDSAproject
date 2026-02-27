@@ -124,7 +124,7 @@
       </div>
     </div>
     </div>
-     
+   {% include 'chatbot.html' %}  
    
   {% include 'footer.html' %}
 
@@ -446,6 +446,43 @@
 
 });
     </script>
+    <script>
+function openSidebar() {
+    document.getElementById("leftSidebar")
+        .classList.remove("-translate-x-full");
+}
+
+function closeSidebar() {
+    document.getElementById("leftSidebar")
+        .classList.add("-translate-x-full");
+}
+
+async function askchatbot(){
+    const questionIN = document.getElementById('question');
+    const answer=document.getElementById('answer');
+
+    const question = questionIN.value.trim();
+    if(!question){
+        answer.innerText="Please enter your question";
+        return;
+    }
+
+    answer.innerText="Loading...";
+
+    try{
+        const res = await fetch("/chatbot/chatbot/",{
+            method:"POST",
+            headers:{ "Content-Type":"application/json"},
+            body:JSON.stringify({question:question})
+        });
+
+        const data = await res.json();
+        answer.innerText=data.answer;
+    } catch (error){
+        answer.innerText="Error occurred. Please try again.";
+    }
+}
+</script>
    
 
 </body>
