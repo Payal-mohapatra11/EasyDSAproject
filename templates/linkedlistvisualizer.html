@@ -9,27 +9,33 @@
       <style>
          @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Space Grotesk', sans-serif; }
+        /* Mobile-specific adjustments */
+        @media (max-width: 640px) {
+            body {
+                padding-bottom: 120px;
+            }
+        }
     </style>
 </head>
 <body>
      {% include 'header.html' %}
 
-      <div class="max-w-5xl mx-auto py-12 px-6">
-        <div class="text-center mb-10">
+      <div class="max-w-5xl mx-auto py-4 sm:py-12 px-3 sm:px-6 pb-24">
+        <div class="text-center mb-6 sm:mb-10">
            <h1 class="text-4xl font-bold text-pink-800 tracking-wide">{{topic.name}} Visualizer</h1>
         </div>
         
-        <form method="POST" class="mb-6">
+        <form method="POST" class="mb-4 sm:mb-6">
     {% csrf_token %}
     
-    <div class="flex items-center space-x-3">
+    <div class="flex items-center space-x-2 sm:space-x-3 justify-center">
         <input type="checkbox"
                name="complete_topic"
                onchange="this.form.submit()"
                {% if progress.is_completed %}checked disabled{% endif %}
-               class="w-5 h-5 text-green-600">
+               class="w-4 h-4 sm:w-5 sm:h-5 text-green-600">
 
-        <label class="text-lg font-semibold text-green-700">
+        <label class="text-sm sm:text-lgfont-semibold text-green-700">
             Mark only if this topic is Completed
         </label>
     </div>
@@ -270,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function switchMode(newType) {
     if (type !== newType) {
-        linkedList = [];      // 🔥 automatic reset
+        linkedList = [];      //  automatic reset
         logSteps([]);
     }
     type = newType;
