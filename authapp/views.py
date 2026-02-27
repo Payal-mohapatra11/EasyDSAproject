@@ -123,11 +123,11 @@ def logout_view(request):
     return redirect("login")
 
 
-@login_required
-def profile_view(request):
+#@login_required
+"""def profile_view(request):
     profile, created = Profile.objects.get_or_create(
-        user=request.user,
-        defaults={
+    user=request.user,
+    defaults={
             "full_name": request.user.get_full_name() or request.user.username
         }
     )
@@ -154,6 +154,39 @@ def profile_view(request):
         profile.full_name=default_username
         profile.save()
 
+    return render(request, "authapp/profile.html", {
+        "profile": profile
+    })"""
+    
+@login_required
+def profile_view(request):
+    # Get or create profile
+    profile, created = Profile.objects.get_or_create(
+        user=request.user,
+        defaults={
+            "full_name": request.user.get_full_name() or request.user.username,
+            "gmailid": request.user.email or ""
+        }
+    )
+    
+    # Update email if changed (safe for multiple logins)
+    if request.user.email and profile.gmailid != request.user.email:
+        profile.gmailid = request.user.email
+        profile.save(update_fields=['gmailid'])
+    
+    # Only populate name from Google on first creation or if empty
+    if created or not profile.full_name:
+        social_account = SocialAccount.objects.filter(
+            user=request.user,
+            provider="google"
+        ).first()
+        
+        if social_account:
+            google_name = social_account.extra_data.get("name")
+            if google_name:
+                profile.full_name = google_name
+                profile.save(update_fields=['full_name'])
+    
     return render(request, "authapp/profile.html", {
         "profile": profile
     })
