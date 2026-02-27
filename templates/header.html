@@ -57,9 +57,16 @@
     </nav>
     <script>
         // Mobile menu toggle
-        document.querySelector('.mobile-menu-button').addEventListener('click', function() {
-            document.querySelector('.mobile-menu').classList.toggle('hidden');
+        ocument.addEventListener("DOMContentLoaded", function () {
+    const btn = document.querySelector(".mobile-menu-button");
+    const menu = document.querySelector(".mobile-menu");
+
+    if (btn && menu) {
+        btn.addEventListener("click", function () {
+            menu.classList.toggle("hidden");
         });
+    }
+});
     </script>
     <script>
         const customIcons = {
