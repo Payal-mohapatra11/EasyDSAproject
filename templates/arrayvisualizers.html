@@ -14,9 +14,9 @@
 </head>
 <body>
     {% include 'header.html' %}
-    <div class="max-w-5xl mx-auto py-12 px-6">
+    <div class="max-w-5xl mx-auto py-6 sm:py-12 sm:px-4">
         <div class="text-center mb-10">
-           <h1 class="text-4xl font-bold text-pink-800 tracking-wide">{{topic.name}} Visualizer</h1>
+           <h1 class="text-4xl sm:text-3xl font-bold text-pink-800 tracking-wide text-center mb-6 sm:mb-8">{{topic.name}} Visualizer</h1>
         </div>
         
         <form method="POST" class="mb-6">
@@ -37,15 +37,15 @@
 
         <div class="bg-green-100 rounded-xl shadow-lg p-6 mb-8">
 
-            <div class="flex justify-between mb-4">
+            <div class="flex flex-wrap justify-center gap-3 mb-4">
                 <div class="flex space-x-2">
-                    <button id="insert-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Insert</button>
-                   <button id="delete-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Delete</button>
-                   <button id="update-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Update</button>
-                   <button id="search-btn" class="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-indigo-700">Search</button> 
+                    <button id="insert-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Insert</button>
+                   <button id="delete-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Delete</button>
+                   <button id="update-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Update</button>
+                   <button id="search-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Search</button> 
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button id="reset-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Reset</button>
+                    <button id="reset-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Reset</i></button>
                 </div>
             </div>
             <div class="flex justify-center mb-4">
@@ -441,6 +441,6 @@
 
 });
     </script>
-    
+     {% include 'footer.html' %}
 </body>
 </html>

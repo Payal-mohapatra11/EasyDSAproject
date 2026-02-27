@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Visualizer  </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .tree-node {
+            transition: all 0.3s ease;
+        }
+        .tree-line {
+            stroke: #818cf8;
+            stroke-width: 2;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    
+  {% include 'header.html' %}
+    <div class="max-w-5xl mx-auto py-6 sm:py-12 sm:px-4">
+      <div class="text-center mb-10">
+           <h1 class="text-4xl sm:text-3xl font-bold text-pink-800 tracking-wide text-center mb-6 sm:mb-8">{{topic.name}} Visualizer</h1>
+        </div>
+        <form method="POST" class="mb-6">
+    {% csrf_token %}
+    
+    <div class="flex items-center space-x-3">
+        <input type="checkbox"
+               name="complete_topic"
+               onchange="this.form.submit()"
+               {% if progress.is_completed %}checked disabled {% endif %}
+               class="w-5 h-5 text-green-600">
+
+        <label class="text-lg font-semibold text-green-700">
+            Mark only if this topic is Completed
+        </label>
+    </div>
+</form>
+
+        <div class="bg-green-100 rounded-xl shadow-lg p-6">
+            <div class="flex flex-wrap gap-2 justify-center sm:justify-between mb-4">
+                <div class="flex space-x-2">
+                    <button id="insert-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Insert</button>
+                    <button id="dfs-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Dfs</button>
+                    <button id="bfs-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">BFS</button>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="reset-btn"class="px-3 py-2 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-gray-700">Reset</button>
+                </div>
+            </div>
+
+            <div class="relative h-64 sm:h-96 bg-gray-100 rounded-lg mb-4 overflow-hidden" id="tree-container">
+                <svg id="tree-lines"></svg>
+                <!-- Tree nodes will be dynamically inserted here -->
+            </div>
+
+            <div id="operation-panel" class="hidden bg-gray-100 p-4 rounded-lg mb-4">
+                <div id="insert-panel" class="hidden">
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <label for="insert-value" class="block text-sm font-medium text-gray-700">Value:</label>
+                            <input type="number" id="insert-value" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <button id="do-insert" class="mt-5 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Insert</button>
+                    </div>
+                </div>
+
+                <div id="dfs-panel" class="hidden">
+                    <div class="flex items-center space-x-4">
+                        <select id="dfs-type" class="mt-1 block rounded-md border-gray-300 shadow-sm">
+                            <option value="preorder">Preorder</option>
+                            <option value="inorder">Inorder</option>
+                            <option value="postorder">Postorder</option>
+                        </select>
+                        <button id="do-dfs" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Traverse</button>
+                    </div>
+                </div>
+
+                <div id="bfs-panel" class="hidden">
+                    <button id="do-bfs" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Traverse</button>
+                </div>
+            </div>
+
+            <div id="status-message" class="text-center text-gray-600 italic"></div>
+            <div id="traversal-path" class="text-center mt-2 font-mono"></div>
+             <div class="mt-4">
+            <div id="output-box" class="mt-3 p-4 rounded-lg text-center font-semibold text-gray-800">
+                    
+            </div>
+    
+             <h3 class="font-bold mb-2"></h3>
+             <pre id="operation-log"
+              class="bg-white text-gray-800 text-xs sm:text-sm p-3 sm:p-4 rounded-lg h-32 sm:h-40 overflow-y-auto">
+            </pre>
+           </div>
+
+        </div>
+
+ <div class="bg-green-100 rounded-xl shadow-lg p-6">
+<section class="max-w-6xl mx-auto mt-6 sm:mt-10 bg-white p-4 sm:p-6 rounded-xl shadow-md">
+ 
+   <h2 class="text-3xl font-bold mb-4 text-indigo-600">
+    Understanding the Tree Data Structure
+   </h2>
+
+  <p class="text-gray-700 mb-4">
+    A <strong>Tree</strong> is a non-linear data structure used to represent
+    hierarchical relationships between elements. It consists of nodes connected
+    by edges, with one node designated as the <strong>root</strong>.
+  </p>
+
+  <p class="text-gray-700 mb-4">
+    Unlike arrays or linked lists, trees organize data in <strong>levels</strong>,
+    making them efficient for searching, sorting, and representing real-world
+    hierarchies.
+  </p>
+
+  <ul class="list-disc pl-6 text-gray-700 mb-6">
+    <li>Each element is called a <strong>node</strong></li>
+    <li>Connections between nodes are called <strong>edges</strong></li>
+    <li>Topmost node is the <strong>root</strong></li>
+    <li>Nodes with no children are called <strong>leaf nodes</strong></li>
+  </ul>
+
+  <!-- BASIC TREE OPERATIONS -->
+  <h3 class="text-2xl font-semibold mb-3 text-indigo-500">
+    Time and Space Complexity (General Tree)
+  </h3>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border border-gray-300 text-left">
+      <thead class="bg-indigo-100">
+        <tr>
+          <th class="p-3 border">Operation</th>
+          <th class="p-3 border">Time Complexity</th>
+          <th class="p-3 border">Space Complexity</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td class="p-3 border">Insert</td>
+          <td class="p-3 border">O(log n) / O(n)</td>
+          <td class="p-3 border">O(log n) / O(n)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Delete</td>
+          <td class="p-3 border">O(log n) / O(n)</td>
+          <td class="p-3 border">O(log n) / O(n)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Search</td>
+          <td class="p-3 border">O(log n) / O(n)</td>
+          <td class="p-3 border">O(log n) / O(n)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Traversal</td>
+          <td class="p-3 border">O(n)</td>
+          <td class="p-3 border">O(n)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Height calculation</td>
+          <td class="p-3 border">O(n)</td>
+          <td class="p-3 border">O(n)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TRAVERSAL COMPLEXITIES -->
+  <h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+    Traversal Complexities (Any Tree)
+  </h3>
+
+  <p class="text-gray-700 mb-3">
+    Assume <strong>n</strong> = number of nodes, <strong>h</strong> = height of the tree.
+  </p>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border border-gray-300 text-left">
+      <thead class="bg-indigo-100">
+        <tr>
+          <th class="p-3 border">Traversal</th>
+          <th class="p-3 border">Time Complexity</th>
+          <th class="p-3 border">Extra Space Complexity</th>
+          <th class="p-3 border">Notes</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td class="p-3 border">DFS (Pre/In/Post Order)</td>
+          <td class="p-3 border">O(n)</td>
+          <td class="p-3 border">O(h)</td>
+          <td class="p-3 border">Space is recursion stack (or explicit stack) up to height. </td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">BFS (Level Order)</td>
+          <td class="p-3 border">O(n)</td>
+          <td class="p-3 border">O(w) (Worst O(n))</td>
+          <td class="p-3 border">Queue can hold the widest level w.</td>
+          
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ul class="list-disc pl-6 text-gray-700 mt-4 mb-6">
+    <li>DFS space comes from recursion stack (or explicit stack) up to height <strong>h</strong></li>
+    <li>BFS uses a queue that can store the widest level <strong>w</strong></li>
+  </ul>
+
+  <!-- BST OPERATIONS -->
+  <h3 class="text-2xl font-semibold mb-3 text-indigo-500">
+    BST Operations (Binary Search Tree)
+  </h3>
+
+  <p class="text-gray-700 mb-4">
+    In a <strong>BST</strong>, search, insert, and delete operations take
+    <strong>O(h)</strong> time because traversal follows a single root-to-leaf path.
+  </p>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border border-gray-300 text-left">
+      <thead class="bg-indigo-100">
+        <tr>
+          <th class="p-3 border">Operation</th>
+          <th class="p-3 border">Best Case</th>
+          <th class="p-3 border">Average (Balanced)</th>
+          <th class="p-3 border">Worst Case (Skewed)</th>
+          <th class="p-3 border">Extra Space</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td class="p-3 border">Search</td>
+          <td class="p-3 border">O(1)</td>
+          <td class="p-3 border">O(log n)</td>
+          <td class="p-3 border">O(n)</td>
+          <td class="p-3 border">O(h) recursive , O(1) iterative</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Insert</td>
+          <td class="p-3 border">O(1)</td>
+          <td class="p-3 border">O(log n)</td>
+          <td class="p-3 border">O(n)</td>
+          <td class="p-3 border">O(h) Recursive , O(1) iterative</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Delete</td>
+          <td class="p-3 border">O(1)</td>
+          <td class="p-3 border">O(log n)</td>
+          <td class="p-3 border">O(n)</td>
+          <td class="p-3 border">O(h) Recursive , O(1) iterative</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+ Advantages</h3>
+ <ul class="list-disc pl-6 text-gray-700 space-y-3">
+     <li>
+    <strong>Efficient Searching:</strong><br>
+      Trees, particularly balanced ones like AVL or binary search trees, allow 
+searches in O(log n) time by halving the search space at each step—much faster than O(n) linear 
+scans. 
+  </li> 
+    <li>
+    <strong>Hierarchical Representation:</strong><br>
+     Trees naturally model parent-child relationships, such as file systems, 
+organizational charts, or HTML DOM trees, making data navigation intuitive and structured. 
+  </li>
+    <li>
+    <strong>Dynamic Operations:</strong><br>
+     Insertion and deletion are efficient (often O(log n)) and support 
+growing/shrinking datasets without fixed size limits, unlike arrays. 
+  </li>
+    <li>
+    <strong>Built-in Sorting:</strong><br>
+     Structures like BSTs maintain sorted order automatically during insertions, 
+enabling quick min/max or range queries. 
+  </li>
+    <li>
+    <strong>Memory Efficiency:</strong><br>
+     Trees allocate memory only for nodes and links as needed, optimizing space 
+for sparse or hierarchical data compared to dense arrays. 
+  </li>
+</ul>
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+ Disadvantages</h3>
+ <ul class="list-disc pl-6 text-gray-700 space-y-3">
+      <li>
+    <strong>High Memory Usage:</strong><br>
+  Each node needs pointers to children (and often a parent), creating overhead 
+that grows with tree size—especially problematic in memory-constrained environments. 
+  </li>
+    <li>
+    <strong>Risk of Imbalance:</strong><br>
+      Unbalanced trees (e.g., skewed from sequential inserts) degrade to O(n) time for 
+searches/inserts/deletes, performing like a linked list instead of O(log n). 
+  </li>
+   <li>
+    <strong>Implementation Complexity:</strong><br>
+     Building and maintaining balanced trees (AVL, red-black) involves 
+rotations and invariants, which are error-prone and harder to code/debug than linear structures. 
+  </li>
+   <li>
+    <strong>Slower for Simple Tasks:</strong><br>
+     : For basic search/insert/delete without hierarchy needs, hash tables often 
+outperform trees in average case, with less setup hassle. 
+  </li>
+ </ul>
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Real-World Applications of Trees
+</h3>
+
+<p class="text-gray-700 mb-4">
+  Trees are used in real life whenever data is <strong>hierarchical (parent → child)</strong>
+  or when fast <strong>searching, indexing, and decision making</strong> is required.
+</p>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-3">
+
+  <li>
+    <strong>Operating Systems (File System):</strong><br>
+    Folders and files form a hierarchy (root directory → subfolders → files),
+    which maps naturally to a tree structure.
+  </li>
+
+  <li>
+    <strong>Web Development (DOM / XML):</strong>
+    <ul class="list-disc pl-6 mt-1">
+      <li>XML documents are represented as an element tree (root → child elements).</li>
+      <li>DOM parsing builds a hierarchical tree of nodes so elements can be accessed and modified easily.</li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Databases (Indexing):</strong><br>
+    Databases commonly use <strong>B-Trees</strong> and <strong>B+ Trees</strong> for indexing
+    large tables to keep lookups fast by keeping the tree shallow.
+  </li>
+
+  <li>
+    <strong>Search & Text Features (Trie / Prefix Tree):</strong><br>
+    Tries are widely used for prefix-based tasks such as autocomplete,
+    spell checking, and IP routing (longest-prefix matching).
+  </li>
+
+  <li>
+    <strong>AI / Machine Learning (Decision Trees):</strong><br>
+    Decision trees are used for rule-based decision making in
+    classification and regression problems and are popular because they are easy to interpret.
+  </li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            
+            class TreeNode {
+                constructor(value) {
+                    this.value = value;
+                    this.left = null;
+                    this.right = null;
+                    this.element = null;
+                    this.x = 0;
+                    this.y = 0;
+                }
+            }
+
+            let root = null;
+            const treeContainer = document.getElementById('tree-container');
+            const treeLines = document.getElementById('tree-lines');
+            const statusMessage = document.getElementById('status-message');
+            const traversalPath = document.getElementById('traversal-path');
+            const operationPanel = document.getElementById('operation-panel');
+            const operationLog = document.getElementById("operation-log");
+            const outputBox = document.getElementById("output-box");
+
+            let nodeElements = [];
+            let lineElements = [];
+            
+        // ========== LOG FUNCTIONS ==========
+        function logJSON(obj) {
+            const p = document.createElement("p");
+            p.className = "font-mono text-sm";
+            p.textContent = JSON.stringify(obj);
+            operationLog.appendChild(p);
+            operationLog.scrollTop = operationLog.scrollHeight;
+        }
+
+        function clearLog() {
+            operationLog.innerHTML = "";
+        }
+
+            function renderTree() {
+                // Clear existing elements
+                nodeElements.forEach(el => el.remove());
+                lineElements.forEach(el => el.remove());
+                nodeElements = [];
+                lineElements = [];
+                
+                if (!root) return;
+
+                // Calculate positions
+                const containerWidth = treeContainer.clientWidth;
+                const containerHeight = treeContainer.clientHeight;
+                const levelHeight = containerHeight / 5;
+                
+                // Recursive function to position nodes
+                function positionNodes(node, level, x, xStep) {
+                    if (!node) return;
+                    
+                    node.x = x;
+                    node.y = level * levelHeight + 50;
+                    
+                    if (node.left) positionNodes(node.left, level + 1, x - xStep, xStep / 2);
+                    if (node.right) positionNodes(node.right, level + 1, x + xStep, xStep / 2);
+                }
+                
+                positionNodes(root, 0, containerWidth / 2, containerWidth / 4);
+
+                // Draw lines first (so nodes appear on top)
+                function drawLines(node) {
+                    if (!node) return;
+                    
+                    if (node.left) {
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', node.x);
+                        line.setAttribute('y1', node.y + 15);
+                        line.setAttribute('x2', node.left.x);
+                        line.setAttribute('y2', node.left.y - 15);
+                        line.classList.add('tree-line');
+                        treeLines.appendChild(line);
+                        lineElements.push(line);
+                        drawLines(node.left);
+                    }
+                    
+                    if (node.right) {
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', node.x);
+                        line.setAttribute('y1', node.y + 15);
+                        line.setAttribute('x2', node.right.x);
+                        line.setAttribute('y2', node.right.y - 15);
+                        line.classList.add('tree-line');
+                        treeLines.appendChild(line);
+                        lineElements.push(line);
+                        drawLines(node.right);
+                    }
+                }
+                
+                drawLines(root);
+
+                // Create node elements
+                function createNodeElement(node) {
+                    const nodeEl = document.createElement('div');
+                    nodeEl.className = `tree-node absolute w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold cursor-pointer`;
+                    nodeEl.style.left = `${node.x - 24}px`;
+                    nodeEl.style.top = `${node.y - 24}px`;
+                    nodeEl.textContent = node.value;
+                    
+                    node.element = nodeEl;
+                    nodeElements.push(nodeEl);
+                    treeContainer.appendChild(nodeEl);
+                    
+                    nodeEl.addEventListener('click', () => {
+                        highlightNode(node, 'bg-pink-500');
+                        statusMessage.textContent = `Selected node ${node.value}`;
+                    });
+                }
+                
+                function traverseAndCreate(node) {
+                    if (!node) return;
+                    createNodeElement(node);
+                    traverseAndCreate(node.left);
+                    traverseAndCreate(node.right);
+                }
+                
+                traverseAndCreate(root);
+            }
+
+            function highlightNode(node, color = 'bg-pink-500') {
+                if (node && node.element) {
+                    node.element.classList.add(color);
+                    setTimeout(() => {
+                        node.element.classList.remove(color);
+                    }, 1000);
+                }
+            }
+
+            function insertNode(value) {
+                const newNode = new TreeNode(value);
+                
+                if (!root) {
+                    root = newNode;
+                    return true;
+                }
+                
+                let current = root;
+                while (true) {
+                    if (value < current.value) {
+                        if (!current.left) {
+                            current.left = newNode;
+                            return true;
+                        }
+                        current = current.left;
+                    } else if (value > current.value) {
+                        if (!current.right) {
+                            current.right = newNode;
+                            return true;
+                        }
+                        current = current.right;
+                    } else {
+                        return false; // Value already exists
+                    }
+                }
+            }
+
+            function dfsTraversal(type) {
+                const path = [];
+                
+                function traverse(node) {
+                    if (!node) return;
+                    
+                    if (type === 'preorder') path.push(node.value);
+                    traverse(node.left);
+                    if (type === 'inorder') path.push(node.value);
+                    traverse(node.right);
+                    if (type === 'postorder') path.push(node.value);
+                }
+                
+                traverse(root);
+                return path;
+            }
+
+            function bfsTraversal() {
+                if (!root) return [];
+                
+                const queue = [root];
+                const path = [];
+                
+                while (queue.length > 0) {
+                    const node = queue.shift();
+                    path.push(node.value);
+                    
+                    if (node.left) queue.push(node.left);
+                    if (node.right) queue.push(node.right);
+                }
+                
+                return path;
+            }
+            
+        function bfsTraversal() {
+            if (!root) return [];
+            const queue = [root];
+            const path = [];
+            while (queue.length > 0) {
+                const node = queue.shift();
+                path.push(node.value);
+                if (node.left) queue.push(node.left);
+                if (node.right) queue.push(node.right);
+            }
+            return path;
+        }
+
+            async function animateTraversal(path) {
+                traversalPath.textContent = '';
+                statusMessage.textContent = 'Traversing...';
+                
+                for (let i = 0; i < path.length; i++) {
+                    const value = path[i];
+                    let current = root;
+                    
+                    // Find the node (since we don't have direct access)
+                    const stack = [root];
+                    while (stack.length > 0) {
+                        current = stack.pop();
+                        if (current.value === value) break;
+                        if (current.right) stack.push(current.right);
+                        if (current.left) stack.push(current.left);
+                    }
+                    
+                    if (current && current.value === value) {
+                        highlightNode(current);
+                        traversalPath.textContent += (i > 0 ? ' → ' : '') + value;
+                        await new Promise(resolve => setTimeout(resolve, 800));
+                    }
+                }
+                
+                statusMessage.textContent = 'Traversal complete!';
+            }
+
+            renderTree();
+            
+            document.getElementById('insert-btn').addEventListener('click', function() {
+                operationPanel.classList.remove('hidden');
+                document.querySelectorAll('#operation-panel > div').forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+                document.getElementById('insert-panel').classList.remove('hidden');
+                statusMessage.textContent = '';
+                traversalPath.textContent = '';
+            });
+            
+            document.getElementById('dfs-btn').addEventListener('click', function() {
+                operationPanel.classList.remove('hidden');
+                document.querySelectorAll('#operation-panel > div').forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+                document.getElementById('dfs-panel').classList.remove('hidden');
+                statusMessage.textContent = '';
+                traversalPath.textContent = '';
+            });
+            
+            document.getElementById('bfs-btn').addEventListener('click', function() {
+                operationPanel.classList.remove('hidden');
+                document.querySelectorAll('#operation-panel > div').forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+                document.getElementById('bfs-panel').classList.remove('hidden');
+                statusMessage.textContent = '';
+                traversalPath.textContent = '';
+            });
+            
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                root = null;
+                renderTree();
+                clearLog();
+                statusMessage.textContent = 'Tree has been reset.';
+                traversalPath.textContent = '';
+                outputBox.textContent = ''; 
+            });
+            
+            document.getElementById('do-insert').addEventListener('click', function() {
+                const value = parseInt(document.getElementById('insert-value').value);
+                
+                if (isNaN(value)) {
+                    statusMessage.textContent = 'Please enter a valid number';
+                    return;
+                }
+                
+                const inserted = insertNode(value);
+                renderTree();
+                
+             if (inserted) {
+                 statusMessage.textContent = `Inserted value ${value}. Time complexity: O(log n) average`;
+                 outputBox.textContent = `Output: Node ${value} inserted successfully`;
+                 logJSON({ action: "insert", value: value, result: "success" });
+            } else {
+                 statusMessage.textContent = `Value ${value} already exists in tree.`;
+                 outputBox.textContent = `Output: Duplicate value not allowed`;
+                 logJSON({ action: "insert", value: value, result: "duplicate" });
+                }
+
+                
+                document.getElementById('insert-value').value = '';
+            });
+            
+            document.getElementById('do-dfs').addEventListener('click', function() {
+                const type = document.getElementById('dfs-type').value;
+                const path = dfsTraversal(type);
+                
+                if (path.length === 0) {
+                    statusMessage.textContent = 'Tree is empty!';
+                    logJSON({ action: "dfs", type: type, path: [], result: "empty tree" });
+
+                    return;
+                }
+                
+                statusMessage.textContent = `Performing ${type} DFS traversal. Time complexity: O(n)`;
+                logJSON({ action: "dfs", type: type, path: path });
+                animateTraversal(path);
+            });
+            
+            document.getElementById('do-bfs').addEventListener('click', function() {
+                const path = bfsTraversal();
+                
+                if (path.length === 0) {
+                    statusMessage.textContent = 'Tree is empty!';
+                    logJSON({ action: "bfs", path: [], result: "empty tree" });
+
+                    return;
+                }
+                
+                statusMessage.textContent = 'Performing BFS traversal. Time complexity: O(n)';
+                logJSON({ action: "bfs", path: path });
+                animateTraversal(path);
+            });
+        });
+    </script>
+    {% include 'footer.html' %}   
+</body>
+</html>

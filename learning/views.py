@@ -66,8 +66,11 @@ def linkedlist_visualizer(request):
 
 @login_required
 def stack_visualizer(request):
-    topic, progress = handle_progress(request, "Stack")
-
+    result = handle_progress(request,"Stack")
+    if isinstance(result,HttpResponse):
+        return result
+    topic,progress = result
+       
     return render(request, "stackvisualizers.html", {
         "topic": topic,
         "progress": progress
@@ -76,12 +79,28 @@ def stack_visualizer(request):
 
 @login_required
 def queue_visualizer(request):
-    topic, progress = handle_progress(request, "Queue")
+    result = handle_progress(request,"Queue ")
+    if isinstance(result,HttpResponse):
+        return result
+    topic,progress = result
 
     return render(request, "queuevisualizers.html", {
         "topic": topic,
         "progress": progress
     })
+    
+@login_required
+def tree_visualizer(request):
+    result = handle_progress(request,"Tree")
+    if isinstance(result,HttpResponse):
+        return result
+    topic,progress = result
+
+    return render(request, "treevisualizer.html", {
+        "topic": topic,
+        "progress": progress
+    })
+    
     
 @login_required
 def sorting_visualizer(request):

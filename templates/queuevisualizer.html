@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Queue Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+      body {
+        font-family: "Space Grotesk", sans-serif;
+       }
+      .road {
+        background-image: repeating-linear-gradient(
+          90deg,
+          #d1d5db,
+          #d1d5db 40px,
+          #f3f4f6 40px,
+          #f3f4f6 80px
+        );
+      }
+      .box {
+        transition: all 0.5s ease;
+      }
+      .queue-item {
+        transition: transform 0.3s ease;
+      }
+      .queue-item:hover {
+        transform: translateY(-5px);
+      
+      } 
+    </style>
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <div class="max-w-5xl mx-auto py-6 sm:py-12 sm:px-4">
+      <div class="text-center mb-10">
+        <h1 class="text-4xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-pink-800 tracking-wide">
+          {{topic.name}} Visualizer
+        </h1>
+      </div>
+      
+<form method="POST" class="mb-6">
+    {% csrf_token %}
+    
+    <div class="flex items-center space-x-3">
+        <input type="checkbox"
+               name="complete_topic"
+               onchange="this.form.submit()"
+               {% if progress.is_completed %}checked disabled {% endif %}
+               class="w-5 h-5 text-green-600">
+
+        <label class="text-lg font-semibold text-green-700">
+            Mark only if this topic is Completed
+        </label>
+    </div>
+</form>
+
+      <div class="bg-green-100 rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex justify-between sm:justify-between mb-4">
+         <div class="flex space-x-2">
+            <button id="enqueue-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">
+              Enqueue 
+              <!-- <i data-feather="plus" class="block mx-auto"></i> -->
+            </button>
+            <button id="dequeue-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">
+              Dequeue 
+              <!-- <i data-feather="minus" class="block mx-auto"></i> -->
+            </button>
+          </div>
+         
+       <div class="flex items-center space-x-2">
+                    <button id="reset-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-gray-700">Reset
+                      <!-- <i data-feather="rotate-ccw" class="ml-1 inline"></i>  -->
+                    </button>
+                </div>
+          
+        </div>
+        <p
+          id="statusMessage"
+          class="text-sm text-gray-700 mt-2 italic">
+         Queue initialized with default values.
+       </p>
+
+        <div
+          class="road h-20 sm:h-24 rounded-lg mb-4 flex items-center overflow-hidden relative"
+
+        >
+          <div id="boxes-container" class="flex items-center h-full"></div>
+        </div>
+        <div class="mb-6">
+          <h3 class="font-bold mb-2">Queue Contents:</h3>
+          <div
+            id="queue-container"
+            class="flex space-x-2 min-h-16 p-2 bg-gray-100 rounded-lg"
+          >
+            <!-- Queue items will appear here -->
+          </div>
+        </div>
+        <!--ADDED: Insert value section -->
+        <div class="mb-6">
+          <h3 class="font-bold mb-2">value:</h3>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input
+              id="custom-enqueue-value"
+              type="number"
+              class="w-full sm:w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter a value"
+            />
+            <button
+              id="custom-enqueue-btn"
+              class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            >
+              Insert value
+            </button>
+          </div>
+        <div class="mt-6">
+            <h3 class="font-bold mb-2"></h3>
+            <pre id="operation-log"
+            class="bg-white text-gray-800 text-xs sm:text-sm p-3 sm:p-4 rounded-lg h-32 sm:h-40 overflow-y-auto">
+           </pre>
+        </div>
+        </div>
+      </div>
+      <div class="bg-green-100 border border-green-200 rounded-lg p-4">
+       <section class="max-w-6xl mx-auto mt-6 sm:mt-10 bg-white p-4 sm:p-6 rounded-xl shadow-md">
+ 
+          <h2 class="text-3xl font-bold mb-4 text-indigo-600">
+            Understanding the Queue Data Structure
+          </h2>
+          <p class="text-gray-700 mb-4">
+            A <strong>Queue</strong> is a linear data structure that follows
+            <strong>FIFO (First-In, First-Out)</strong>, meaning the first
+            element inserted is the first one removed.
+          </p>
+          <ul class="list-disc pl-6 text-gray-700 mb-6">
+            <li>Elements are inserted at the <strong>rear (back)</strong></li>
+            <li>Elements are removed from the <strong>front</strong></li>
+            <li>Insertion operation is called <strong>Enqueue</strong></li>
+            <li>Deletion operation is called <strong>Dequeue</strong></li>
+          </ul>
+          <!-- TIME & SPACE COMPLEXITY -->
+          <h3 class="text-2xl font-semibold mb-3 text-indigo-500">
+            Time and Space Complexity
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-gray-300 text-left">
+              <thead class="bg-indigo-100">
+                <tr>
+                  <th class="p-3 border">Operation</th>
+                  <th class="p-3 border">Time Complexity</th>
+                  <th class="p-3 border">Space Complexity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="p-3 border">Enqueue (Insert element)</td>
+                  <td class="p-3 border">O(1)</td>
+                  <td class="p-3 border">O(1)</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border">Dequeue (Remove element)</td>
+                  <td class="p-3 border">O(1)</td>
+                  <td class="p-3 border">O(1)</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border">Peek / Front</td>
+                  <td class="p-3 border">O(1)</td>
+                  <td class="p-3 border">O(1)</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border">isEmpty</td>
+                  <td class="p-3 border">O(1)</td>
+                  <td class="p-3 border">O(1)</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border">isFull (Array implementation)</td>
+                  <td class="p-3 border">O(1)</td>
+                  <td class="p-3 border">O(1)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+           <h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+            Advantages
+          </h3>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+             <li>
+              <strong>Maintains order:</strong><br />
+             Elements are processed in the same order they arrive (First-In, First-Out), which is 
+             useful for fair scheduling and servicing requests.  
+            </li>
+             <li>
+              <strong>Efficient insert/delete at ends:</strong><br />
+              Enqueue (rear) and dequeue (front) are typically fast (often [O(1)]) 
+              in standard implementations. 
+            </li>
+              <li>
+              <strong>Good for shared resources:</strong><br />
+             Works well when multiple producers/consumers use the same service 
+             (e.g., job scheduling, request handling). 
+            </li>
+              <li>
+              <strong>Useful for inter-process communication/buffering:</strong><br />
+              Helps pass data smoothly between components 
+              running at different speeds (acts like a buffer).
+            </li>
+             <li>
+              <strong>Building block for other structures/algorithms:</strong><br />
+              Queues are used inside many systems and can 
+              help implement or support other data-handling mechanisms.  
+            </li>
+          </ul>
+            <h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+            Disadvantages
+          </h3>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+             <li>
+              <strong>No random access or middle operations:</strong><br />
+               You can't insert/delete/search elements in the middle 
+               without dequeuing everything before it ([O(n)] time). 
+            </li>
+              <li>
+              <strong>Fixed capacity in array implementation:</strong><br />
+               Simple/static arrays waste space after dequeues (needs 
+               circular queue to fix); overflows if full. 
+            </li>
+              <li>
+              <strong>No priority support:</strong><br />
+               Processes strictly in arrival order, unsuitable if urgent tasks need jumping 
+               ahead (use priority queue instead).  
+            </li>
+              <li>
+              <strong>Overhead in linked lists:</strong><br />
+               Extra memory for pointers/nodes per element. Search inefficiency: 
+               Finding an element requires scanning from front ([O(n)]). 
+
+            </li>
+          </ul>
+
+          <!-- ===== REAL-WORLD APPLICATIONS OF QUEUE ===== -->
+          <h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+            Real-World Applications of Queue
+          </h3>
+          <p class="text-gray-700 mb-4">
+            Queues are used whenever data or tasks must be processed in
+            <strong>First-In, First-Out (FIFO)</strong> order.
+          </p>
+          <h4 class="text-xl font-semibold mb-2 text-indigo-500">
+            Everyday Real-World Examples
+          </h4>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li>
+              <strong>ATM / Ticket counter lines:</strong><br />
+              People are served in the order they arrive, matching FIFO
+              behavior.
+            </li>
+            <li>
+              <strong>Call centres:</strong><br />
+              Incoming calls are placed in a waiting queue and handled
+              sequentially.
+            </li>
+            <li>
+              <strong>Traffic / Toll booths:</strong><br />
+              Vehicles form a line and pass through in the order they arrive.
+            </li>
+          </ul>
+          <h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+            Computer System Examples
+          </h4>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li>
+              <strong>CPU / Process scheduling:</strong><br />
+              Operating systems place ready processes in queues (e.g., Round
+              Robin scheduling).
+            </li>
+            <li>
+              <strong>Printer spooling:</strong><br />
+              Print jobs are queued and printed one-by-one in submission order.
+            </li>
+            <li>
+              <strong>Networking:</strong><br />
+              Routers and switches queue packets to manage bursts of traffic.
+            </li>
+          </ul>
+          <h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+            Web and Software Engineering
+          </h4>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li>
+              <strong>Web server request handling / rate limiting:</strong
+              ><br />
+              Requests are queued so the system processes them at a controlled
+              throughput.
+            </li>
+            <li>
+              <strong>Message queues & background jobs:</strong><br />
+              Systems enqueue tasks (emails, video processing, order events) so
+              workers can consume them asynchronously.
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    feather.replace();
+
+    /* ------------------ STATE ------------------ */
+    const queue = [];
+    const boxes = [];
+
+    const boxesContainer = document.getElementById("boxes-container");
+    const queueContainer = document.getElementById("queue-container");
+    const operationLog = document.getElementById("operation-log");
+    const statusMessage = document.getElementById("statusMessage");
+
+    let boxCount = 0;
+
+    
+
+    function logOperation(message) {
+      const p = document.createElement("p");
+      p.className = "text-sm text-gray-700";
+      p.textContent = message;
+      operationLog.appendChild(p);
+      operationLog.scrollTop = operationLog.scrollHeight;
+    }
+    function logJSON(actionObj) {
+      const p = document.createElement("p");
+      p.className = "text-sm text-gray-800 font-mono";
+      p.textContent = JSON.stringify(actionObj);
+      operationLog.appendChild(p);
+      operationLog.scrollTop = operationLog.scrollHeight;
+    }
+
+    function getQueueValues() {
+      return queue.map(item => item.value);
+    }
+
+
+    /* ------------------ COLORS ------------------ */
+    const boxColors = [
+      "bg-amber-500",
+      "bg-emerald-500",
+      "bg-yellow-500",
+      "bg-purple-500",
+      "bg-sky-500",
+    ];
+
+    /* ------------------ RENDER QUEUE ------------------ */
+    function drawQueue() {
+      queueContainer.innerHTML = "";
+
+      queue.forEach((item) => {
+        const queueItem = document.createElement("div");
+        queueItem.className = `queue-item w-10 h-10 sm:w-12 sm:h-12 ${item.color} rounded flex items-center justify-center text-white font-bold`;
+        queueItem.textContent = item.value;
+        queueContainer.appendChild(queueItem);
+      });
+    }
+    /* ------------------ INITIAL QUEUE ------------------ */
+  function initializeQueue() {
+
+  drawQueue();
+}
+
+
+
+    /* ------------------ ADD BOX ------------------ */
+    function addBox() {
+      boxCount++;
+
+      const box = document.createElement("div");
+      const colorClass =
+        boxColors[boxCount % boxColors.length];
+
+      box.className = `box w-16 h-16 ${colorClass} rounded-md flex items-center justify-center text-white font-bold mr-4`;
+      box.textContent = boxCount;
+
+      boxesContainer.appendChild(box);
+
+      boxes.push({
+        element: box,
+        color: colorClass,
+        value: boxCount,
+      });
+    }
+
+    /* ------------------ ENQUEUE (AUTO) ------------------ */
+   /* ------------------ ENQUEUE (AUTO) ------------------ */
+document
+  .getElementById("enqueue-btn")
+  .addEventListener("click", function () {
+
+    if (boxes.length === 0) {
+      logOperation("No boxes to enqueue! Add boxes first.");
+      return;
+    }
+
+    // 🔹 START
+    logJSON({
+      action: "start_enqueue",
+      queue: getQueueValues(),
+      size: queue.length
+    });
+
+    const box = boxes.shift();
+    box.element.remove();
+
+    queue.push({
+      value: box.value,
+      color: box.color,
+    });
+
+    drawQueue();
+
+    // 🔹 ENQUEUE ACTION
+    logJSON({
+      action: "enqueue",
+      element: box.value,
+      queue: getQueueValues(),
+      size: queue.length,
+      highlight: "rear"
+    });
+
+    // 🔹 FINISH
+    logJSON({
+      action: "finish",
+      queue: getQueueValues(),
+      size: queue.length
+    });
+
+    score += 10;
+    updateScore();
+
+    setTimeout(addBox, 1000);
+  });
+
+
+    /* ------------------ CUSTOM ENQUEUE ------------------ */
+    const customValueInput = document.getElementById(
+      "custom-enqueue-value"
+    );
+    const customEnqueueBtn = document.getElementById(
+      "custom-enqueue-btn"
+    );
+
+    customEnqueueBtn.addEventListener("click", function () {
+  const val = customValueInput.value.trim();
+  if (val === "") {
+    logOperation("Please enter a value to enqueue.");
+    return;
+  }
+
+  // 🔹 START
+  logJSON({
+    action: "start_enqueue",
+    queue: getQueueValues(),
+    size: queue.length
+  });
+
+  const colorClass =
+    boxColors[(queue.length + boxCount) % boxColors.length];
+
+  queue.push({ value: Number(val), color: colorClass });
+  drawQueue();
+
+  // 🔹 ENQUEUE
+  logJSON({
+    action: "enqueue",
+    element: Number(val),
+    queue: getQueueValues(),
+    size: queue.length,
+    highlight: "rear"
+  });
+
+  // 🔹 FINISH
+  logJSON({
+    action: "finish",
+    queue: getQueueValues(),
+    size: queue.length
+  });
+
+  score += 10;
+  updateScore();
+
+  customValueInput.value = "";
+});
+
+
+    customValueInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") customEnqueueBtn.click();
+    });
+
+    /* ------------------ DEQUEUE ------------------ */
+    document.getElementById("dequeue-btn").addEventListener("click", function () {
+  if (queue.length === 0) {
+    logOperation("Queue is empty! Nothing to dequeue.");
+    return;
+  }
+
+  // 🔹 START
+  logJSON({
+    action: "start_dequeue",
+    queue: getQueueValues(),
+    size: queue.length
+  });
+
+  const removed = queue.shift();
+  drawQueue();
+
+  // 🔹 DEQUEUE
+  logJSON({
+    action: "dequeue",
+    removed: removed.value,
+    queue: getQueueValues(),
+    size: queue.length,
+    highlight: "front"
+  });
+
+  // 🔹 FINISH
+  logJSON({
+    action: "finish",
+    queue: getQueueValues(),
+    size: queue.length
+  });
+});
+
+
+    /* ------------------ RESET ------------------ */
+  document.getElementById("reset-btn")
+  .addEventListener("click", function () {
+
+    // Clear queue and boxes
+    queue.length = 0;
+    boxes.length = 0;
+
+    // Reset counters
+    boxCount = 0;
+    score = 0;
+
+    // Clear UI
+    boxesContainer.innerHTML = "";
+    queueContainer.innerHTML = "";
+    operationLog.innerHTML = "";
+
+    // Recreate initial boxes (1,2,3)
+    addBox();
+    addBox();
+    addBox();
+
+    // Draw empty queue
+    drawQueue();
+
+    // Show human readable message in log
+    logOperation("Queue reset to initial state.");
+
+    // Also show algorithm step (like stack visualizer)
+
+    // Status line message
+    statusMessage.textContent = "Queue reset to initial state.";
+});
+
+
+
+    /* ------------------ INIT ------------------ */
+    initializeQueue();
+    addBox();
+    addBox();
+    addBox();
+  });
+</script>
+ {% include 'footer.html' %}
+</body>
+</html>
+

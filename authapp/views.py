@@ -131,11 +131,17 @@ def profile_view(request):
             "full_name": request.user.get_full_name() or request.user.username
         }
     )
-
+    if request.user.get_full_name():    
+           default_username=request.user.get_full_name()
+    else:
+        default_username=request.user.email.split("@")[0]
     
-
-    if request.user.email:
+    if request.user.username !=default_username:
+        request.user.username=default_username
+        request.user.save()
+    if request.user.email and profile.gmailid != request.user.email:
         profile.gmailid = request.user.email
+        profile.full_name=default_username
         profile.save()
 
     return render(request, "authapp/profile.html", {
