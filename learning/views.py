@@ -71,7 +71,7 @@ def stack_visualizer(request):
         return result
     topic,progress = result
        
-    return render(request, "stackvisualizers.html", {
+    return render(request, "stackvisualizer.html", {
         "topic": topic,
         "progress": progress
     })
@@ -84,7 +84,7 @@ def queue_visualizer(request):
         return result
     topic,progress = result
 
-    return render(request, "queuevisualizers.html", {
+    return render(request, "queuevisualizer.html", {
         "topic": topic,
         "progress": progress
     })
