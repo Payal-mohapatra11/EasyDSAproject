@@ -9,5 +9,7 @@ def visualizers(request):
 #     return render(request, 'arrayvisualizers.html')
 # def linkedlistvisualizers(request):
 #     return render(request,'linkedlistvisualizer.html')
+def features(request):
+    return render(request,'features.html')
 def chatbotpage(request):
     return render(request,'chatbot.html')

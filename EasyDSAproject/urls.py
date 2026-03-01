@@ -46,6 +46,7 @@ urlpatterns = [
      path('stackvisualizers/',learning_views.stack_visualizer,name='stack_visualizer'),
      path('sortingvisualizers/',learning_views.sorting_visualizer,name='sorting_visualizer'),
      path('searchingvisualizers/',learning_views.searching_visualizer,name='searching_visualizer'),
+     path('features/',views.features,name='features'),
      path('chatbotpage/',views.chatbotpage,name='chatbotpage'),
        path('learning/', include('learning.urls')),
        path("progress-profile/",learning_views.progress_profile,name="progress_profile"),
