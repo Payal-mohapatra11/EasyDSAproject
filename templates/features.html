@@ -29,10 +29,19 @@
     </style>
 </head>
 <body>
-{% include 'header.html' %}
    <!--Header -->
 <section class="bg-gradient-to-r from-green-600 to-emerald-500 text-white py-20">
-    <div class="max-w-6xl mx-auto px-4 text-center">
+    <div class="max-w-6xl mx-auto px-4 text-center relative">
+          <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-code text-white text-xl sm:text-2xl"></i>
+                      <span class="text-lg sm:text-xl font-bold">EasyDSA</span>
+                </div>
+        <!-- Home button right -->
+        <a href="{% url 'home' %}"
+           class="absolute right-4 top-0 sm:right-0 px-3 py-2 rounded-md text-sm font-medium bg-white/20 hover:bg-white/30">
+           Home
+        </a>
+
         <h1 class="text-4xl sm:text-5xl font-bold mb-4">Easy DSA Features</h1>
         <p class="text-lg opacity-90">
             Master Data Structures & Algorithms with interactive and visual learning.
@@ -46,7 +55,7 @@
     <!-- Structured Learning -->
     <div class="flex flex-col md:flex-row items-center gap-10 reveal">
         <div class="bg-green-100 p-5 rounded-2xl">
-            <img src="{% static 'images/learning.png' %}" alt="Structured Learning" class="w-12 h-12">
+            <img src="{% static 'learning.png' %}" alt="Structured Learning" class="w-12 h-12">
         </div>
         <div>
             <h2 class="text-2xl font-bold mb-2">Structured DSA Learning</h2>
@@ -62,7 +71,7 @@
     <!-- Visualizer -->
     <div class="flex flex-col md:flex-row-reverse items-center gap-10 reveal">
         <div class="bg-green-100 p-5 rounded-2xl">
-            <img src="{% static 'images/visualizers.png' %}" alt="Algorithm Visualizer" class="w-12 h-12">
+            <img src="{% static 'visualizers.png' %}" alt="Algorithm Visualizer" class="w-12 h-12">
         </div>
         <div>
             <h2 class="text-2xl font-bold mb-2">Algorithm Visualizer</h2>
@@ -78,7 +87,7 @@
     <!-- Chatbot -->
     <div class="flex flex-col md:flex-row items-center gap-10 reveal">
         <div class="bg-green-100 p-5 rounded-2xl">
-            <img src="{% static 'images/chat.png' %}" alt="AI Chatbot" class="w-12 h-12">
+            <img src="{% static 'chat.png' %}" alt="AI Chatbot" class="w-12 h-12">
         </div>
         <div>
             <h2 class="text-2xl font-bold mb-2">AI Chatbot Support</h2>
@@ -94,7 +103,7 @@
     <!-- Authentication -->
     <div class="flex flex-col md:flex-row-reverse items-start md:items-center gap-10 reveal">
         <div class="bg-green-100 p-5 rounded-2xl">
-            <img src="{% static 'images/authentication.png' %}" alt="User Authentication" class="w-12 h-12">
+            <img src="{% static 'authentication.png' %}" alt="User Authentication" class="w-12 h-12">
         </div>
         <div>
             <h2 class="text-2xl font-bold mb-2">User Authentication</h2>
@@ -109,7 +118,7 @@
     <!-- Feedback -->
     <div class="flex flex-col md:flex-row items-center gap-10 reveal">
         <div class="bg-green-100 p-5 rounded-2xl">
-            <img src="{% static 'images/feedback.png' %}" alt="Feedback System" class="w-12 h-12">
+            <img src="{% static 'feedback.png' %}" alt="Feedback System" class="w-12 h-12">
         </div>
         <div>
             <h2 class="text-2xl font-bold mb-2">Feedback System</h2>
@@ -124,7 +133,7 @@
     <!-- Responsive -->
     <div class="flex flex-col md:flex-row-reverse items-center gap-10 reveal">
         <div class="bg-green-100 p-5 rounded-2xl">
-            <img src="{% static 'images/responsive.png' %}" alt="Responsive Design" class="w-12 h-12">
+            <img src="{% static 'responsive.png' %}" alt="Responsive Design" class="w-12 h-12">
         </div>
         <div>
             <h2 class="text-2xl font-bold mb-2">Responsive Design</h2>
