@@ -60,13 +60,13 @@
       <div class="bg-green-100 rounded-xl shadow-lg p-6 mb-8">
         <div class="flex justify-between sm:justify-between mb-4">
          <div class="flex space-x-2">
-            <button id="enqueue-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">
+            <button id="enqueue-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-pink-700">
               Enqueue 
-              <!-- <i data-feather="plus" class="block mx-auto"></i> -->
+              
             </button>
-            <button id="dequeue-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">
+            <button id="dequeue-btn" class="px-4 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-pink-700">
               Dequeue 
-              <!-- <i data-feather="minus" class="block mx-auto"></i> -->
+             
             </button>
           </div>
          
@@ -93,9 +93,8 @@
           <h3 class="font-bold mb-2">Queue Contents:</h3>
           <div
             id="queue-container"
-            class="flex space-x-2 min-h-16 p-2 bg-gray-100 rounded-lg"
-          >
-            <!-- Queue items will appear here -->
+            class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-3 min-h-20 p-4 bg-gray-100 rounded-lg max-h-80 overflow-y-auto">
+            <!-- Queue items will appear-->
           </div>
         </div>
         <!--ADDED: Insert value section -->
@@ -355,7 +354,7 @@
 
       queue.forEach((item) => {
         const queueItem = document.createElement("div");
-        queueItem.className = `queue-item w-10 h-10 sm:w-12 sm:h-12 ${item.color} rounded flex items-center justify-center text-white font-bold`;
+        queueItem.className = `queue-item w-10 h-10 sm:w-12 sm:h-12 ${item.color} rounded flex items-center justify-center text-white font-bold text-sm sm:text-base `;
         queueItem.textContent = item.value;
         queueContainer.appendChild(queueItem);
       });
@@ -399,7 +398,7 @@ document
       return;
     }
 
-    // 🔹 START
+    //  START
     logJSON({
       action: "start_enqueue",
       queue: getQueueValues(),
@@ -416,7 +415,7 @@ document
 
     drawQueue();
 
-    // 🔹 ENQUEUE ACTION
+    // ENQUEUE ACTION
     logJSON({
       action: "enqueue",
       element: box.value,
@@ -425,7 +424,7 @@ document
       highlight: "rear"
     });
 
-    // 🔹 FINISH
+    // FINISH
     logJSON({
       action: "finish",
       queue: getQueueValues(),
@@ -454,7 +453,7 @@ document
     return;
   }
 
-  // 🔹 START
+  //  START
   logJSON({
     action: "start_enqueue",
     queue: getQueueValues(),
@@ -467,7 +466,7 @@ document
   queue.push({ value: Number(val), color: colorClass });
   drawQueue();
 
-  // 🔹 ENQUEUE
+  // ENQUEUE 
   logJSON({
     action: "enqueue",
     element: Number(val),
@@ -476,7 +475,7 @@ document
     highlight: "rear"
   });
 
-  // 🔹 FINISH
+  //  FINISH
   logJSON({
     action: "finish",
     queue: getQueueValues(),
@@ -501,7 +500,7 @@ document
     return;
   }
 
-  // 🔹 START
+  // START
   logJSON({
     action: "start_dequeue",
     queue: getQueueValues(),
@@ -511,7 +510,7 @@ document
   const removed = queue.shift();
   drawQueue();
 
-  // 🔹 DEQUEUE
+  // DEQUEUE
   logJSON({
     action: "dequeue",
     removed: removed.value,
@@ -520,7 +519,7 @@ document
     highlight: "front"
   });
 
-  // 🔹 FINISH
+  // FINISH
   logJSON({
     action: "finish",
     queue: getQueueValues(),

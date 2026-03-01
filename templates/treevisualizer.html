@@ -24,6 +24,9 @@
             height: 100%;
             pointer-events: none;
         }
+        #tree-container {
+    scroll-behavior: smooth;
+}
     </style>
 </head>
 <body>
@@ -52,17 +55,17 @@
         <div class="bg-green-100 rounded-xl shadow-lg p-6">
             <div class="flex flex-wrap gap-2 justify-center sm:justify-between mb-4">
                 <div class="flex space-x-2">
-                    <button id="insert-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Insert</button>
-                    <button id="dfs-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">Dfs</button>
-                    <button id="bfs-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-indigo-700">BFS</button>
+                    <button id="insert-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-pink-700">Insert</button>
+                    <button id="dfs-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-pink-700">Dfs</button>
+                    <button id="bfs-btn" class="px-3 py-2 text-sm sm:text-base bg-pink-500 text-white rounded-md hover:bg-pink-700">BFS</button>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button id="reset-btn"class="px-3 py-2 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-gray-700">Reset</button>
+                    <button id="reset-btn"class="px-3 py-2 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-700">Reset</button>
                 </div>
             </div>
 
-            <div class="relative h-64 sm:h-96 bg-gray-100 rounded-lg mb-4 overflow-hidden" id="tree-container">
-                <svg id="tree-lines"></svg>
+             <div class="relative h-[350px] sm:h-[450px] bg-gray-100 rounded-lg mb-4 overflow-x-auto overflow-y-auto" id="tree-container">
+                <svg id="tree-lines" class="absolute top-0 left-0 min-w-[2000px] h-full pointer-events-none"></svg>
                 <!-- Tree nodes will be dynamically inserted here -->
             </div>
 
@@ -443,7 +446,7 @@ outperform trees in average case, with less setup hassle.
                     if (node.right) positionNodes(node.right, level + 1, x + xStep, xStep / 2);
                 }
                 
-                positionNodes(root, 0, containerWidth / 2, containerWidth / 4);
+                positionNodes(root, 0, containerWidth / 2, containerWidth / 6);
 
                 // Draw lines first (so nodes appear on top)
                 function drawLines(node) {
