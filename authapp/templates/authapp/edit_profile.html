@@ -23,6 +23,11 @@
       <div>
         <label class="block text-sm font-medium mb-1">Username</label>
         {{ form.full_name }}
+        {% if form.instance.full_name %}
+    <p class="text-xs text-gray-500 mt-1">
+      Username cannot be changed.
+    </p>
+  {% endif %}
       </div>
 
       <div>

@@ -42,6 +42,8 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["full_name", "phone"]
+        
+       
 
         widgets = {
             "full_name": forms.TextInput(attrs={
@@ -52,7 +54,14 @@ class ProfileEditForm(forms.ModelForm):
                 "class": "w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-200",
                 "placeholder": "Enter phone number"
             }),
-        }                                         
+        }  
+        
+        def __init__(self, *args, **kwargs):
+               super().__init__(*args, **kwargs)
+
+        # If full_name already exists → disable field
+               if self.instance and self.instance.full_name:
+                  self.fields["full_name"].widget.attrs["readonly"] = True                                       
         
 class CustomResetForm(SetPasswordForm):
     new_password1 = forms.CharField(

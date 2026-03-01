@@ -199,10 +199,11 @@ def edit_profile(request):
         form = ProfileEditForm(request.POST, instance=profile)
         if form.is_valid():
             profile = form.save(commit=False)
-            new_username=form.cleaned_data.get("full_name")
-            request.user.username = new_username
-            request.user.save()
-            profile.full_name=new_username
+            # new_username=form.cleaned_data.get("full_name")
+            # request.user.username = new_username
+            # request.user.save()
+            # profile.full_name=new_username
+            profile.full_name = form.cleaned_data.get("full_name")
             profile.save()
             messages.success(request, "Profile updated successfully.")
             return redirect("profile")
