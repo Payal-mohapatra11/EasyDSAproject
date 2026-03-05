@@ -46,10 +46,10 @@
                         <div>
                             <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Learning</h3>
                             <ul class="mt-4 space-y-4">
-                        <li><a href="features.html" class="text-base text-gray-400 hover:text-white">Features</a></li>
-                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Games</a></li>
-                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Tutorials</a></li>
-<li><a href="#" class="text-base text-gray-400 hover:text-white">Challenges</a></li>
+                        <li><a href="{% url 'features' %}" class="text-base text-gray-400 hover:text-white">Features</a></li>
+                        <li><a href="{% url 'visualizers' %}" class="text-base text-gray-400 hover:text-white">Visualizers</a></li>
+                        <li><a href="{% url 'chatbot' %}" class="text-base text-gray-400 hover:text-white">Chatbot</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Challenges</a></li>
                             </ul>
                         </div>
                         <div class="mt-12 md:mt-0">
@@ -61,21 +61,13 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="md:grid md:grid-cols-2 md:gap-8">
-                        <div>
-                            <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Team Members</h3>
-                            <ul class="mt-4 space-y-4">
-                                <li><a href="#" class="text-base text-gray-400 hover:text-white">Payal Mohapatra - Developer</a></li>
-                                <li><a href="#" class="text-base text-gray-400 hover:text-white">[Member 2 Name] - Designer</a></li>
-                                <li><a href="#" class="text-base text-gray-400 hover:text-white">[Member 3 Name] - Researcher</a></li>
-                            </ul>
-                        </div>
+                   
                         <div class="mt-12 md:mt-0">
                             <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Support</h3>
                             <ul class="mt-4 space-y-4">
                                 <li><a href="#" class="text-base text-gray-400 hover:text-white">Contact Us</a></li>
-                                <li><a href="#" class="text-base text-gray-400 hover:text-white">Feedback</a></li>
-                                <li><a href="#" class="text-base text-gray-400 hover:text-white">Report Issue</a></li>
+                                <li><a href="{% url 'feedback' %}" class="text-base text-gray-400 hover:text-white">Feedback</a></li>
+                                <!-- <li><a href="#" class="text-base text-gray-400 hover:text-white">Report Issue</a></li> -->
                             </ul>
                         </div>
                     </div>
@@ -83,7 +75,7 @@
             </div>
             <div class="mt-12 border-t border-gray-700 pt-8">
                 <p class="text-base text-gray-400 text-center">
-                    &copy; 2025 EasyDSA. All rights reserved.
+                    &copy; 2026 EasyDSA. All rights reserved.
                 </p>
             </div>
     
