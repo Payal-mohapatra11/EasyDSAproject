@@ -79,7 +79,7 @@ def stack_visualizer(request):
 
 @login_required
 def queue_visualizer(request):
-    result = handle_progress(request,"Queue ")
+    result = handle_progress(request,"Queue")
     if isinstance(result,HttpResponse):
         return result
     topic,progress = result

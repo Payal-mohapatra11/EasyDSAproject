@@ -62,18 +62,480 @@
     </div>
 
      <div class="bg-green-100 rounded-xl shadow-lg p-6 border border-white">
-      <h2 class="text-xl font-bold mb-3 text-green-900">Theory: Array Operation</h2>
-      <p class="text-gray-700 mb-3">
-        Arrays store elements in contiguous memory, so index-based access is direct.
-      </p>
-      <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-        <ul class="list-disc pl-5 text-gray-800">
-          <li><strong>Access/Update by index:</strong> Time complexity O(1), Space complexity O(1) [Direct address calculation, so reads/writes at a known index are O(1).]</li>
-          <li><strong>Search (unsorted):</strong> Time complexity O(n), Space complexity O(1)</li> [May check every element]
-          <li><strong>Insert/Delete at index:</strong> Time complexity O(n) (shift elements), Space complexity typically O(1) for in-place shifting [Shift subsequent elements to maintain contiguity (make space on insert, close the gap on delete).]</li>
-          <li><strong>Overall array storage:</strong> O(n) Space for n elements</li>
-        </ul>
-      </div>
+      <section class="max-w-6xl mx-auto mt-6 sm:mt-10 bg-white p-4 sm:p-6 rounded-xl shadow-md">
+
+  <!-- ===== TITLE ===== -->
+  <h2 class="text-3xl font-bold mb-4 text-indigo-600">
+    Understanding the Searching Operation
+  </h2>
+
+  <!-- ===== INTRO PARAGRAPH ===== -->
+  <p class="text-gray-700 mb-4">
+    A <strong>Searching operation</strong> is the process of finding a specific 
+    element (key) from a collection of data such as an array, list, or file.
+  </p>
+
+  <p class="text-gray-700 mb-6">
+    <strong>Example:</strong> Finding a student’s roll number in a list of students.
+  </p>
+
+  <!-- ===== MAIN TYPES ===== -->
+  <h3 class="text-2xl font-semibold mb-3 text-indigo-500">
+    Main Searching Types
+  </h3>
+
+  <ul class="list-disc pl-6 text-gray-700 mb-6 space-y-2">
+    <li>
+      <strong>Linear (Sequential) Search:</strong> 
+      Checks elements one by one and works even if the data is unsorted.
+    </li>
+    <li>
+      <strong>Binary Search:</strong> 
+      Repeatedly checks the middle element and discards half of the data. 
+      Works only when the data is sorted.
+    </li>
+  </ul>
+
+  <!-- ===== LINEAR SEARCH ===== -->
+  <h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+    Linear Search (Works Everywhere)
+  </h3>
+
+  <ul class="list-disc pl-6 text-gray-700 space-y-2">
+    <li>
+      You start from the first element and compare each element with the target 
+      until you find it or finish the list.
+    </li>
+    <li>
+      Time complexity in worst case is <strong>O(n)</strong> 
+      because you might scan all <strong>n</strong> elements.
+    </li>
+  </ul>
+
+  <!-- ===== BINARY SEARCH ===== -->
+  <h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+    Binary Search (Needs Sorted Data)
+  </h3>
+
+  <ul class="list-disc pl-6 text-gray-700 space-y-2">
+    <li>
+      Binary search compares the target with the middle element.
+    </li>
+    <li>
+      It searches only the left half or right half based on comparison.
+    </li>
+    <li>
+      It requires a sorted array because only then can half of the elements 
+      be safely discarded in each step.
+    </li>
+    <li>
+      Time complexity is <strong>O(log n)</strong>.
+    </li>
+  </ul>
+  <!-- ===== BROADER LIST OF SEARCHING ALGORITHMS ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Broader List (Common Searching Algorithms)
+</h3>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-3">
+
+  <li>
+    <strong>Jump Search:</strong><br>
+    Works on a sorted array by jumping ahead in fixed block sizes 
+    (commonly √n) to find the block where the key could be, 
+    then performing a linear search inside that block.
+  </li>
+
+  <li>
+    <strong>Exponential Search:</strong><br>
+    Works on a sorted array (often described for unbounded or infinite arrays) 
+    by first finding a range where the element may lie using positions 
+    (1, 2, 4, 8, ...), then applying binary search within that range.
+  </li>
+
+  <li>
+    <strong>Fibonacci Search:</strong><br>
+    Works on a sorted array by splitting the search range using 
+    Fibonacci numbers (instead of halving like binary search) 
+    and narrowing the range based on comparisons.
+  </li>
+
+  <li>
+    <strong>Ternary Search:</strong><br>
+    Repeatedly splits the search range into three parts using two mid points 
+    and keeps the part that can contain the key. 
+    Commonly used for unimodal functions and special cases.
+  </li>
+
+  <li>
+    <strong>Interpolation Search:</strong><br>
+    Works on a sorted array by estimating the likely position of the key 
+    using its value (based on distribution), then narrowing the range. 
+    Performs best when values are uniformly distributed.
+  </li>
+
+</ul>
+<!-- ===== TIME & SPACE COMPLEXITY ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Time and Space Complexity
+</h3>
+
+<div class="overflow-x-auto">
+  <table class="w-full border border-gray-300 text-left">
+    <thead class="bg-indigo-100">
+      <tr>
+        <th class="p-3 border">Searching Operation</th>
+        <th class="p-3 border">Best</th>
+        <th class="p-3 border">Average</th>
+        <th class="p-3 border">Worst</th>
+        <th class="p-3 border">Aux Space</th>
+        <th class="p-3 border">Notes</th>
+      </tr>
+    </thead>
+
+    <tbody class="text-gray-700">
+
+      <tr>
+        <td class="p-3 border">Linear (Sequential) Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(n)</td>
+        <td class="p-3 border">O(n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Works on unsorted data.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Sentinel Linear Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(n)</td>
+        <td class="p-3 border">O(n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Linear variant using sentinel to reduce comparisons.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Binary Search (Iterative)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Needs sorted data.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Binary Search (Recursive)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">Extra stack space due to recursion.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Jump Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(√n)</td>
+        <td class="p-3 border">O(√n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Sorted array; jumps then linear search in block.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Interpolation Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Best for uniformly distributed sorted values.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Exponential Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Good for unbounded/infinite sorted arrays.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Fibonacci Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Uses Fibonacci partitioning.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Ternary Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Mostly used for unimodal functions.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Meta / Ubiquitous Binary Search</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(log n)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">Binary search family variants.</td>
+      </tr>
+
+      <tr>
+        <td class="p-3 border">Rabin-Karp (Substring Search)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">O(n + m)</td>
+        <td class="p-3 border">O(nm)</td>
+        <td class="p-3 border">O(1)</td>
+        <td class="p-3 border">
+          Searches pattern of length m in text length n using hashing; worst case due to collisions.
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+<!-- ===== REAL-WORLD APPLICATION ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Real-World Application
+</h3>
+
+<!-- ===== Everyday App Examples ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  Everyday App Examples
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>
+    Finding a contact in a sorted phonebook-style list maps to 
+    binary search behavior (keep halving the search space).
+  </li>
+
+  <li>
+    Scanning a short unsorted list such as a shopping list, 
+    small member list, or seat map often uses linear search 
+    because it is simplest and “fast enough” at small sizes.
+  </li>
+
+  <li>
+    File/folder lookup is accelerated by directory or index 
+    structures rather than scanning every file entry.
+  </li>
+</ul>
+
+<!-- ===== Databases and Indexing ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  Databases and Indexing
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>
+    Databases avoid linear scanning of billions of rows by 
+    building indexes (commonly B-tree family structures) so 
+    queries can find records with far fewer disk reads.
+  </li>
+
+  <li>
+    Hash indexes or structures support fast average-case key 
+    lookups by mapping keys to locations (commonly used in 
+    database internals and caches).
+  </li>
+
+  <li>
+    This is why searching a product by ID, email, or username 
+    can be fast even at huge scale — because you are searching 
+    the index, not the whole table.
+  </li>
+</ul>
+
+<!-- ===== Search Engines and Document Search ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  Search Engines and Document Search
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2">
+  <li>
+    Search engines and document systems commonly use an 
+    inverted index (term → list of documents) to retrieve 
+    documents containing a word or phrase efficiently.
+  </li>
+
+  <li>
+    Ranking happens after retrieval, but the first step is 
+    still finding candidate documents quickly — which is 
+    a searching problem at scale.
+  </li>
+</ul>
+<!-- ===== Graph and Pathfinding Uses ===== -->
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Graph and Pathfinding Uses
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>
+    On maps and navigation, “find a route” means searching 
+    through a graph of roads and intersections. Traversal-style 
+    searches like <strong>BFS</strong> and <strong>DFS</strong> 
+    are core building blocks for exploring graphs.
+  </li>
+
+  <li>
+    The same idea applies to networking and web crawling: 
+    you explore nodes (pages or routers) and edges 
+    (links or connections) to find a target or achieve coverage.
+  </li>
+</ul>
+
+<!-- ===== AI, Autocomplete, and Fuzzy Search ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  AI, Autocomplete, and “Fuzzy” Search
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2">
+  <li>
+    Autocomplete commonly uses a <strong>Trie</strong> 
+    for prefix searching, then explores the subtree 
+    (often using DFS) to collect valid completions.
+  </li>
+
+  <li>
+    When “match” means similar rather than exactly equal 
+    (such as in image search, recommendations, or semantic search), 
+    systems use similarity search methods to find nearest neighbours 
+    instead of exact-key matches.
+  </li>
+</ul>
+<!-- ===== ADVANTAGES ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Advantages
+</h3>
+
+<!-- ===== Efficiency Gains ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  Efficiency Gains
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>
+    Efficient searching reduces time and resources — 
+    binary search cuts comparisons from <strong>O(n)</strong> 
+    to <strong>O(log n)</strong> on sorted data, making it ideal for large datasets.
+  </li>
+
+  <li>
+    Jump and interpolation searches further optimize performance 
+    for specific cases like uniformly distributed data, 
+    often outperforming linear search on large arrays.
+  </li>
+</ul>
+
+<!-- ===== Versatility Across Uses ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  Versatility Across Uses
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>
+    Searching algorithms enable quick lookups in databases, 
+    pattern matching in AI systems, and web indexing in search engines.
+  </li>
+
+  <li>
+    Linear search requires no sorting, making it simple for 
+    small or unsorted data, while advanced methods like hashing 
+    (via hash tables) provide near-constant <strong>O(1)</strong> access.
+  </li>
+</ul>
+
+<!-- ===== Practical Advantages ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  Practical Advantages
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2">
+  <li>
+    Works across various data structures such as arrays 
+    (efficient binary search), trees (range queries), 
+    and hash tables (instant lookups).
+  </li>
+
+  <li>
+    Scales effectively for real-world applications — 
+    faster queries lead to more responsive systems 
+    and reduced operational costs.
+  </li>
+</ul>
+<!-- ===== COMMON DISADVANTAGES ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Common Disadvantages
+</h3>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>
+    <strong>Preprocessing Overhead:</strong>
+    Binary, jump, interpolation, and similar algorithms require 
+    sorting first (cost <strong>O(n log n)</strong>), 
+    which is not needed for linear search.
+  </li>
+
+  <li>
+    <strong>Data Structure Limitations:</strong>
+    Binary and jump search fail on unsorted data or linked lists 
+    (due to lack of random access). Linear search works but 
+    scales poorly for large <strong>n</strong>.
+  </li>
+
+  <li>
+    <strong>Dynamic Data Issues:</strong>
+    Insertions or deletions can break sorted order, 
+    forcing costly re-sorting or additional maintenance.
+  </li>
+</ul>
+
+<!-- ===== By Algorithm Type ===== -->
+<h4 class="text-xl font-semibold mb-2 text-indigo-500">
+  By Algorithm Type
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2">
+
+  <li>
+    <strong>Linear Search:</strong>
+    Worst and average time <strong>O(n)</strong>; 
+    inefficient for large or frequent searches.
+  </li>
+
+  <li>
+    <strong>Binary Search:</strong>
+    Recursive version uses <strong>O(log n)</strong> stack space; 
+    can be error-prone (off-by-one mistakes); 
+    unusable on unsorted data.
+  </li>
+
+  <li>
+    <strong>Jump / Exponential / Fibonacci Search:</strong>
+    Require sorted arrays; not always faster than binary search; 
+    Fibonacci search may need extra space.
+  </li>
+
+  <li>
+    <strong>Interpolation Search:</strong>
+    Performance degrades to <strong>O(n)</strong> 
+    if data is not uniformly distributed.
+  </li>
+
+  <li>
+    <strong>Ternary Search:</strong>
+    More divisions than binary search (slower constant factor); 
+    mainly suited for unimodal functions rather than general searching.
+  </li>
+
+</ul>
+</section>
     </div>
     
 

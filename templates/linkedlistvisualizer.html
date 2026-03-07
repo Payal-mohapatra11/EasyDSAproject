@@ -112,18 +112,105 @@
             </div>
         </div>
              <div class="bg-green-100 rounded-xl shadow-lg p-6 border border-white">
-      <h2 class="text-xl font-bold mb-3 text-green-900">Theory: Array Operation</h2>
-      <p class="text-gray-700 mb-3">
-        Arrays store elements in contiguous memory, so index-based access is direct.
-      </p>
-      <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-        <ul class="list-disc pl-5 text-gray-800 space-y-2">
-          <li><strong>Access/Update by index:</strong> Time complexity O(1), Space complexity O(1) [Direct address calculation, so reads/writes at a known index are O(1).]</li>
-          <li><strong>Search (unsorted):</strong> Time complexity O(n), Space complexity O(1)</li> [May check every element]
-          <li><strong>Insert/Delete at index:</strong> Time complexity O(n) (shift elements), Space complexity typically O(1) for in-place shifting [Shift subsequent elements to maintain contiguity (make space on insert, close the gap on delete).]</li>
-          <li><strong>Overall array storage:</strong> O(n) Space for n elements</li>
-        </ul>
-      </div>
+       <section class="max-w-6xl mx-auto mt-6 sm:mt-10 bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+
+  <!-- Main Heading -->
+  <h2 class="text-4xl font-bold mb-6 text-indigo-600 tracking-tight leading-snug">
+    Understanding the Linked List Data Structure
+  </h2>
+
+  <!-- Introduction -->
+  <p class="text-gray-700 text-lg leading-relaxed mb-4">
+    A <strong class="text-indigo-600">Linked List</strong> is a linear structure made of nodes, 
+    where each node stores data and a reference to another node.
+  </p>
+
+  <p class="text-gray-700 text-lg leading-relaxed mb-6">
+    The first node is tracked by a special reference called the 
+    <strong>head</strong>, and the last node’s 
+    <strong>next</strong> reference is <strong>null</strong> in a standard 
+    (non-circular) singly linked list.
+  </p>
+
+  <!-- Time and Space Complexity -->
+  <h3 class="text-3xl font-semibold mb-4 text-indigo-500">
+    Time and Space Complexity
+  </h3>
+
+  <div class="overflow-x-auto mb-10">
+    <table class="w-full border border-gray-300 text-left text-lg">
+      <thead class="bg-indigo-100 text-indigo-700 font-semibold">
+        <tr>
+          <th class="p-4 border">Operation</th>
+          <th class="p-4 border">Time Complexity</th>
+          <th class="p-4 border">Space Complexity</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr><td class="p-4 border">Traverse / Display</td><td class="p-4 border">O(n)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Access i-th Node</td><td class="p-4 border">O(n)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Search (by value)</td><td class="p-4 border">O(n)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Insert at Beginning</td><td class="p-4 border">O(1)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Insert at End (no tail)</td><td class="p-4 border">O(n)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Insert at Position</td><td class="p-4 border">O(n)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Delete at Beginning</td><td class="p-4 border">O(1)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Delete at End</td><td class="p-4 border">O(n)</td><td class="p-4 border">O(1)</td></tr>
+        <tr><td class="p-4 border">Delete at Position</td><td class="p-4 border">O(n)</td><td class="p-4 border">O(1)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Real World Applications -->
+  <h3 class="text-3xl font-semibold mb-4 text-indigo-500">
+    Real-World Applications
+  </h3>
+
+  <h4 class="text-xl font-semibold mb-2 text-indigo-500">Everyday Software Examples</h4>
+  <ul class="list-disc pl-8 text-gray-700 text-lg space-y-2 mb-6">
+    <li><strong>Browser navigation:</strong> Back/forward functionality.</li>
+    <li><strong>Undo/Redo systems:</strong> Editors store user actions dynamically.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold mb-2 text-indigo-500">Core System-Level Uses</h4>
+  <ul class="list-disc pl-8 text-gray-700 text-lg space-y-2 mb-6">
+    <li><strong>Function calls & recursion:</strong> Managed using call stack behavior.</li>
+    <li><strong>Memory management:</strong> Stack frames handle local variables.</li>
+  </ul>
+
+  <h4 class="text-xl font-semibold mb-2 text-indigo-500">Algorithms & Programming Tasks</h4>
+  <ul class="list-disc pl-8 text-gray-700 text-lg space-y-2 mb-10">
+    <li>Parentheses matching & syntax validation.</li>
+    <li>Expression evaluation (Infix, Prefix, Postfix).</li>
+    <li>Backtracking & DFS traversal.</li>
+  </ul>
+
+  <!-- Advantages -->
+  <h3 class="text-3xl font-semibold mb-4 text-indigo-500">
+    Advantages
+  </h3>
+
+  <ul class="list-disc pl-8 text-gray-700 text-lg space-y-3 mb-10">
+    <li><strong>Dynamic sizing:</strong> Grows or shrinks at runtime.</li>
+    <li><strong>Efficient insert/delete:</strong> O(1) at known positions.</li>
+    <li><strong>Non-contiguous memory:</strong> No need for large continuous blocks.</li>
+    <li><strong>Ideal for frequent insertions/deletions:</strong> Used in stacks, queues, playlists.</li>
+  </ul>
+
+  <!-- Disadvantages -->
+  <h3 class="text-3xl font-semibold mb-4 text-indigo-500">
+    Disadvantages
+  </h3>
+
+  <ul class="list-disc pl-8 text-gray-700 text-lg space-y-3">
+    <li><strong>No random access:</strong> Accessing i-th element takes O(n).</li>
+    <li><strong>Extra memory overhead:</strong> Pointer storage increases memory usage.</li>
+    <li><strong>Poor cache performance:</strong> Non-contiguous nodes cause cache misses.</li>
+    <li><strong>Slower traversal:</strong> Pointer chasing is slower than arrays.</li>
+    <li><strong>Complex implementation:</strong> Higher risk of pointer bugs.</li>
+    <li><strong>No efficient size check:</strong> Without counter, size() is O(n).</li>
+  </ul>
+
+</section>
     </div>
     </div>
 

@@ -62,18 +62,121 @@
     </div>
 
      <div class="bg-green-100 rounded-xl shadow-lg p-6 border border-white">
-      <h2 class="text-xl font-bold mb-3 text-green-900">Theory: Array Operation</h2>
-      <p class="text-gray-700 mb-3">
-        Arrays store elements in contiguous memory, so index-based access is direct.
-      </p>
-      <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-        <ul class="list-disc pl-5 text-gray-800">
-          <li><strong>Access/Update by index:</strong> Time complexity O(1), Space complexity O(1) [Direct address calculation, so reads/writes at a known index are O(1).]</li>
-          <li><strong>Search (unsorted):</strong> Time complexity O(n), Space complexity O(1)</li> [May check every element]
-          <li><strong>Insert/Delete at index:</strong> Time complexity O(n) (shift elements), Space complexity typically O(1) for in-place shifting [Shift subsequent elements to maintain contiguity (make space on insert, close the gap on delete).]</li>
-          <li><strong>Overall array storage:</strong> O(n) Space for n elements</li>
-        </ul>
-      </div>
+      <section class="max-w-6xl mx-auto mt-6 sm:mt-10 bg-white p-4 sm:p-6 rounded-xl shadow-md">
+
+<h3 class="text-2xl font-semibold mt-10 mb-3 text-indigo-500">
+  Understanding the Sorting Operation / Algorithm
+</h3>
+
+<p class="text-gray-700 mb-4">
+  Sorting is the rearrangement of elements in a list or array 
+  according to a chosen order (ascending, descending, or custom comparator).
+</p>
+
+<p class="text-gray-700 mb-4">
+  Example: <strong>[10, 20, 5, 2]</strong> becomes 
+  <strong>[2, 5, 10, 20]</strong>
+</p>
+
+<!-- ================= IMPORTANT PROPERTIES ================= -->
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Important Sorting Properties
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li><strong>In-place Sorting:</strong> Uses constant extra space and modifies the original array (Bubble, Selection, Insertion, Heap).</li>
+  <li><strong>Internal vs External Sorting:</strong> Internal sorting works when data fits in RAM; external sorting handles very large data stored on disk.</li>
+  <li><strong>Stability:</strong> A stable sort preserves the relative order of equal elements (important for multi-key sorting).</li>
+</ul>
+
+<!-- ================= HOW SORTS WORK ================= -->
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  How Common Sorting Algorithms Work
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li><strong>Bubble Sort:</strong> Repeatedly compares adjacent elements and swaps them; largest element bubbles to the end each pass.</li>
+  <li><strong>Selection Sort:</strong> Selects the smallest element from unsorted portion and places it in correct position.</li>
+  <li><strong>Insertion Sort:</strong> Builds sorted array one element at a time by inserting elements into correct position.</li>
+  <li><strong>Merge Sort:</strong> Divides array into halves, sorts them recursively, then merges sorted halves.</li>
+  <li><strong>Quick Sort:</strong> Selects a pivot, partitions array into smaller/larger elements, and recursively sorts partitions.</li>
+  <li><strong>Heap Sort:</strong> Uses heap data structure to repeatedly extract maximum/minimum element.</li>
+</ul>
+
+<!-- ================= TIME & SPACE COMPLEXITY ================= -->
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Time and Space Complexity
+</h4>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-300 text-gray-700 text-sm">
+  <thead class="bg-indigo-100">
+    <tr>
+      <th class="border px-3 py-2">Algorithm</th>
+      <th class="border px-3 py-2">Best</th>
+      <th class="border px-3 py-2">Average</th>
+      <th class="border px-3 py-2">Worst</th>
+      <th class="border px-3 py-2">Extra Space</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="border px-3 py-2">Bubble</td><td class="border px-3 py-2">O(n)</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(1)</td></tr>
+    <tr><td class="border px-3 py-2">Selection</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(1)</td></tr>
+    <tr><td class="border px-3 py-2">Insertion</td><td class="border px-3 py-2">O(n)</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(1)</td></tr>
+    <tr><td class="border px-3 py-2">Merge</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(n)</td></tr>
+    <tr><td class="border px-3 py-2">Quick</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(n²)</td><td class="border px-3 py-2">O(log n)</td></tr>
+    <tr><td class="border px-3 py-2">Heap</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(n log n)</td><td class="border px-3 py-2">O(1)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p class="text-gray-600 text-sm mb-6">
+  Note: n = number of elements, k = range or digit-related parameter depending on algorithm.
+</p>
+
+<!-- ================= REAL WORLD APPLICATION ================= -->
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Real-World Applications
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li><strong>Databases:</strong> SQL ORDER BY sorts query results.</li>
+  <li><strong>E-commerce:</strong> Products sorted by price, rating, relevance.</li>
+  <li><strong>External Sorting:</strong> Used for very large files that don't fit in memory.</li>
+  <li><strong>Data Analysis:</strong> Helps find median, percentiles, grouped reports.</li>
+  <li><strong>File Managers:</strong> Sort files by name, size, date.</li>
+</ul>
+
+<!-- ================= ADVANTAGES ================= -->
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Advantages
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>Improves search efficiency using Binary Search (O(log n)).</li>
+  <li>Reveals trends and patterns in data analysis.</li>
+  <li>Required for merging and many advanced algorithms.</li>
+  <li>Reduces downstream processing time.</li>
+</ul>
+
+<!-- ================= DISADVANTAGES ================= -->
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Disadvantages
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+  <li>Some algorithms have O(n²) complexity (inefficient for large data).</li>
+  <li>Merge sort requires extra memory O(n).</li>
+  <li>Quick sort worst case O(n²) if pivot is poorly chosen.</li>
+  <li>Frequent insertions in sorted data structures are costly.</li>
+</ul> 
+</section>
     </div>
     
 
