@@ -265,7 +265,9 @@ def reset_password(request, uidb64, token):
             form.save()
             messages.success(request, "Password reset successful.")
             return redirect("login")
-
+        else:
+            # THIS WAS MISSING! Show validation errors
+            messages.error(request, "Please fix the errors below.")
     else:
         form = CustomResetForm(user)
 
