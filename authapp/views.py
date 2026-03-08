@@ -1,4 +1,4 @@
-import token
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -262,14 +262,11 @@ def reset_password(request, uidb64, token):
     if request.method == "POST":
         form = CustomResetForm(user, request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data["new_password1"])
-            user.save()
+            form.save()
             messages.success(request, "Password reset successful.")
             
             return redirect("login")
-        else:
-           form = CustomResetForm(user)
+       
         # If form has errors, render with error messages
         return render(request, "authapp/reset_password.html", {"form": form})
     
