@@ -71,8 +71,8 @@ def LoginView(request):
     Google users are detected and handled safely
     """
     if request.method == "POST":
-        username_or_email = request.POST.get("username")
-        password = request.POST.get("password")
+        username_or_email = request.POST.get("username").strip()
+        password = request.POST.get("password").strip()
         
         if not username_or_email or not password:
             return render(request, "authapp/login.html", {
@@ -258,18 +258,15 @@ def reset_password(request, uidb64, token):
         messages.error(request, "Invalid or expired link.")
         return redirect("forgot_password")
 
-    # Handle POST request - validate and save password
     if request.method == "POST":
         form = CustomResetForm(user, request.POST)
+
         if form.is_valid():
             form.save()
             messages.success(request, "Password reset successful.")
-            
             return redirect("login")
-       
-        # If form has errors, render with error messages
-        return render(request, "authapp/reset_password.html", {"form": form})
-    
-    # Handle GET request - show empty form
-    form = CustomResetForm(user)
+
+    else:
+        form = CustomResetForm(user)
+
     return render(request, "authapp/reset_password.html", {"form": form})
