@@ -61,7 +61,7 @@ class ProfileEditForm(forms.ModelForm):
 
         # If full_name already exists → disable field
                if self.instance and self.instance.full_name:
-                  self.fields["full_name"].widget.attrs["readonly"] = True                                       
+                  self.fields["full_name"].disabled = True                                    
         
 class CustomResetForm(SetPasswordForm):
     new_password1 = forms.CharField(

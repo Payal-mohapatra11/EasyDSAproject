@@ -22,13 +22,12 @@
 
       <div>
         <label class="block text-sm font-medium mb-1">Username</label>
-         {% if form.instance.full_name %}
-      {{ form.full_name.as_widget(attrs={'disabled':'disabled','class':'w-full border rounded-lg p-2 bg-gray-100'}) }}
-      <p class="text-xs text-gray-500 mt-1">
-        Username cannot be changed.
-      </p>
-  {% else %}
-      {{ form.full_name }}
+        {{ form.full_name }}
+
+  {% if form.instance.full_name %}
+  <p class="text-xs text-gray-500 mt-1">
+    Username cannot be changed.
+  </p>
   {% endif %}
       </div>
 
