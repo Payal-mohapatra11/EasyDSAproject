@@ -258,19 +258,16 @@ def reset_password(request, uidb64, token):
         messages.error(request, "Invalid or expired link.")
         return redirect("forgot_password")
 
-    # Only create empty form on GET
-    if request.method == "GET":
-        form = CustomResetForm(user)
-        return render(request, "authapp/reset_password.html", {"form": form})
-
-    #  Only validate on POST
+    # Handle POST request - validate and save password
     if request.method == "POST":
-        form = CustomResetForm(user, request.POST)
-
+        form = CustomResetForm(user=user, data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Password reset successful.")
             return redirect("login")
-
-        # If invalid → render same form with errors
+        # If form has errors, render with error messages
         return render(request, "authapp/reset_password.html", {"form": form})
+    
+    # Handle GET request - show empty form
+    form = CustomResetForm(user=user)
+    return render(request, "authapp/reset_password.html", {"form": form})

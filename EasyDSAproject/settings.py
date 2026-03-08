@@ -33,8 +33,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['easydsapro.onrender.com', 'www.easydsa.online','easydsa.online','localhost', '127.0.0.1' ,'.onrender.com']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://easydsapro.onrender.com',
-    'https://*.onrender.com',
+    'https://easydsa.online',
+    'https://www.easydsa.online',
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
