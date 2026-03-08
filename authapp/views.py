@@ -260,7 +260,7 @@ def reset_password(request, uidb64, token):
 
     # Handle POST request - validate and save password
     if request.method == "POST":
-        form = CustomResetForm(user=user, data=request.POST)
+        form = CustomResetForm(user, request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Password reset successful.")
@@ -269,5 +269,5 @@ def reset_password(request, uidb64, token):
         return render(request, "authapp/reset_password.html", {"form": form})
     
     # Handle GET request - show empty form
-    form = CustomResetForm(user=user)
+    form = CustomResetForm(user)
     return render(request, "authapp/reset_password.html", {"form": form})
