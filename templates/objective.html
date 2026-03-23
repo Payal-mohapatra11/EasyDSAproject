@@ -18,7 +18,7 @@
  
   
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     background: linear-gradient(160deg, #dcfce7 0%, #86efac 40%, #4ade80 100%);
     background-attachment: fixed;
     min-height: 100vh;
@@ -52,7 +52,7 @@
   }
  
   .hero h1 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(36px, 6vw, 60px);
     font-weight: 800;
     line-height: 1.08;
@@ -103,7 +103,7 @@
   }
  
   .section-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(24px, 3.5vw, 36px);
     font-weight: 800;
     color: #14532d;
@@ -146,7 +146,7 @@
   }
  
   .obj-number {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 12px;
     font-weight: 800;
     color: #15803d;
@@ -169,7 +169,7 @@
   }
  
   .obj-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 16px;
     font-weight: 700;
     color: #14532d;
@@ -202,7 +202,7 @@
   }
  
   .footer-strip h2 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(22px, 3.5vw, 34px);
     font-weight: 800;
     color: #14532d;
@@ -243,7 +243,7 @@
 </style>
 </head>
 <body>
-
+{% include 'header.html' %}
 <!-- HERO -->
 <section class="hero">
   <div class="badge">Our Objectives</div>
@@ -379,6 +379,6 @@
     <a href="visualizer.html" class="cta-btn">Start Learning Now </a>
   </div>
 </div>
- 
+ {% include 'footer.html' %}
 </body>
 </html>
