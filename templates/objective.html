@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Objectives - EasyDSA</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+ 
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --green:  #16a34a;
+    --text:   #1a1a1a;
+    --muted:  #374151;
+    --border: rgba(255,255,255,0.4);
+  }
+ 
+  
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(160deg, #dcfce7 0%, #86efac 40%, #4ade80 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+ 
+
+ 
+  /* ── HERO ── */
+  .hero {
+    width: 100%;
+    padding: 70px 48px 40px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+  }
+ 
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.4);
+    color: #15803d;
+    border: 1px solid rgba(255,255,255,0.6);
+    margin-bottom: 24px;
+  }
+ 
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 60px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -.02em;
+    color: #14532d;
+    margin-bottom: 20px;
+  }
+ 
+  .hero-desc {
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #166534;
+  }
+ 
+  /* ── SECTION ── */
+  .section {
+    width: 100%;
+    padding: 48px 48px;
+  }
+ 
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+ 
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #15803d;
+    margin-bottom: 12px;
+  }
+ 
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #15803d;
+    border-radius: 2px;
+  }
+ 
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 800;
+    color: #14532d;
+    margin-bottom: 14px;
+  }
+ 
+  .section-body {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--muted);
+    max-width: 700px;
+    margin-bottom: 36px;
+  }
+ 
+  /* ── OBJECTIVE GRID ── */
+  .obj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+ 
+  /* ── GLASS CARD ── */
+  .obj-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    padding: 30px 26px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+ 
+  .obj-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.38);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255,255,255,0.7);
+  }
+ 
+  .obj-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    color: #15803d;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+ 
+  .obj-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+ 
+  .obj-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #14532d;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+ 
+  .obj-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #374151;
+  }
+ 
+  /* ── FOOTER STRIP ── */
+  .footer-wrap {
+    width: 100%;
+    padding: 40px 48px 60px;
+  }
+ 
+  .footer-strip {
+    width: 100%;
+    border-radius: 20px;
+    padding: 52px 40px;
+    text-align: center;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+  }
+ 
+  .footer-strip h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 3.5vw, 34px);
+    font-weight: 800;
+    color: #14532d;
+    margin-bottom: 12px;
+  }
+ 
+  .footer-strip p {
+    font-size: 15px;
+    color: #374151;
+    max-width: 480px;
+    margin: 0 auto 28px;
+    line-height: 1.75;
+  }
+ 
+  .cta-btn {
+    display: inline-block;
+    padding: 13px 32px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    background: #16a34a;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(22,163,74,.35);
+    transition: background .2s ease, transform .2s ease;
+  }
+ 
+  .cta-btn:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+  }
+ 
+  @media (max-width: 768px) {
+    .navbar { padding: 14px 20px; }
+    .nav-buttons a { margin-left: 8px; padding: 6px 10px; font-size: 12px; }
+    .hero, .section, .footer-wrap { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">Our Objectives</div>
+  <h1>What EasyDSA <span style="color:#16a34a;">Aims</span><br>To <span style="color:#ec4899;">Achieve</span></h1>
+  <p class="hero-desc">
+    EasyDSA was built with a clear purpose — to make Data Structures and Algorithms
+    accessible, visual, and genuinely easy to understand for every kind of learner.
+    Here are the core objectives that drive every decision we make.
+  </p>
+</section>
+ 
+<!-- OBJECTIVES -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">Core Objectives</div>
+    <h2 class="section-title">The Goals Behind EasyDSA</h2>
+    <p class="section-body">
+      Every feature on EasyDSA exists to serve a specific learning goal. These objectives
+      guide our development, content, and design — ensuring the platform always puts
+      the student first.
+    </p>
+ 
+    <div class="obj-grid">
+ 
+      <!-- 1 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 01</div>
+        <div class="obj-icon">🧩</div>
+        <div class="obj-title">Simplify Learning of DSA</div>
+        <div class="obj-desc">
+          Break down complex Data Structures and Algorithms into digestible, beginner-friendly
+          content. Replace intimidating pseudocode with clear visuals, plain-English explanations,
+          and real examples that make concepts click faster.
+        </div>
+      </div>
+ 
+      <!-- 2 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 02</div>
+        <div class="obj-icon">📚</div>
+        <div class="obj-title">Topic-wise Structured Visual Learning</div>
+        <div class="obj-desc">
+          Organize all DSA topics — Arrays, Stacks, Queues, Trees, Graphs, Sorting, Searching,
+          and more — into a clean, structured curriculum. Each topic is paired with a dedicated
+          visualizer so learners follow a logical progression from basics to advanced.
+        </div>
+      </div>
+ 
+      <!-- 3 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 03</div>
+        <div class="obj-icon">📈</div>
+        <div class="obj-title">Track Student Learning Progress</div>
+        <div class="obj-desc">
+          Allow students to monitor which topics they have completed, revisit weak areas,
+          and measure their overall growth. Progress tracking keeps learners motivated,
+          accountable, and aware of how far they have come on their DSA journey.
+        </div>
+      </div>
+ 
+      <!-- 4 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 04</div>
+        <div class="obj-icon">💬</div>
+        <div class="obj-title">Student Feedback System</div>
+        <div class="obj-desc">
+          Collect meaningful feedback from students about their learning experience.
+          Feedback helps improve the platform, fix issues, and ensure EasyDSA always
+          meets the real needs of its learners.
+        </div>
+      </div>
+ 
+      <!-- 5 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 05</div>
+        <div class="obj-icon">📱</div>
+        <div class="obj-title">User-Friendly & Responsive Platform</div>
+        <div class="obj-desc">
+          Deliver a smooth, intuitive experience across all devices — desktop, tablet, and
+          mobile. A clean interface with easy navigation ensures that students can focus
+          entirely on learning without any technical friction or confusion.
+        </div>
+      </div>
+ 
+      <!-- 6 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 06</div>
+        <div class="obj-icon">🎬</div>
+        <div class="obj-title">Real-Time Algorithm Visualization</div>
+        <div class="obj-desc">
+          Animate every algorithm step by step so learners can observe how data moves,
+          how comparisons are made, and how structures change internally. Seeing an
+          algorithm think is far more powerful than reading about it.
+        </div>
+      </div>
+ 
+      <!-- 7 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 07</div>
+        <div class="obj-icon">🏆</div>
+        <div class="obj-title">Prepare Students for Interviews</div>
+        <div class="obj-desc">
+          Equip learners with the problem-solving skills and conceptual depth required
+          for technical interviews at top companies. Curated problem sets, complexity
+          analysis, and pattern recognition help students build real interview confidence.
+        </div>
+      </div>
+ 
+      <!-- 8 -->
+      <div class="obj-card">
+        <div class="obj-number">Objective 08</div>
+        <div class="obj-icon">🌍</div>
+        <div class="obj-title">Make Quality DSA Education Free</div>
+        <div class="obj-desc">
+          Ensure that financial barriers never stop a student from learning. EasyDSA
+          is completely free to use, making world-class DSA education accessible to
+          every student regardless of their background or location.
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER STRIP -->
+<div class="footer-wrap">
+  <div class="footer-strip">
+    <h2>Our mission is your understanding.</h2>
+    <p>
+      Every objective on this page is a promise to our users. We build EasyDSA
+      every day with these goals in mind — for you.
+    </p>
+    <a href="visualizer.html" class="cta-btn">Start Learning Now </a>
+  </div>
+</div>
+ 
+</body>
+</html>

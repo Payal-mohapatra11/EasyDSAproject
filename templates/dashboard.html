@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EasyDSA Dashboard</title>
+<style>
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #d9f3f1;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Navbar */
+.navbar {
+  background: #16a34a;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nav-buttons a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 5px;
+  background: #15803d;
+  transition: 0.3s;
+}
+
+.nav-buttons a:hover {
+  background: #4f1bd3;
+}
+
+/* Welcome */
+.welcome {
+  padding: 40px 40px 20px;
+  text-align: center;
+}
+
+.welcome h1 {
+  font-family: 'Syne', sans-serif ; ;
+  font-size: 50px;
+  margin: 0;
+  color: #e94078;
+  animation: slideDown 1s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-40px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+.welcome p {
+  color: #555;
+}
+
+/* Dashboard */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 40px 40px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Card — single line */
+.card {
+  background: linear-gradient(135deg, #ffffff, #dcfce7);
+  padding: 14px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+}
+
+/* Slide animations */
+.card:nth-child(1) { animation: slideLeft  0.8s forwards; }
+.card:nth-child(2) { animation: slideRight 0.8s forwards; }
+.card:nth-child(3) { animation: slideLeft  1.0s forwards; }
+.card:nth-child(4) { animation: slideRight 1.0s forwards; }
+.card:nth-child(5) { animation: slideLeft  1.2s forwards; }
+
+@keyframes slideLeft {
+  from { transform: translateX(-80px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes slideRight {
+  from { transform: translateX(80px);  opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+/* Icon */
+.card-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%,100% { transform: translateY(0);    }
+  50%      { transform: translateY(-4px); }
+}
+
+.card:nth-child(1) .card-icon { animation-delay: 0s;   }
+.card:nth-child(2) .card-icon { animation-delay: 0.4s; }
+.card:nth-child(3) .card-icon { animation-delay: 0.8s; }
+.card:nth-child(4) .card-icon { animation-delay: 1.2s; }
+.card:nth-child(5) .card-icon { animation-delay: 1.6s; }
+
+/* Text */
+.card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-text h2 {
+  color: #15803d;
+  margin: 0 0 2px;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-text p {
+  color: #666;
+  font-size: 12px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Button */
+.card-btn {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.card-btn:hover {
+  transform: scale(1.08);
+  opacity: 0.88;
+}
+
+/* Button colors per card */
+.card:nth-child(1) .card-btn { background: rgba(59,130,246,0.15);  color: #3b82f6; border: 1.5px solid rgba(59,130,246,0.4);  }
+.card:nth-child(2) .card-btn { background: rgba(22,163,74,0.15);   color: #16a34a; border: 1.5px solid rgba(22,163,74,0.4);   }
+.card:nth-child(3) .card-btn { background: rgba(245,158,11,0.15);  color: #d97706; border: 1.5px solid rgba(245,158,11,0.4);  }
+.card:nth-child(4) .card-btn { background: rgba(236,72,153,0.15);  color: #ec4899; border: 1.5px solid rgba(236,72,153,0.4);  }
+.card:nth-child(5) .card-btn { background: rgba(139,92,246,0.15);  color: #8b5cf6; border: 1.5px solid rgba(139,92,246,0.4);  }
+
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="logo">EasyDSA</div>
+  <div class="nav-buttons">
+    <a href="index.html">Home</a>
+    <a href="logout.html">Logout</a>
+  </div>
+</div>
+
+<!-- Welcome -->
+<div class="welcome">
+  <h1>Welcome to EasyDSA</h1>
+  <p>Continue learning Data Structures and Algorithms with EasyDSA</p>
+</div>
+
+<!-- Dashboard Cards -->
+<div class="dashboard">
+
+  <div class="card">
+    <div class="card-icon">👤</div>
+    <div class="card-text">
+      <h2>Manage Profile</h2>
+      <p>Update your personal information and account settings.</p>
+    </div>
+    <a href="profile.html" class="card-btn">Account</a>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">🚀</div>
+    <div class="card-text">
+      <h2>Continue Learning</h2>
+      <p>Resume your last topic and continue learning DSA concepts.</p>
+    </div>
+    <a href="learning.html" class="card-btn">In Progress</a>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">📊</div>
+    <div class="card-text">
+      <h2>Track Progress</h2>
+      <p>View your completed topics and learning progress.</p>
+    </div>
+    <a href="progress.html" class="card-btn">Analytics</a>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">💬</div>
+    <div class="card-text">
+      <h2>Feedback</h2>
+      <p>Share your suggestions and feedback about the platform.</p>
+    </div>
+    <a href="feedback.html" class="card-btn">Community</a>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">🛡️</div>
+    <div class="card-text">
+      <h2>Support & Help</h2>
+      <p>Get help and find answers to common questions.</p>
+    </div>
+    <a href="support.html" class="card-btn">Help Center</a>
+  </div>
+
+</div>
+
+</body>
+</html>

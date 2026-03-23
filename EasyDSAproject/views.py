@@ -5,11 +5,13 @@ def home(request):
     return render(request, 'index.html')
 def visualizers(request):
     return render(request, 'visualizers.html')
-# def arrayvisualizers(request):
-#     return render(request, 'arrayvisualizers.html')
-# def linkedlistvisualizers(request):
-#     return render(request,'linkedlistvisualizer.html')
 def features(request):
     return render(request,'features.html')
 def chatbotpage(request):
     return render(request,'chatbot.html')
+def about(request):
+    return render(request,'aboutus.html')
+def objectives(request):
+    return render(request,'objective.html')
+def supporrt(request):
+    return render(request,'support&help.html')

@@ -53,5 +53,7 @@ urlpatterns = [
        path('learning/', include('learning.urls')),
        path("progress-profile/",learning_views.progress_profile,name="progress_profile"),
         path("feedback/", include("feedback.urls")),
-    
+        path("about/",views.about,name="about"),
+       path("objectives/",views.objectives,name="objectives"),
+       path("support/",views.supporrt,name="support"),
 ]

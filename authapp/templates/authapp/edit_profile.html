@@ -53,5 +53,18 @@
 
 {% include "footer.html" %}
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const usernameField = document.querySelector("input[name='full_name']");
+
+    if (usernameField && usernameField.value.trim() !== "") {
+        usernameField.setAttribute("readonly", true);
+        usernameField.classList.add("bg-gray-100", "cursor-not-allowed");
+    }
+
+});
+</script>
+
 </body>
 </html>

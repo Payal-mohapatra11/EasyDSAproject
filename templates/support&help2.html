@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EasyDSA Support</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+ 
+<style>
+:root {
+  --green:       #16a34a;
+  --green-light: #22c55e;
+  --green-dark:  #14532d;
+  --pink:        #e94078;
+  --teal:        #0d9488;
+  --text:        #1a2e22;
+  --muted:       #374151;
+}
+ 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+ 
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: linear-gradient(160deg, #dcfce7 0%, #86efac 40%, #4ade80 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  color: var(--text);
+  overflow-x: hidden;
+}
+ 
+ 
+/* ── HEADER ── */
+.header {
+  font-family: 'Syne', sans-serif;
+  text-align: center;
+  padding: 50px 24px 30px;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+ 
+.header h1 {
+  margin-bottom: 10px;
+  color: #e94078;
+  font-size: clamp(28px, 5vw, 46px);
+  font-weight: 800;
+}
+ 
+.header p {
+  color: #166534;
+  font-size: 15px;
+}
+ 
+/* ── TOPICS SLIDER ── */
+.topics-section {
+  padding: 40px 0 30px;
+  overflow: hidden;
+}
+ 
+.slider-track-wrapper {
+  overflow: hidden;
+  position: relative;
+  padding: 10px 0;
+}
+ 
+.slider-track-wrapper::before,
+.slider-track-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+.slider-track-wrapper::before { left:  0; background: linear-gradient(to right, #dcfce7, transparent); }
+.slider-track-wrapper::after  { right: 0; background: linear-gradient(to left,  #4ade80, transparent); }
+ 
+.slider-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: slide 28s linear infinite;
+}
+ 
+.slider-track:hover { animation-play-state: paused; }
+ 
+@keyframes slide {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+ 
+/* ── GLASS topic card ── */
+.topic-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  padding: 28px 32px;
+  min-width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  cursor: default;
+  flex-shrink: 0;
+}
+ 
+.topic-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  background: rgba(255,255,255,0.38);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+  border-color: rgba(255,255,255,0.7);
+}
+ 
+.topic-icon { font-size: 2.2rem; margin-bottom: 12px; display: block; }
+ 
+.topic-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #14532d;
+  margin-bottom: 6px;
+}
+ 
+.topic-card p { font-size: 0.82rem; color: #374151; line-height: 1.5; }
+ 
+/* ── FAQ ── */
+.faq-section {
+  padding: 60px 48px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+ 
+.faq-section h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #14532d;
+  margin-bottom: 8px;
+}
+ 
+.faq-section .section-sub {
+  color: #374151;
+  font-size: 0.95rem;
+  margin-bottom: 36px;
+}
+ 
+/* ── GLASS faq card ── */
+.faq-item {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+ 
+.faq-item.open {
+  background: rgba(255,255,255,0.38);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+ 
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 20px 24px;
+  text-align: left;
+  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #14532d;
+  gap: 12px;
+}
+ 
+.faq-question:hover { background: rgba(255,255,255,0.15); }
+ 
+.faq-icon {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--green-light);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: transform 0.3s, background 0.2s;
+}
+ 
+.faq-item.open .faq-icon { transform: rotate(45deg); background: var(--pink); }
+ 
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+ 
+.faq-answer-inner {
+  padding: 16px 24px 20px;
+  color: #374151;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  border-top: 1px solid rgba(255,255,255,0.4);
+}
+ 
+/* ── CONTACT SECTION ── */
+.contact-section {
+  padding: 60px 48px 80px;
+  width: 100%;
+  border-top: 1px solid rgba(255,255,255,0.4);
+}
+ 
+.contact-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+ 
+.contact-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #15803d;
+  margin-bottom: 10px;
+}
+ 
+.contact-label::before {
+  content: '';
+  display: block;
+  width: 20px; height: 2px;
+  background: #15803d;
+  border-radius: 2px;
+}
+ 
+.contact-info { text-align: center; }
+ 
+.contact-info h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(24px, 3.5vw, 34px);
+  font-weight: 800;
+  color: #14532d;
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+ 
+.contact-info p {
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.8;
+}
+ 
+/* ── GLASS contact card ── */
+.contact-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  transition: background .25s ease, box-shadow .25s ease;
+}
+ 
+.contact-card:hover {
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255,255,255,0.7);
+}
+ 
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+ 
+.contact-row:last-child  { border-bottom: none; padding-bottom: 0; }
+.contact-row:first-child { padding-top: 0; }
+ 
+.contact-row-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+ 
+.contact-row-text { flex: 1; }
+ 
+.contact-row-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #15803d;
+  margin-bottom: 4px;
+}
+ 
+.contact-row-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #14532d;
+}
+ 
+.contact-row-value a {
+  color: #14532d;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+ 
+.contact-row-value a:hover { color: #16a34a; text-decoration: underline; }
+ 
+.contact-row-sub {
+  font-size: 12px;
+  color: #374151;
+  margin-top: 2px;
+}
+ 
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 30px; right: 30px;
+  background: #14532d;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 999;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+ 
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .navbar { padding: 14px 20px; }
+  .nav-buttons a { margin-left: 8px; padding: 6px 10px; font-size: 12px; }
+  .faq-section { padding: 40px 20px; }
+  .contact-section { padding: 40px 20px 60px; }
+  .contact-card { padding: 24px 20px; }
+  .header { padding: 40px 20px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>Support & Help Center</h1>
+  <p>Get help with EasyDSA visualizers and DSA concepts.</p>
+</div>
+ 
+<!-- TOPICS INFINITE SLIDER -->
+<section class="topics-section">
+  <div class="slider-track-wrapper">
+    <div class="slider-track">
+      <div class="topic-card"><span class="topic-icon">🗃️</span><h3>Array</h3><p>Learn array operations and visualizations.</p></div>
+      <div class="topic-card"><span class="topic-icon">📚</span><h3>Stack</h3><p>Understand push and pop with LIFO logic.</p></div>
+      <div class="topic-card"><span class="topic-icon">🚶</span><h3>Queue</h3><p>FIFO operations visualized step by step.</p></div>
+      <div class="topic-card"><span class="topic-icon">🔗</span><h3>Linked List</h3><p>Visualize node connections and pointers.</p></div>
+      <div class="topic-card"><span class="topic-icon">🌳</span><h3>Tree</h3><p>Understand hierarchical data structures.</p></div>
+      <div class="topic-card"><span class="topic-icon">🕸️</span><h3>Graph</h3><p>Learn BFS and DFS traversal visually.</p></div>
+      <div class="topic-card"><span class="topic-icon">🔍</span><h3>Searching</h3><p>Linear & Binary Search made simple.</p></div>
+      <div class="topic-card"><span class="topic-icon">⚡</span><h3>Sorting</h3><p>Visualize Bubble, Merge, Quick Sort & more.</p></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="topic-card"><span class="topic-icon">🗃️</span><h3>Array</h3><p>Learn array operations and visualizations.</p></div>
+      <div class="topic-card"><span class="topic-icon">📚</span><h3>Stack</h3><p>Understand push and pop with LIFO logic.</p></div>
+      <div class="topic-card"><span class="topic-icon">🚶</span><h3>Queue</h3><p>FIFO operations visualized step by step.</p></div>
+      <div class="topic-card"><span class="topic-icon">🔗</span><h3>Linked List</h3><p>Visualize node connections and pointers.</p></div>
+      <div class="topic-card"><span class="topic-icon">🌳</span><h3>Tree</h3><p>Understand hierarchical data structures.</p></div>
+      <div class="topic-card"><span class="topic-icon">🕸️</span><h3>Graph</h3><p>Learn BFS and DFS traversal visually.</p></div>
+      <div class="topic-card"><span class="topic-icon">🔍</span><h3>Searching</h3><p>Linear & Binary Search made simple.</p></div>
+      <div class="topic-card"><span class="topic-icon">⚡</span><h3>Sorting</h3><p>Visualize Bubble, Merge, Quick Sort & more.</p></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FAQ -->
+<section class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+  <p class="section-sub">Quick answers to common questions about EasyDSA.</p>
+ 
+  <div class="faq-item">
+    <button class="faq-question">What is the EasyDSA platform?<div class="faq-icon">+</div></button>
+    <div class="faq-answer"><div class="faq-answer-inner">EasyDSA is an interactive learning platform that helps students understand Data Structures and Algorithms through step-by-step visualizations, making complex concepts easy and fun to grasp.</div></div>
+  </div>
+ 
+  <div class="faq-item">
+    <button class="faq-question">How do I use the visualizer?<div class="faq-icon">+</div></button>
+    <div class="faq-answer"><div class="faq-answer-inner">Navigate to the Visualizer page, choose a data structure (Array, Stack, Queue, Tree, etc.), then perform operations like insert, delete, and search. Watch each step animate in real time.</div></div>
+  </div>
+ 
+  <div class="faq-item">
+    <button class="faq-question">What topics are available in EasyDSA?<div class="faq-icon">+</div></button>
+    <div class="faq-answer"><div class="faq-answer-inner">EasyDSA currently covers: Arrays, Linked Lists, Stacks, Queues, Trees, Graphs, Searching algorithms (Linear & Binary), and Sorting algorithms (Bubble, Selection, Insertion, Merge, Quick Sort).</div></div>
+  </div>
+ 
+  <div class="faq-item">
+    <button class="faq-question">Is EasyDSA free to use?<div class="faq-icon">+</div></button>
+    <div class="faq-answer"><div class="faq-answer-inner">Yes! EasyDSA is completely free for all students. No registration or credit card is required. Just open the platform and start learning right away.</div></div>
+  </div>
+</section>
+ 
+<!-- CONTACT -->
+<section class="contact-section">
+  <div class="contact-inner">
+ 
+    <div class="contact-info">
+      <div class="contact-label">Get In Touch</div>
+      <h2>Contact Our Support Team</h2>
+      <p>
+        This is the official support page of EasyDSA where you can share your queries,
+        feedback, suggestions, or any issues related to our platform and DSA visualizers.
+        EasyDSA helps students understand Data Structures through interactive visualizations.
+        We are available <strong>Monday to Saturday, 9AM - 6PM IST.</strong>
+      </p>
+    </div>
+ 
+    <div class="contact-card">
+ 
+      <div class="contact-row">
+        <div class="contact-row-icon">✉️</div>
+        <div class="contact-row-text">
+          <div class="contact-row-label">Email</div>
+          <div class="contact-row-value">
+            <a href="mailto:support@easydsa.com">easydsa@easydsa.online</a>
+          </div>
+          <div class="contact-row-sub">We reply within 24 hours</div>
+        </div>
+      </div>
+ 
+      <div class="contact-row">
+        <div class="contact-row-icon">📞</div>
+        <div class="contact-row-text">
+          <div class="contact-row-label">Phone</div>
+          <div class="contact-row-value">
+            <a href="tel:+919876543210">+91 8260524299</a>
+          </div>
+          <div class="contact-row-sub">Mon - Sat, 9AM to 6PM IST</div>
+        </div>
+      </div>
+ 
+      <div class="contact-row">
+        <div class="contact-row-icon">🕐</div>
+        <div class="contact-row-text">
+          <div class="contact-row-label">Support Hours</div>
+          <div class="contact-row-value">Monday - Saturday</div>
+          <div class="contact-row-sub">9:00 AM - 6:00 PM IST</div>
+        </div>
+      </div>
+ 
+      <div class="contact-row">
+        <div class="contact-row-icon">📍</div>
+        <div class="contact-row-text">
+          <div class="contact-row-label">Based In</div>
+          <div class="contact-row-value">India 🇮🇳</div>
+          <div class="contact-row-sub">Serving students worldwide</div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+<div class="toast" id="toast">✅ Message sent! We'll reply within 24 hours.</div>
+ 
+<script>
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+ 
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-answer').style.maxHeight = '0';
+    });
+ 
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
+</script>
+ 
+</body>
+</html>

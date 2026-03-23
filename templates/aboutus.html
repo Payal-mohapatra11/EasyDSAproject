@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - EasyDSA</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+ 
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --green:  #16a34a;
+    --text:   #1a1a1a;
+    --muted:  #374151;
+    --border: rgba(255,255,255,0.4);
+  }
+ 
+  
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(160deg, #dcfce7 0%, #86efac 40%, #4ade80 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+ 
+  /*HERO*/
+  .hero {
+    width: 100%;
+    padding: 70px 48px 40px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+  }
+ 
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -.02em;
+    color: #14532d;
+    margin-bottom: 20px;
+  }
+ 
+  .hero-desc {
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.9;
+    color: #166534;
+  }
+ 
+  /*SECTIONS*/
+  .section {
+    width: 100%;
+    padding: 48px 48px;
+  }
+ 
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+ 
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #15803d;
+    margin-bottom: 12px;
+  }
+ 
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #15803d;
+    border-radius: 2px;
+  }
+ 
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 800;
+    color: #14532d;
+    margin-bottom: 14px;
+  }
+ 
+  .section-body {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--muted);
+    max-width: 680px;
+  }
+ 
+  /* FEATURES GRID */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 18px;
+    margin-top: 32px;
+    width: 100%;
+  }
+ 
+  /* GLASS CARD */
+  .feature-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+ 
+  .feature-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.38);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255,255,255,0.7);
+  }
+ 
+  .card-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+ 
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #14532d;
+    margin-bottom: 8px;
+  }
+ 
+  .card-desc {
+    font-size: 13px;
+    line-height: 1.75;
+    color: #374151;
+  }
+ 
+  /*HOW IT WORKS SECTION*/
+  .section-glass {
+    width: 100%;
+    padding: 52px 48px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.4);
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+  }
+ 
+  /* TIMELINE */
+  .timeline {
+    margin-top: 32px;
+    position: relative;
+    padding-left: 28px;
+  }
+ 
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: linear-gradient(to bottom, #16a34a, #86efac);
+    border-radius: 2px;
+  }
+ 
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+    padding-left: 24px;
+  }
+ 
+  .tl-dot {
+    position: absolute;
+    left: -28px; top: 4px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #16a34a;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #86efac;
+  }
+ 
+  .tl-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: #14532d;
+    margin-bottom: 4px;
+  }
+ 
+  .tl-body {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.75;
+  }
+ 
+  /* ── TWO-COL ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+ 
+  /* ── FOOTER STRIP ── */
+  .footer-wrap {
+    width: 100%;
+    padding: 40px 48px 60px;
+  }
+ 
+  .footer-strip {
+    width: 100%;
+    border-radius: 20px;
+    padding: 52px 40px;
+    text-align: center;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+  }
+ 
+  .footer-strip h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 3.5vw, 34px);
+    font-weight: 800;
+    color: #14532d;
+    margin-bottom: 12px;
+  }
+ 
+  .footer-strip p {
+    font-size: 15px;
+    color: #374151;
+    max-width: 480px;
+    margin: 0 auto 28px;
+    line-height: 1.75;
+  }
+ 
+  .cta-btn {
+    display: inline-block;
+    padding: 13px 32px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    background: #16a34a;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(22,163,74,.35);
+    transition: background .2s ease, transform .2s ease;
+  }
+ 
+  .cta-btn:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+  }
+ 
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; gap: 32px; }
+    .navbar  { padding: 14px 20px; }
+    .nav-buttons a { margin-left: 8px; padding: 6px 10px; font-size: 12px; }
+    .hero, .section, .section-glass, .footer-wrap { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+ 
+
+ 
+<!-- HERO -->
+<section class="hero">
+  <h1>Learn DSA<span style="color:#16a34a;"> The</span><span style="color:#ec4899;"> Visual Way</span></h1>
+  <p class="hero-desc">
+    EasyDSA is a free interactive platform that makes Data Structures and Algorithms
+    easy to understand through real-time visualizations and step-by-step walkthroughs —
+    covering everything from Arrays and Stacks to Graphs and Sorting, for beginners
+    and interview-ready developers alike.
+  </p>
+</section>
+ 
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Everything You Need to Master DSA</h2>
+ 
+    <div class="features-grid">
+ 
+      <div class="feature-card">
+        <div class="card-icon">🎬</div>
+        <div class="card-title">Interactive Visualizers</div>
+        <div class="card-desc">Watch algorithms execute in real time with animated, color-coded diagrams. Pause, rewind, and step through every operation at your own pace.</div>
+      </div>
+ 
+      <div class="feature-card">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">AI Chatbot Support</div>
+        <div class="card-desc">Stuck on a concept? Our AI assistant answers doubts instantly, explains logic in plain language, and suggests next steps tailored to your level.</div>
+      </div>
+ 
+      <div class="feature-card">
+        <div class="card-icon">🧭</div>
+        <div class="card-title">Step-by-Step Walkthroughs</div>
+        <div class="card-desc">Every algorithm is broken down into micro-steps with clear explanations, so you understand the "why" behind each move — not just the "what".</div>
+      </div>
+ 
+      <div class="feature-card">
+        <div class="card-icon">🌱</div>
+        <div class="card-title">Beginner Friendly</div>
+        <div class="card-desc">Zero prior knowledge? No problem. EasyDSA starts from the absolute basics and gently ramps up, making it the perfect starting point for anyone.</div>
+      </div>
+ 
+      <div class="feature-card">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Code Playground</div>
+        <div class="card-desc">Write and run code directly in the browser. See your code interact with live visualizers, bridging the gap between theory and implementation.</div>
+      </div>
+ 
+      <div class="feature-card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Complexity Analyzer</div>
+        <div class="card-desc">Instantly see the Big-O time and space complexity for every algorithm, with charts comparing performance across different input sizes.</div>
+      </div>
+ 
+      <div class="feature-card">
+        <div class="card-icon">🗺️</div>
+        <div class="card-title">Learning Roadmap</div>
+        <div class="card-desc">A structured curriculum that tells you exactly what to learn next. Track your progress and never feel lost in the DSA jungle again.</div>
+      </div>
+ 
+      <div class="feature-card">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">Search & Filter Topics</div>
+        <div class="card-desc">Quickly find any data structure or algorithm. Filter by category, difficulty, or topic to jump straight to what you need.</div>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+<!-- HOW IT WORKS + WHY -->
+<div class="section-glass">
+  <div class="two-col">
+ 
+    <div>
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Your DSA Journey, Step by Step</h2>
+      <p class="section-body">A deliberate learning loop: understand visually, then apply hands-on.</p>
+ 
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Choose a Topic</div>
+          <div class="tl-body">Pick from Arrays, Trees, Graphs, Sorting, DP and more — or follow the guided roadmap.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Watch the Visualizer</div>
+          <div class="tl-body">See the algorithm animate live. Control speed and step through every state change.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Read the Explanation</div>
+          <div class="tl-body">Concept notes explain the logic, pitfalls, and real-world use-cases alongside the animation.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Practice & Ask</div>
+          <div class="tl-body">Solve problems in the playground. Ask the AI chatbot for instant, personalized help.</div>
+        </div>
+        <div class="tl-item" style="margin-bottom:0;">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Track Your Progress</div>
+          <div class="tl-body">Earn milestones and watch your roadmap fill up as you master each topic.</div>
+        </div>
+      </div>
+    </div>
+ 
+    <div>
+      <div class="section-label">Why EasyDSA?</div>
+      <h2 class="section-title">Built by Learners, for Learners</h2>
+      <p class="section-body">
+        EasyDSA was born out of frustration with textbooks that explain algorithms using walls
+        of pseudocode with zero intuition. Our founders spent years watching students struggle
+        with the same conceptual gaps — so we built the resource we wished had existed.
+      </p>
+      <p class="section-body" style="margin-top:14px;">
+        Today, EasyDSA is used by students preparing for competitive programming, university
+        coursework, and placement drives at top companies. Every feature is crafted with one
+        goal in mind: make the "aha!" moment come faster.
+      </p>
+      <p class="section-body" style="margin-top:14px;">
+        We are constantly adding new visualizers, expanding our problem bank, and improving
+        our AI chatbot based on community feedback. EasyDSA grows with you.
+      </p>
+    </div>
+ 
+  </div>
+</div>
+ 
+<!-- FOOTER STRIP -->
+<div class="footer-wrap">
+  <div class="footer-strip">
+    <h2>Ready to visualize your first algorithm?</h2>
+    <p>Join thousands of students already learning DSA the easy, visual way. It's completely free.</p>
+    <a href="#" class="cta-btn">Start Learning Now </a>
+  </div>
+</div>
+ 
+</body>
+</html>
+ 
