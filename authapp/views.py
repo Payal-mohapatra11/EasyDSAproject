@@ -95,7 +95,7 @@ def LoginView(request):
 
         if user :
             login(request, user)
-            return redirect("home")
+            return redirect("dashboard")
 
         return render(request, "authapp/login.html", {
             "error": "Invalid password"

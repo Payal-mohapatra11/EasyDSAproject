@@ -15,3 +15,5 @@ def objectives(request):
     return render(request,'objective.html')
 def supporrt(request):
     return render(request,'support&help.html')
+def dashboard(request):
+    return render(request,'dashboard.html')

@@ -16,7 +16,7 @@ def topic_list(request):
 
 @login_required
 def handle_progress(request, topic_name):
-    topic = Topic.objects.get(name=topic_name)
+    topic = get_object_or_404(Topic, name=topic_name)
 
     progress, created = Progress.objects.get_or_create(
         user=request.user,
@@ -147,3 +147,31 @@ def progress_profile(request):
        "pending_topics":pending_topics,
     }  
     return render(request, "learning/progress_profile.html", context)
+
+@login_required
+def continue_learning(request):
+    user = request.user
+    in_progress=Progress.objects.filter(user=user,is_completed=False).first()
+    if in_progress:
+        topic_name=in_progress.topic.name
+        return redirect_topic(topic_name)
+    completed_topics=Progress.objects.filter(user=user,is_completed=True).values_list("topic_id",flat=True)
+    next_topic=Topic.objects.exclude(id__in=completed_topics).first()
+    if next_topic:
+        return redirect_topic(next_topic.name)
+    last_topic=Topic.objects.last()
+    if last_topic:
+        return redirect_topic(last_topic.name)
+    return redirect("topic_list")
+
+def redirect_topic(topic_name):
+    mapping={
+        "Array":"array_visualizer",
+        "Linkedlist":"linkedlist_visualizer",
+        "Stack":"stack_visualizer",
+        "Queue":"queue_visualizer",
+        "Tree":"tree_visualizer",
+        "Sorting":"sorting_visualizer",
+        "Searching":"searching_visualizer",
+    }
+    return redirect(mapping.get(topic_name,"topic_list"))

@@ -48,6 +48,7 @@ urlpatterns = [
      path('treevisualizers/',learning_views.tree_visualizer,name='tree_visualizer'),
      path('sortingvisualizers/',learning_views.sorting_visualizer,name='sorting_visualizer'),
      path('searchingvisualizers/',learning_views.searching_visualizer,name='searching_visualizer'),
+     path('countinue-learning/',learning_views.continue_learning,name='continue_learning'),
      path('features/',views.features,name='features'),
      path('chatbotpage/',views.chatbotpage,name='chatbotpage'),
        path('learning/', include('learning.urls')),
@@ -56,4 +57,5 @@ urlpatterns = [
         path("about/",views.about,name="about"),
        path("objectives/",views.objectives,name="objectives"),
        path("support/",views.supporrt,name="support"),
+       path("dashboard/", views.dashboard, name="dashboard")
 ]
