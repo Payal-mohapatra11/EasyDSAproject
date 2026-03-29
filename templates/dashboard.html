@@ -191,6 +191,12 @@ body {
 
 {% include 'header.html' %}
 
+  <div class="w-24 h-24 mx-auto rounded-full bg-white 
+              flex items-center justify-center 
+              text-green-500 text-4xl font-bold shadow-lg">
+    {{ user.email|first|upper }}
+  </div>
+
 <!-- Welcome -->
 <div class="welcome">
   <h1>Welcome to EasyDSA</h1>

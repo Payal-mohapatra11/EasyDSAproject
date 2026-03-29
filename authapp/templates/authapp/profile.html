@@ -36,27 +36,7 @@
               text-green-500 text-4xl font-bold shadow-lg">
     {{ user.email|first|upper }}
   </div>
-           <!-- {% if user.socialaccount_set.all %}
-           {% with social=user.socialaccount_set.all.0 %}
-           {% if social.extra_data.picture %}
-
-        <img
-             src="{{ social.extra_data.picture }}"
-          alt="Google Profile"
-          class="w-full h-full object-cover"
-        >
-    {% else %} -->
-    <!-- <span class="text-3xl font-bold text-indigo-600">
-           {{ profile.full_name|first|upper }} 
-            {{ user.email|first|upper }}
-        </span> -->
-        <!-- {% endif %} 
- {% endwith %}
-  {% else %}
-    <span class="text-3xl font-bold text-indigo-600">
-      {{ profile.full_name|first|upper }}
-    </span>
-  {% endif %}-->
+         
 
           </div>
           <h1 class="text-2xl font-semibold mt-4">{{profile.full_name}}</h1>

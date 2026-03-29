@@ -198,10 +198,10 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
-ACCOUNT_LOGIN_REDIRECT_URL = "home"
-SOCIALACCOUNT_LOGIN_REDIRECT_URL = "home"
+ACCOUNT_LOGIN_REDIRECT_URL = "dashboard"
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = "dashboard"
 
-LOGIN_REDIRECT_URL =  "home"                            #"/auth/profile/"
+LOGIN_REDIRECT_URL =  "dashboard"                            #"/auth/profile/"
 LOGOUT_REDIRECT_URL = "/auth/login/"
 ACCOUNT_SIGNUP_REDIRECT_URL = "/auth/login"
 SOCIALACCOUNT_SIGNUP_REDIRECT_URL = "/auth/signup/"
