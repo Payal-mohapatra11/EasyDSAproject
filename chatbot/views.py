@@ -8,9 +8,12 @@ client = Groq(api_key=settings.GROQ_API_KEY)
 
 DSA_KEYWORDS = [
     "array", "linked list", "stack", "queue", "tree", "graph",
-    "binary search", "sorting", "recursion", "dynamic programming",
+    "binary search", "linear search", "sorting", "recursion", "dynamic programming",
     "dp", "greedy", "hash", "heap", "trie", "backtracking",
-    "time complexity", "space complexity", "dsa"
+    "time complexity", "space complexity", "dsa","algorithm", "data structure","searching","search",
+    "bubble sort", "selection sort", "insertion sort",
+    "merge sort", "quick sort", "heap sort",
+    "counting sort", "radix sort", "bucket sort", "hashmap", "hash set", "hash table", "priority queue", "disjoint set", "union find",
 ]
 
 def is_dsa_question(question: str) -> bool:
