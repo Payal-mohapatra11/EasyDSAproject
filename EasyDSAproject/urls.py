@@ -57,5 +57,6 @@ urlpatterns = [
         path("about/",views.about,name="about"),
        path("objectives/",views.objectives,name="objectives"),
        path("support/",views.supporrt,name="support"),
-       path("dashboard/", views.dashboard, name="dashboard")
+       path("dashboard/", views.dashboard, name="dashboard"),
+       path("contact/", views.contact, name="contact"),
 ]
