@@ -19,5 +19,3 @@ def dashboard(request):
     return render(request,'dashboard.html')
 def contact(request):
     return render(request,'contact.html')
-def support(request):
-    return render(request,'support&help.html')
