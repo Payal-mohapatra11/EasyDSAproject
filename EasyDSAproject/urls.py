@@ -46,6 +46,7 @@ urlpatterns = [
      path('stackvisualizers/',learning_views.stack_visualizer,name='stack_visualizer'),
      path('queuevisualizers/',learning_views.queue_visualizer,name='queue_visualizer'),
      path('treevisualizers/',learning_views.tree_visualizer,name='tree_visualizer'),
+     path('graphvisualizers/',learning_views.graph_visualizer,name='graph_visualizer'),
      path('sortingvisualizers/',learning_views.sorting_visualizer,name='sorting_visualizer'),
      path('searchingvisualizers/',learning_views.searching_visualizer,name='searching_visualizer'),
      path('countinue-learning/',learning_views.continue_learning,name='continue_learning'),
