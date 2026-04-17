@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .graph-node {
+            transition: all 0.3s ease;
+        }
+        .graph-line {
+            stroke: #818cf8;
+            stroke-width: 2;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    {% include 'header.html' %}
+
+    <div class="max-w-6xl mx-auto py-6 sm:py-12 px-2 sm:px-4">
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4 sm:mb-8 text-pink-800">
+         {{topic.name}} Visualizer
+        </h1>
+
+         <form method="POST" class="mb-4 sm:mb-6">
+    {% csrf_token %}
+    
+    <div class="flex items-center space-x-2 sm:space-x-3 justify-center">
+        <input type="checkbox"
+               name="complete_topic"
+               onchange="this.form.submit()"
+               {% if progress.is_completed %}checked disabled{% endif %}
+               class="w-4 h-4 sm:w-5 sm:h-5 text-green-600">
+
+        <label class="text-sm sm:text-lgfont-semibold text-green-700">
+            Mark only if this topic is Completed
+        </label>
+    </div>
+</form>
+        
+        <div class="bg-green-100 rounded-xl shadow-lg p-3 sm:p-6 mb-6 sm:mb-8">
+            <div class="flex justify-between mb-4">
+                <div class="flex space-x-2">
+                    <button id="bfs-btn" class="px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-pink-600 text-white rounded-md hover:bg-pink-700">BFS</button>
+                    <button id="dfs-btn" class="px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-pink-600 text-white rounded-md hover:bg-pink-700">DFS</button>
+                    <button id="dijkstra-btn" class="px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-pink-600 text-white rounded-md hover:bg-pink-700">Dijkstra's</button>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="reset-btn" class="px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-blue-600 text-white rounded-md hover:bg-blue-700">Reset</button>
+                </div>
+            </div>
+
+            <div class="relative h-56 sm:h-72 md:h-96 bg-gray-100 rounded-lg mb-4" id="graph-container">
+                <svg id="graph-lines"></svg>
+                <!-- Graph nodes will be dynamically inserted here -->
+            </div>
+
+            <div class="flex justify-between bg-gray-100 p-2 sm:p-4 rounded-lg mb-4 text-sm sm:text-base">
+                <div class="flex space-x-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="start-node" value="A" class="mr-1" checked>
+                        <span>Start: A</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="end-node" value="G" class="mr-1" checked>
+                        <span>End: G</span>
+                    </label>
+                </div>
+                <div>
+                    <span class="font-medium">Path Length:</span>
+                    <span id="path-length" class="font-bold">0</span>
+                </div>
+            </div>
+
+            <div id="status-message" class="text-center text-gray-600 italic"></div>
+            <div id="path-display" class="text-center mt-2 font-mono"></div>
+        </div>
+    <div class="bg-gray-100 p-4 rounded-lg mt-4">
+      <h3 class="font-semibold mb-2 text-green-600"></h3>
+     <div id="action-log" class="text-sm font-mono space-y-1 max-h-40 overflow-y-auto"></div>
+    </div>
+
+  <div class="bg-green-100 border border-green-200 rounded-lg p-4">
+<section class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-md">
+
+  <h2 class="text-3xl font-bold mb-4 text-indigo-600">
+    Understanding the Graph Data Structure
+  </h2>
+
+  <p class="text-gray-700 mb-4">
+    A <strong>Graph</strong> is a non-linear data structure made up of nodes 
+    (vertices) and connections between them (edges). Graphs are used to 
+    represent relationships between different entities.
+  </p>
+
+  <ul class="list-disc pl-6 text-gray-700 mb-6 space-y-2">
+    <li>
+      <strong>Vertex (Node):</strong> The fundamental unit in a graph 
+      (e.g., a person in a social network).
+    </li>
+
+    <li>
+      <strong>Edge:</strong> A connection between two vertices; it can be:
+      <ul class="list-disc pl-6 mt-2">
+        <li>Undirected (unordered pair)</li>
+        <li>Directed (ordered pair)</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Adjacent Vertices:</strong> Vertices that share an edge.
+    </li>
+
+    <li>
+      <strong>Path:</strong> A sequence of edges connecting vertices.
+    </li>
+  </ul>
+
+  <!-- TIME & SPACE COMPLEXITY -->
+  <h3 class="text-2xl font-semibold mb-3 text-indigo-500">
+    Time and Space Complexity
+  </h3>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border border-gray-300 text-left">
+      <thead class="bg-indigo-100">
+        <tr>
+          <th class="p-3 border">Operation</th>
+          <th class="p-3 border">Adjacency List (Time)</th>
+          <th class="p-3 border">Adjacency Matrix (Time)</th>
+          <th class="p-3 border">Extra Space</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="p-3 border">Check if edge (u → v) exists</td>
+          <td class="p-3 border">O(degree(u))</td>
+          <td class="p-3 border">O(1)</td>
+          <td class="p-3 border">O(1)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Add edge (u → v)</td>
+          <td class="p-3 border">O(1)</td>
+          <td class="p-3 border">O(1)</td>
+          <td class="p-3 border">O(1)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Remove edge (u → v)</td>
+          <td class="p-3 border">O(degree(u))</td>
+          <td class="p-3 border">O(1)</td>
+          <td class="p-3 border">O(1)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">Iterate neighbours of (u)</td>
+          <td class="p-3 border">O(degree(u))</td>
+          <td class="p-3 border">O(V)</td>
+          <td class="p-3 border">O(1)</td>
+        </tr>
+
+        <tr>
+          <td class="p-3 border">BFS / DFS Traversal</td>
+          <td class="p-3 border">O(V + E)</td>
+          <td class="p-3 border">O(V²)</td>
+          <td class="p-3 border">O(V)</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <!-- ===== REAL-WORLD APPLICATIONS ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Real-World Applications
+</h3>
+
+<p class="text-gray-700 mb-4">
+  Graphs are used whenever you need to model <strong>entities (nodes)</strong> 
+  and the <strong>relationships (edges)</strong> between them. They are especially 
+  useful for solving problems like shortest path, reachability, ranking, and 
+  community detection.
+</p>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-4">
+
+  <li>
+    <strong>Social Networks:</strong><br>
+    Users or pages act as nodes, and relationships like 
+    friend, follow, or interaction act as edges. This helps 
+    analyze connections and identify influential or highly 
+    connected users.
+  </li>
+
+  <li>
+    <strong>Maps and Navigation:</strong><br>
+    Cities or intersections are nodes, and roads or flight routes 
+    are edges. Graph algorithms like shortest path help find the 
+    most efficient route and reduce travel time or distance.
+  </li>
+
+  <li>
+    <strong>Web Search and Crawling:</strong><br>
+    Web pages are nodes and hyperlinks are edges. This structure 
+    helps search engines discover pages and determine their 
+    importance based on connections.
+  </li>
+
+  <li>
+    <strong>Recommendation Systems:</strong><br>
+    Users and items are connected through interactions like views, 
+    purchases, or likes. Graph relationships help generate 
+    recommendations such as “people you may know” or similar products.
+  </li>
+
+  <li>
+    <strong>Supply Chain and Biology:</strong><br>
+    <ul class="list-disc pl-6 mt-2 space-y-2">
+      <li>
+        Supply chain networks: factories, warehouses, and stores are nodes, 
+        while edges represent the flow of goods or information.
+      </li>
+      <li>
+        Bioinformatics: genes, proteins, or metabolites act as nodes, and 
+        their interactions form edges to study biological systems.
+      </li>
+    </ul>
+  </li>
+
+</ul>
+<!-- ===== ADVANTAGES ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Advantages of Graph Data Structure
+</h3>
+
+<h4 class="text-xl font-semibold mt-4 mb-2 text-indigo-500">
+  Key Advantages
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-3">
+  
+  <li>
+    <strong>Flexible Representation:</strong><br>
+    Graphs can model arbitrary relationships between entities without 
+    rigid structures like trees or arrays.
+  </li>
+
+  <li>
+    <strong>Efficient Traversals:</strong><br>
+    Algorithms like BFS and DFS run in <strong>O(V + E)</strong> time 
+    (using adjacency list), making them efficient for pathfinding and 
+    connectivity problems.
+  </li>
+
+  <li>
+    <strong>Scalable for Networks:</strong><br>
+    Graphs handle both sparse and dense data efficiently. Adjacency lists 
+    are memory-efficient for real-world sparse graphs.
+  </li>
+
+</ul>
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Modeling Power
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-3">
+
+  <li>
+    Graphs naturally represent non-linear relationships such as 
+    social networks, web links, and transportation systems, making 
+    analysis more intuitive.
+  </li>
+
+  <li>
+    They support <strong>weighted</strong> and <strong>directed</strong> edges, 
+    allowing representation of costs, directions, and priorities, unlike 
+    simple linear structures.
+  </li>
+
+</ul>
+<!-- ===== DISADVANTAGES ===== -->
+<h3 class="text-2xl font-semibold mt-8 mb-3 text-indigo-500">
+  Disadvantages of Graph Data Structure
+</h3>
+
+<h4 class="text-xl font-semibold mt-4 mb-2 text-indigo-500">
+  Key Disadvantages
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-3">
+
+  <li>
+    <strong>High Memory Usage:</strong><br>
+    Adjacency matrix requires <strong>O(V²)</strong> space even for sparse graphs. 
+    Adjacency lists are more efficient but still grow with the number of edges (E).
+  </li>
+
+  <li>
+    <strong>Scalability Issues:</strong><br>
+    Traversal algorithms like BFS and DFS take <strong>O(V + E)</strong> time, 
+    but for dense graphs (E ≈ V²), computation becomes expensive.
+  </li>
+
+  <li>
+    <strong>Complex Implementation:</strong><br>
+    Operations like adding/removing edges or checking existence can be slower 
+    in adjacency lists <strong>(O(degree(u)))</strong> compared to adjacency matrix 
+    <strong>(O(1))</strong>.
+  </li>
+
+</ul>
+
+<h4 class="text-xl font-semibold mt-6 mb-2 text-indigo-500">
+  Practical Limitations
+</h4>
+
+<ul class="list-disc pl-6 text-gray-700 space-y-3">
+
+  <li>
+    Large and complex graphs are difficult to visualize, interpret, 
+    or debug without specialized tools.
+  </li>
+
+  <li>
+    Graphs mainly model relationships and do not store detailed 
+    object attributes directly (additional data structures are needed).
+  </li>
+
+  <li>
+    Data quality is critical: incorrect or missing edges can lead 
+    to misleading results and poor analysis.
+  </li>
+
+</ul>
+
+</section>
+</div>
+           
+    </div>
+{% include 'footer.html' %}
+{% include 'chatbot.html' %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+ 
+    feather.replace();
+ 
+    function logAction(text) {
+        const log = document.getElementById('action-log');
+ 
+        const step = document.createElement('div');
+        step.textContent = text;
+ 
+        step.className = "bg-green-200 px-2 py-1 rounded transition-all duration-500";
+ 
+        log.appendChild(step);
+ 
+        setTimeout(() => {
+            step.classList.remove('bg-green-200');
+        }, 500);
+ 
+        log.scrollTop = log.scrollHeight;
+    }
+ 
+    function clearLog() {
+        document.getElementById('action-log').innerHTML = "";
+    }
+ 
+    // Graph
+    const graph = {
+        nodes: ['A','B','C','D','E','F','G'],
+        edges: [
+            {from:'A',to:'B',weight:4},
+            {from:'A',to:'C',weight:2},
+            {from:'B',to:'D',weight:5},
+            {from:'C',to:'D',weight:8},
+            {from:'C',to:'E',weight:10},
+            {from:'D',to:'F',weight:2},
+            {from:'D',to:'G',weight:6},
+            {from:'E',to:'G',weight:2},
+            {from:'F',to:'G',weight:2}
+        ],
+        positions: {
+            'A':{x:0.1,y:0.5},
+            'B':{x:0.3,y:0.3},
+            'C':{x:0.3,y:0.7},
+            'D':{x:0.5,y:0.5},
+            'E':{x:0.7,y:0.8},
+            'F':{x:0.7,y:0.5},
+            'G':{x:0.9,y:0.5}
+        }
+    };
+ 
+    const graphContainer = document.getElementById('graph-container');
+    const graphLines = document.getElementById('graph-lines');
+    const statusMessage = document.getElementById('status-message');
+    const pathDisplay = document.getElementById('path-display');
+    const pathLengthDisplay = document.getElementById('path-length');
+ 
+    let nodeElements = {};
+    let lineElements = [];
+    let isAnimating = false;
+ 
+function renderGraph(){
+    graphLines.innerHTML="";
+    Object.values(nodeElements).forEach(el=>el.remove());
+    nodeElements={};
+    lineElements=[];
+
+    const cw = graphContainer.clientWidth;
+    const ch = graphContainer.clientHeight;
+    const nodeSize = Math.max(24, Math.min(40, cw * 0.08));
+    const half = nodeSize / 2;
+    const fontSize = Math.max(10, Math.min(14, cw * 0.03));
+    const weightFontSize = Math.max(9, Math.min(13, cw * 0.028));
+
+    graph.edges.forEach(edge=>{
+        const fromPos=graph.positions[edge.from];
+        const toPos=graph.positions[edge.to];
+
+        const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1',fromPos.x*cw);
+        line.setAttribute('y1',fromPos.y*ch);
+        line.setAttribute('x2',toPos.x*cw);
+        line.setAttribute('y2',toPos.y*ch);
+        line.classList.add('graph-line');
+
+        graphLines.appendChild(line);
+        lineElements.push(line);
+
+        const midX = (fromPos.x + toPos.x) / 2 * cw;
+        const midY = (fromPos.y + toPos.y) / 2 * ch;
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+        text.setAttribute('x', midX);
+        text.setAttribute('y', midY);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('fill', '#4f46e5');
+        text.setAttribute('font-weight', 'bold');
+        text.setAttribute('font-size', weightFontSize);
+        text.textContent = edge.weight;
+        graphLines.appendChild(text);
+    });
+
+    graph.nodes.forEach(node=>{
+        const el=document.createElement('div');
+        el.className="graph-node absolute bg-green-600 rounded-full flex items-center justify-center text-white font-bold";
+        el.style.width    = `${nodeSize}px`;
+        el.style.height   = `${nodeSize}px`;
+        el.style.fontSize = `${fontSize}px`;
+        el.style.left=`${graph.positions[node].x*cw - half}px`;
+        el.style.top =`${graph.positions[node].y*ch - half}px`;
+        el.textContent=node;
+
+        nodeElements[node]=el;
+        graphContainer.appendChild(el);
+    });
+}
+ 
+    function highlightNode(node){
+        nodeElements[node]?.classList.add('bg-pink-500');
+        setTimeout(()=>nodeElements[node]?.classList.remove('bg-pink-500'),800);
+    }
+ 
+    function highlightEdge(from,to){
+        const edgeIndex=graph.edges.findIndex(e=>
+            (e.from===from&&e.to===to)||(e.from===to&&e.to===from)
+        );
+        if(edgeIndex>=0){
+            lineElements[edgeIndex].classList.add('stroke-pink-500');
+            setTimeout(()=>lineElements[edgeIndex].classList.remove('stroke-pink-500'),800);
+        }
+    }
+ 
+    async function animatePath(path){
+        isAnimating=true;
+        let total=0;
+        let text="";
+ 
+        for(let i=0;i<path.length-1;i++){
+            const from=path[i];
+            const to=path[i+1];
+ 
+            const edge=graph.edges.find(e=>
+                (e.from===from&&e.to===to)||(e.from===to&&e.to===from)
+            );
+ 
+            if(edge){
+                total+=edge.weight;
+                text+=(i>0?" → ":"")+from;
+ 
+                highlightNode(from);
+                highlightEdge(from,to);
+ 
+                pathDisplay.textContent=text;
+                pathLengthDisplay.textContent=total;
+ 
+                await new Promise(r=>setTimeout(r,700));
+            }
+        }
+ 
+        text+=" → "+path[path.length-1];
+        pathDisplay.textContent=text;
+        highlightNode(path[path.length-1]);
+ 
+        isAnimating=false;
+    }
+ 
+    // ===== BFS =====
+    function bfs(start,end){
+        clearLog();
+ 
+        const visited=new Set();
+        const queue=[[start,[start]]];
+ 
+        logAction(JSON.stringify({action:"start_bfs",queue:[start],visited:[]}));
+ 
+        while(queue.length){
+            const [current,path]=queue.shift();
+ 
+            logAction(JSON.stringify({
+                action:"dequeue",
+                node:current,
+                queue:queue.map(q=>q[0]),
+                visited:[...visited]
+            }));
+ 
+            if(current===end){
+                logAction(JSON.stringify({action:"final_path",path:path}));
+                return path;
+            }
+ 
+            if(!visited.has(current)){
+                visited.add(current);
+ 
+                const neighbors=graph.edges
+                    .filter(e=>e.from===current||e.to===current)
+                    .map(e=>e.from===current?e.to:e.from);
+ 
+                for(const n of neighbors){
+                    if(!visited.has(n)){
+                        queue.push([n,[...path,n]]);
+                        logAction(JSON.stringify({
+                            action:"enqueue",
+                            element:n,
+                            queue:queue.map(q=>q[0]),
+                            visited:[...visited]
+                        }));
+                    }
+                }
+            }
+        }
+ 
+        logAction(JSON.stringify({action:"no_path"}));
+        return null;
+    }
+ 
+    // ===== DFS =====
+    function dfs(start,end,visited=new Set(),path=[]){
+        if(path.length===0){
+            clearLog();
+            logAction(JSON.stringify({action:"start_dfs",stack:[start],visited:[]}));
+        }
+ 
+        visited.add(start);
+        path=[...path,start];
+ 
+        logAction(JSON.stringify({action:"visit",node:start,path:path}));
+ 
+        if(start===end){
+            logAction(JSON.stringify({action:"final_path",path:path}));
+            return path;
+        }
+ 
+        const neighbors=graph.edges
+            .filter(e=>e.from===start||e.to===start)
+            .map(e=>e.from===start?e.to:e.from);
+ 
+        for(const n of neighbors){
+            if(!visited.has(n)){
+                const res=dfs(n,end,visited,path);
+                if(res) return res;
+            }
+        }
+ 
+        return null;
+    }
+ 
+    // ===== DIJKSTRA =====
+    function dijkstra(start,end){
+        clearLog();
+ 
+        const dist={},prev={},unvisited=new Set(graph.nodes);
+ 
+        graph.nodes.forEach(n=>dist[n]=n===start?0:Infinity);
+ 
+        logAction(JSON.stringify({action:"start_dijkstra",distances:dist}));
+ 
+        while(unvisited.size){
+            let current=[...unvisited].reduce((a,b)=>dist[a]<dist[b]?a:b);
+ 
+            logAction(JSON.stringify({action:"select_node",node:current,distance:dist[current]}));
+ 
+            if(current===end) break;
+ 
+            unvisited.delete(current);
+ 
+            const edges=graph.edges.filter(e=>e.from===current||e.to===current);
+ 
+            for(const e of edges){
+                const n=e.from===current?e.to:e.from;
+                const newDist=dist[current]+e.weight;
+ 
+                if(newDist<dist[n]){
+                    dist[n]=newDist;
+                    prev[n]=current;
+ 
+                    logAction(JSON.stringify({
+                        action:"update_distance",
+                        node:n,
+                        newDistance:newDist
+                    }));
+                }
+            }
+        }
+ 
+        let path=[end],cur=end;
+ 
+        while(cur!==start){
+            cur=prev[cur];
+            if(!cur){
+                logAction(JSON.stringify({action:"no_path"}));
+                return null;
+            }
+            path.unshift(cur);
+        }
+ 
+        logAction(JSON.stringify({action:"final_path",path:path}));
+        return path;
+    }
+ 
+    renderGraph();
+    window.addEventListener('resize',renderGraph);
+ 
+    document.getElementById('bfs-btn').onclick=()=>{
+        const s=document.querySelector('[name="start-node"]:checked').value;
+        const e=document.querySelector('[name="end-node"]:checked').value;
+        const p=bfs(s,e);
+        if(p) animatePath(p);
+    };
+ 
+    document.getElementById('dfs-btn').onclick=()=>{
+        const s=document.querySelector('[name="start-node"]:checked').value;
+        const e=document.querySelector('[name="end-node"]:checked').value;
+        const p=dfs(s,e);
+        if(p) animatePath(p);
+    };
+ 
+    document.getElementById('dijkstra-btn').onclick=()=>{
+        const s=document.querySelector('[name="start-node"]:checked').value;
+        const e=document.querySelector('[name="end-node"]:checked').value;
+        const p=dijkstra(s,e);
+        if(p) animatePath(p);
+    };
+ 
+    document.getElementById('reset-btn').onclick=()=>{
+        renderGraph();
+        clearLog();
+        pathDisplay.textContent="";
+        pathLengthDisplay.textContent="0";
+        statusMessage.textContent="Graph reset";
+    };
+ 
+});
+    </script>
+</body>
+</html>

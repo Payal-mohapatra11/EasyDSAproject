@@ -101,6 +101,17 @@ def tree_visualizer(request):
         "progress": progress
     })
     
+@login_required
+def graph_visualizer(request):
+    result = handle_progress(request,"Graph")
+    if isinstance(result,HttpResponse):
+        return result
+    topic,progress = result
+
+    return render(request, "graphvisualizer.html", {
+        "topic": topic,
+        "progress": progress
+    })
     
 @login_required
 def sorting_visualizer(request):
