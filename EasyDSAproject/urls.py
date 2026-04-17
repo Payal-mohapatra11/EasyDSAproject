@@ -19,6 +19,7 @@ from django.urls import path,include
 from EasyDSAproject import views
 from django.shortcuts import redirect
 from learning import views as learning_views
+from django.views.generic import RedirectView
 
 
 
@@ -60,4 +61,8 @@ urlpatterns = [
        path("support/",views.support,name="support"),
        path("dashboard/", views.dashboard, name="dashboard"),
        path("contact/", views.contact, name="contact"),
+]
+urlpatterns += [
+    path('favicon.ico', RedirectView.as_view(url='/static/easydsa.png')),
+     path('favicon.png', RedirectView.as_view(url='/static/easydsa.png')),
 ]
