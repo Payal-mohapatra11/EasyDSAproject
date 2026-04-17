@@ -108,7 +108,7 @@ def graph_visualizer(request):
         return result
     topic,progress = result
 
-    return render(request, "graphvisualizer.html", {
+    return render(request, "graphVisualizer.html", {
         "topic": topic,
         "progress": progress
     })
