@@ -35,7 +35,7 @@ def chatbot_response(request):
                 )
             })
         
-        response = client.chat.completions.create(model="llama-3.1-8b-instant",messages=[ { 
+        response = client.chat.completions.create(model="openai/gpt-oss-20b",messages=[ { 
            
                     "role": "system",
                     "content": (
