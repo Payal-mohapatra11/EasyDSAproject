@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 import json
 
-client = Groq(api_key=settings.XAI_API_KEY)
+client = Groq(api_key=settings.GROQ_API_KEY)
 
 DSA_KEYWORDS = [
     "array", "linked list", "stack", "queue", "tree", "graph",
