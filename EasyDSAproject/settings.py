@@ -219,9 +219,9 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+XAI_API_KEY = os.getenv("XAI_API_KEY")
 
-# print("GROQ KEY:", os.getenv("GROQ_API_KEY"))
+# print("XAI KEY:", os.getenv("XAI_API_KEY"))
 
 # SOCIALACCOUNT_PROVIDERS = {
 #     "google": {
